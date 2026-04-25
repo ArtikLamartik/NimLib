@@ -18,11 +18,11 @@ proc exec*(command: cstring): tuple[stdo: cstring, exit_code: int] {.exportc, dy
   let (stdo, exit_code) = execCmdEx($command)
   return (cstring(stdo), int(exit_code))
 
-proc filesize*(path: cstring): int {.exportc, dynlib.} =
-  return int(getFileSize($path))
-
 proc fileread*(path: cstring): cstring {.exportc, dynlib.} =
   return cstring(readFile($path))
+
+proc filesize*(path: cstring): int {.exportc, dynlib.} =
+  return int(getFileSize($path))
 
 proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
@@ -79,13 +79,13 @@ proc mkfolder*(path: cstring) {.exportc, dynlib.} =
 proc reallocbuf*(pointer1: pointer; new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
-proc rm*(path: cstring) {.exportc, dynlib.} =
+proc rmfile*(path: cstring) {.exportc, dynlib.} =
   removeFile($path)
 
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
-proc mv*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
+proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
   moveFile($old_path, $new_path)
 
 proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
