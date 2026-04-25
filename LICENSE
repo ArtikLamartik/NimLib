@@ -1,1 +1,108 @@
+NimLib License (NLL-1.0.0)
+Copyright (c) 2026 ArtikLamartik
 
+1. DEFINITIONS
+   "Software" refers to the NimLib library, including all source code,
+   compiled binaries, documentation, and associated files provided by
+   ArtikLamartik.
+
+   "You" refers to any individual or entity exercising permissions
+   granted by this License.
+
+   "Open Source Distribution" means distributing the Software or a
+   derivative work under a publicly available, OSI-approved or similar
+   open-source license.
+
+   "Commercial Application" means any closed-source, proprietary, or
+   otherwise non-open-source software that incorporates, links to, or
+   depends on NimLib.
+
+   "Subscription" means any recurring, periodic, or usage-based payment
+   model, including but not limited to monthly/annual fees, SaaS
+   licensing, or pay-per-use charges.
+
+   "Modified Version" means any version of the Software where the source
+   code or binary has been altered, patched, extended, or derived from
+   the original Software.
+
+2. GRANT OF PERMISSIONS BY USE CASE
+
+   2.1 Open Source Distribution & Modification Rights
+   If you distribute NimLib or a derivative work under an Open Source
+   Distribution model, you are granted the right to:
+   a) Use, copy, modify, merge, fork, and create Modified Versions of
+      the Software.
+   b) Distribute Modified Versions under any open-source license, 
+      provided that Sections 3.1 (Change Disclosure) and 4 (Attribution)
+      are strictly met.
+   c) Use the Software for personal, academic, research, or non-commercial
+      purposes.
+
+   2.2 Commercial Application & One-Time Payment Rights
+   If you use NimLib in a Commercial Application, you are granted the
+   right to:
+   a) Link to, bundle, or distribute NimLib (statically or dynamically)
+      within proprietary, closed-source software.
+   b) Sell, license, or distribute the Commercial Application for a
+      one-time purchase or perpetual license fee.
+   c) Retain proprietary rights over your own application code.
+
+3. RESTRICTIONS & CONDITIONS
+
+   3.1 Change Disclosure Requirement (Open Source Only)
+   If you distribute a Modified Version of NimLib under Section 2.1, you
+   MUST include a prominent notice in the source code and documentation
+   stating:
+   a) That the Software has been modified from the original NimLib.
+   b) The date of the modification.
+   c) A clear summary of the changes made (e.g., via a CHANGELOG file, or header comments).
+
+   Example Notice:
+   "This version of NimLib was modified by [Your Name] on [Date].
+   Changes include: [List of specific changes]."
+
+   3.2 Commercial Modification Prohibition
+   You may NOT modify, alter, reverse-engineer, decompile, patch, or
+   create Modified Versions of the NimLib source code or compiled binaries
+   for use in any Commercial Application. NimLib must be included in its
+   exact, unmodified form as provided by ArtikLamartik.
+
+   3.3 Subscription & Recurring Payment Prohibition
+   Charging Subscriptions, recurring fees, or usage-based licensing for
+   any software that incorporates or depends on NimLib is expressly
+   prohibited under this License.
+
+   3.4 General Restrictions
+   You may not remove, obscure, or alter any copyright, license, or
+   attribution notices present in the original Software.
+
+4. ATTRIBUTION REQUIREMENT
+   For ALL permitted uses (Open Source and Commercial), you must include
+   the following notice in your software's documentation, about screen,
+   or legal notices file:
+
+   "This software uses NimLib, Copyright (c) 2026 ArtikLamartik.
+   Licensed under NLL-1.0.0"
+
+5. NO WARRANTY & LIMITATION OF LIABILITY ("AS IS")
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+   IN NO EVENT SHALL ARTIKLAMARTIK BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE,
+   ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+   OR OTHER DEALINGS IN THE SOFTWARE.
+
+6. TERMINATION
+   Your rights under this License terminate automatically if you:
+   a) Modify NimLib for use in a Commercial Application,
+   b) Charge Subscriptions for software using NimLib,
+   c) Fail to provide Change Disclosure for Modified Open Source versions, or
+   d) Fail to comply with the Attribution requirement in Section 4.
+   Upon termination, you must cease distribution and remove NimLib from
+   all active projects.
+
+7. CONTACT & ALTERNATIVE LICENSING
+   For commercial projects requiring modification rights, subscription
+   models, or alternative licensing terms, please contact ArtikLamartik
+   to discuss a separate commercial agreement.
