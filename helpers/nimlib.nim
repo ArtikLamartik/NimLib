@@ -15,8 +15,8 @@ importAll("/path/to/nimlib.so"):
   proc cls*()
   proc def*(name: cstring; value: cstring)
   proc exec*(command: cstring): tuple[stdo: cstring, exit_code: int]
-  proc filesize*(path: cstring): int
   proc fileread*(path: cstring): cstring
+  proc filesize*(path: cstring): int
   proc filewrite*(path: cstring; content: cstring)
   proc freebuf*(pointer1: pointer)
   proc getcf*(): cstring
@@ -32,9 +32,9 @@ importAll("/path/to/nimlib.so"):
   proc mkfile*(path: cstring)
   proc mkfolder*(path: cstring)
   proc reallocbuf*(pointer1: pointer; new_size: int): pointer
-  proc rm*(path: cstring)
+  proc rmfile*(path: cstring)
   proc rmfolder*(path: cstring)
-  proc mv*(old_path: cstring; new_path: cstring)
+  proc mvfile*(old_path: cstring; new_path: cstring)
   proc mvfolder*(old_path: cstring; new_path: cstring)
   proc stdi*(): cstring
   proc stdo*(string1: cstring)
