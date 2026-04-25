@@ -27,6 +27,7 @@ importAll("/path/to/nimlib.so"):
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
   proc isroot*     (): int
+  proc killproc*   (process_id: int)
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], len: cint]
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
