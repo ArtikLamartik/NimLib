@@ -6,7 +6,7 @@ typedef struct {
 typedef struct {
     const char** paths;
     const char** types_of;
-    int len;
+    int length;
 } Lf;
 
 extern void*       allocbuf   (int size);
@@ -26,6 +26,7 @@ extern int         isdef      (const char* name);
 extern int         isfile     (const char* path);
 extern int         isfolder   (const char* path);
 extern int         isroot     (void);
+extern int         killproc   (int process_id);
 extern Lf          lf         (void);
 extern void        mcopy      (const char* source, void* destination, int size);
 extern void        mkfile     (const char* path);
