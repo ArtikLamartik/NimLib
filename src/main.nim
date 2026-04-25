@@ -1,3 +1,4 @@
+import std/posix
 import osproc
 import std/os
 
@@ -57,7 +58,10 @@ proc isfolder*(path: cstring): int {.exportc, dynlib.} =
 proc isroot*(): int {.exportc, dynlib.} =
   return int(isAdmin() == true)
 
-proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], len: cint] {.exportc, dynlib.} =
+proc killproc*(process_id: int) {.exportc, dynlib.} =
+  discard kill(Pid(process_id), SIGKILL)
+
+proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: cint] {.exportc, dynlib.} =
   var p: seq[cstring]
   var t: seq[cstring]
   for kind, name in walkDir(getCurrentDir()):
