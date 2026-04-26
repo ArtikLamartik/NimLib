@@ -9,7 +9,7 @@ macro importAll(lib: static[string], body: untyped): untyped =
       node.body = newEmptyNode()
       result.add(node)
 
-importAll("/path/to/nimlib.so"):
+importAll("/usr/lib32/nimlib.so"):
   proc allocbuf*   (size: int): pointer
   proc cf*         (path: cstring)
   proc cls*        ()
@@ -21,14 +21,16 @@ importAll("/path/to/nimlib.so"):
   proc freebuf*    (pointer1: pointer)
   proc getcf*      (): cstring
   proc getdef*     (name: cstring): cstring
-  proc getprocid*  (): int
+  proc getcpid*    (): int
   proc halt*       (exit_code: int)
+  proc infoproc*   (process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring]
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
   proc isroot*     (): int
   proc killproc*   (process_id: int)
-  proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], len: cint]
+  proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int]
+  proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], len: int]
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
@@ -37,6 +39,7 @@ importAll("/path/to/nimlib.so"):
   proc rmfolder*   (path: cstring)
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
+  proc spawnproc*  (command: cstring): int
   proc stdi*       (): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
