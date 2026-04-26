@@ -1,3 +1,4 @@
+import std/strutils
 import std/posix
 import osproc
 import std/os
@@ -40,11 +41,19 @@ proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
   else:
     return ""
 
-proc getprocid*(): int {.exportc, dynlib.} =
+proc getcpid*(): int {.exportc, dynlib.} =
   return int(getCurrentProcessId())
 
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
+
+proc infoproc*(process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring] {.exportc, dynlib.} =
+  let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
+  let line = output.strip()
+  if line.len == 0: return
+  let parts = line.splitWhitespace(maxsplit=5)
+  if parts.len < 6: return
+  result = (cstring(parts[0]), cstring(parts[1]), cstring(parts[2]), cstring(parts[3]), cstring(parts[4]), cstring(parts[5]))
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
@@ -61,7 +70,18 @@ proc isroot*(): int {.exportc, dynlib.} =
 proc killproc*(process_id: int) {.exportc, dynlib.} =
   discard kill(Pid(process_id), SIGKILL)
 
-proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: cint] {.exportc, dynlib.} =
+proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  var n: seq[cstring]
+  var p: seq[cstring]
+  let output = execProcess("ps -eo pid,comm --no-headers")
+  for line in output.splitLines():
+    let parts = line.strip().split()
+    if parts.len == 2:
+      p.add(cstring(parts[0]))
+      n.add(cstring(parts[1]))
+  result = (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr p[0]), n.len.int)
+
+proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var p: seq[cstring]
   var t: seq[cstring]
   for kind, name in walkDir(getCurrentDir()):
@@ -69,7 +89,7 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArr
       p.add(cstring(name)); t.add(cstring("file"))
     elif kind == pcDir:
       p.add(cstring(name)); t.add(cstring("folder"))
-  result = (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.cint)
+  result = (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.int)
 
 proc mcopy*(source: cstring; destination: pointer; size: int) {.exportc, dynlib.} =
   copyMem(destination, source, size)
@@ -94,6 +114,9 @@ proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
 
 proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
+
+proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
+  result = int(startProcess($command).processID)
 
 proc stdi*(): cstring {.exportc, dynlib.} =
   try:
