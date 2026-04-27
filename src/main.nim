@@ -29,12 +29,20 @@ proc filesize*(path: cstring): int {.exportc, dynlib.} =
 proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
-proc formatstr*(count: int, parts: ptr UncheckedArray[cstring]): cstring {.exportc, dynlib.} =
-  var s = ""
-  for i in 0..<count:
-    if parts[i] != nil:
-      s.add($parts[i])
-  return cstring(s)
+proc formatstr*(count: int): cstring {.exportc, dynlib, varargs.} =
+  {.emit: """
+  #include <stdarg.h>
+  static char buf[65536];
+  buf[0] = '\0';
+  va_list args;
+  va_start(args, `count`);
+  for (int i = 0; i < `count`; i++) {
+    const char* s = va_arg(args, const char*);
+    if (s != NULL) strcat(buf, s);
+  }
+  va_end(args);
+  return buf;
+  """.}
 
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
