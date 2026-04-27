@@ -29,6 +29,12 @@ proc filesize*(path: cstring): int {.exportc, dynlib.} =
 proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
+proc formatstr*(parts: varargs[cstring]): cstring {.exportc, dynlib.} =
+  var s = ""
+  for part in parts:
+    s.add($part)
+  return cstring(s)
+
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
 
@@ -50,10 +56,8 @@ proc halt*(exit_code: int) {.exportc, dynlib.} =
 proc infoproc*(process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring] {.exportc, dynlib.} =
   let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
   let line = output.strip()
-  if line.len == 0: return
   let parts = line.splitWhitespace(maxsplit=5)
-  if parts.len < 6: return
-  result = (cstring(parts[0]), cstring(parts[1]), cstring(parts[2]), cstring(parts[3]), cstring(parts[4]), cstring(parts[5]))
+  return (cstring(parts[0]), cstring(parts[1]), cstring(parts[2]), cstring(parts[3]), cstring(parts[4]), cstring(parts[5]))
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
@@ -79,7 +83,7 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
     if parts.len == 2:
       p.add(cstring(parts[0]))
       n.add(cstring(parts[1]))
-  result = (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr p[0]), n.len.int)
+  return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr p[0]), n.len.int)
 
 proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var p: seq[cstring]
@@ -89,7 +93,7 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArr
       p.add(cstring(name)); t.add(cstring("file"))
     elif kind == pcDir:
       p.add(cstring(name)); t.add(cstring("folder"))
-  result = (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.int)
+  return (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.int)
 
 proc mcopy*(source: cstring; destination: pointer; size: int) {.exportc, dynlib.} =
   copyMem(destination, source, size)
@@ -116,7 +120,7 @@ proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
-  result = int(startProcess($command).processID)
+  return int(startProcess($command).processID)
 
 proc stdi*(): cstring {.exportc, dynlib.} =
   try:
