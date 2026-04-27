@@ -33,7 +33,6 @@ extern "C" {
     const char* fileread   (const char* path);
     int         filesize   (const char* path);
     void        filewrite  (const char* path, const char* content);
-    const char* formatstr  (int count, ...);
     void        freebuf    (void* pointer1);
     const char* getcf      (void);
     const char* getdef     (const char* name);
@@ -59,6 +58,7 @@ extern "C" {
     const char* stdi       (void);
     void        stdo       (const char* string1);
     int         strcomp    (const char* string1, const char* string2);
+    const char* strformat  (int count, ...);
     void        undef      (const char* name);
     void        wait       (int milliseconds);
 }
