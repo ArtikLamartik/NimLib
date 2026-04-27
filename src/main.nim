@@ -29,10 +29,11 @@ proc filesize*(path: cstring): int {.exportc, dynlib.} =
 proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
-proc formatstr*(parts: varargs[cstring]): cstring {.exportc, dynlib.} =
+proc formatstr*(count: int, parts: ptr UncheckedArray[cstring]): cstring {.exportc, dynlib.} =
   var s = ""
-  for part in parts:
-    s.add($part)
+  for i in 0..<count:
+    if parts[i] != nil:
+      s.add($parts[i])
   return cstring(s)
 
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
