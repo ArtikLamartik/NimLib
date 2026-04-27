@@ -49,11 +49,11 @@ extern "C" {
     void        mcopy      (const char* source, void* destination, int size);
     void        mkfile     (const char* path);
     void        mkfolder   (const char* path);
+    void        mvfile     (const char* old_path, const char* new_path);
+    void        mvfolder   (const char* old_path, const char* new_path);
     void*       reallocbuf (void* pointer1, int new_size);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
-    void        mvfile     (const char* old_path, const char* new_path);
-    void        mvfolder   (const char* old_path, const char* new_path);
     int         spawnproc  (const char* command);
     const char* stdi       (void);
     void        stdo       (const char* string1);
