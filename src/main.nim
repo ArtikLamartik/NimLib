@@ -100,6 +100,12 @@ proc mkfile*(path: cstring) {.exportc, dynlib.} =
 proc mkfolder*(path: cstring) {.exportc, dynlib.} =
   createDir($path)
 
+proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
+  moveFile($old_path, $new_path)
+
+proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
+  moveDir($old_path, $new_path)
+
 proc reallocbuf*(pointer1: pointer; new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
@@ -108,12 +114,6 @@ proc rmfile*(path: cstring) {.exportc, dynlib.} =
 
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
-
-proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
-  moveFile($old_path, $new_path)
-
-proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
-  moveDir($old_path, $new_path)
 
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   result = int(startProcess($command).processID)
