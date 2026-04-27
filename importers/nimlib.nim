@@ -18,7 +18,7 @@ importAll("../compiled/nimlib.so"):
   proc fileread*   (path: cstring): cstring
   proc filesize*   (path: cstring): int
   proc filewrite*  (path: cstring; content: cstring)
-  proc formatstr*  (parts: varargs[cstring]): cstring
+  proc formatstr*  (count: int, parts: ptr UncheckedArray[cstring]): cstring
   proc freebuf*    (pointer1: pointer)
   proc getcf*      (): cstring
   proc getdef*     (name: cstring): cstring
