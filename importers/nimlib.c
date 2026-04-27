@@ -32,7 +32,7 @@ extern Exec        exec       (const char* command);
 extern const char* fileread   (const char* path);
 extern int         filesize   (const char* path);
 extern void        filewrite  (const char* path, const char* content);
-extern const char* formatstr  (int count, const char** parts);
+extern const char* formatstr  (int count, ...);
 extern void        freebuf    (void* pointer1);
 extern const char* getcf      (void);
 extern const char* getdef     (const char* name);
