@@ -29,21 +29,6 @@ proc filesize*(path: cstring): int {.exportc, dynlib.} =
 proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
-proc formatstr*(count: int): cstring {.exportc, dynlib, varargs.} =
-  {.emit: """
-  #include <stdarg.h>
-  static char buf[65536];
-  buf[0] = '\0';
-  va_list args;
-  va_start(args, `count`);
-  for (int i = 0; i < `count`; i++) {
-    const char* s = va_arg(args, const char*);
-    if (s != NULL) strcat(buf, s);
-  }
-  va_end(args);
-  return buf;
-  """.}
-
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
 
@@ -142,6 +127,21 @@ proc stdo*(string1: cstring) {.exportc, dynlib.} =
 
 proc strcomp*(string1: cstring; string2: cstring): int {.exportc, dynlib.} =
   return int(cmp(string1, string2) != 0)
+
+proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
+  {.emit: """
+  #include <stdarg.h>
+  static char buf[65536];
+  buf[0] = '\0';
+  va_list args;
+  va_start(args, `count`);
+  for (int i = 0; i < `count`; i++) {
+    const char* s = va_arg(args, const char*);
+    if (s != NULL) strcat(buf, s);
+  }
+  va_end(args);
+  return buf;
+  """.}
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
