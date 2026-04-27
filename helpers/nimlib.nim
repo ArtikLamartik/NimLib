@@ -34,11 +34,11 @@ importAll("/usr/lib32/nimlib.so"):
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
+  proc mvfile*     (old_path: cstring; new_path: cstring)
+  proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
-  proc mvfile*     (old_path: cstring; new_path: cstring)
-  proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc spawnproc*  (command: cstring): int
   proc stdi*       (): cstring
   proc stdo*       (string1: cstring)
