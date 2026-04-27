@@ -33,7 +33,7 @@ extern "C" {
     const char* fileread   (const char* path);
     int         filesize   (const char* path);
     void        filewrite  (const char* path, const char* content);
-    const char* formatstr  (int count, const char** parts);
+    const char* formatstr  (int count, ...);
     void        freebuf    (void* pointer1);
     const char* getcf      (void);
     const char* getdef     (const char* name);
