@@ -35,6 +35,7 @@ extern "C" {
     void        filewrite  (const char* path, const char* content);
     void        freebuf    (void* pointer1);
     const char* getcf      (void);
+    const char* getchr     (void);
     const char* getdef     (const char* name);
     int         getcpid    (void);
     void        halt       (int exit_code);
