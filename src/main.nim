@@ -1,4 +1,5 @@
 import std/strutils
+import std/terminal
 import std/posix
 import osproc
 import std/os
@@ -34,6 +35,9 @@ proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
 
 proc getcf*(): cstring {.exportc, dynlib.} =
   return cstring(getCurrentDir())
+
+proc getchr*(): cstring {.exportc, dynlib.} =
+  return cstring($getch())
 
 proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
   if existsEnv($name):
@@ -116,9 +120,12 @@ proc rmfolder*(path: cstring) {.exportc, dynlib.} =
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
 
-proc stdi*(): cstring {.exportc, dynlib.} =
+proc stdi*(invisible: int = 0): cstring {.exportc, dynlib.} =
   try:
-    return cstring(readLine(stdin))
+    if invisible == 0:
+      return cstring(readLine(stdin))
+    elif invisible == 1:
+      return cstring(readPasswordFromStdin(prompt = ""))
   except EOFError:
     return ""
 
