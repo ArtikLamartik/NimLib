@@ -20,6 +20,7 @@ importAll("../compiled/nimlib.so"):
   proc filewrite*  (path: cstring; content: cstring)
   proc freebuf*    (pointer1: pointer)
   proc getcf*      (): cstring
+  proc getchr*     (): cstring
   proc getdef*     (name: cstring): cstring
   proc getcpid*    (): int
   proc halt*       (exit_code: int)
@@ -40,7 +41,7 @@ importAll("../compiled/nimlib.so"):
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
   proc spawnproc*  (command: cstring): int
-  proc stdi*       (): cstring
+  proc stdi*       (invisible: int = 0): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
