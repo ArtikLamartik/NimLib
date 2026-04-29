@@ -57,7 +57,7 @@ extern "C" {
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
     int         spawnproc  (const char* command);
-    const char* stdi       (void);
+    const char* stdi       (int invisible = 0);
     void        stdo       (const char* string1);
     int         strcomp    (const char* string1, const char* string2);
     const char* strformat  (int count, ...);
