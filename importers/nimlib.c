@@ -4,6 +4,11 @@ typedef struct {
 } Exec;
 
 typedef struct {
+    const char** args;
+    int length;
+} Getargs;
+
+typedef struct {
     const char* name;
     const char* process_id;
     const char* parent_process_id;
@@ -33,6 +38,7 @@ extern const char* fileread   (const char* path);
 extern int         filesize   (const char* path);
 extern void        filewrite  (const char* path, const char* content);
 extern void        freebuf    (void* pointer1);
+extern Getargs     getargs    (void);
 extern const char* getcf      (void);
 extern const char* getchr     (void);
 extern const char* getdef     (const char* name);
@@ -51,6 +57,7 @@ extern void        mkfile     (const char* path);
 extern void        mkfolder   (const char* path);
 extern void        mvfile     (const char* old_path, const char* new_path);
 extern void        mvfolder   (const char* old_path, const char* new_path);
+extern int         randint    (int minimum, int maximum);
 extern void*       reallocbuf (void* pointer1, int new_size);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
