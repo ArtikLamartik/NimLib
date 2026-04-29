@@ -84,6 +84,14 @@ proc isroot*(): int {.exportc, dynlib.} =
 proc killproc*(process_id: int) {.exportc, dynlib.} =
   discard kill(Pid(process_id), SIGKILL)
 
+proc ladefs*(): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  var n: seq[cstring]
+  var v: seq[cstring]
+  for key, val in envPairs():
+    n.add(cstring(key))
+    v.add(cstring(val))
+  return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr v[0]), n.len.int)
+
 proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var n: seq[cstring]
   var p: seq[cstring]
