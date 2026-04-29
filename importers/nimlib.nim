@@ -30,6 +30,7 @@ importAll("../compiled/nimlib.so"):
   proc isfolder*   (path: cstring): int
   proc isroot*     (): int
   proc killproc*   (process_id: int)
+  proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
   proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int]
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int]
   proc mcopy*      (source: cstring; destination: pointer; size: int)
