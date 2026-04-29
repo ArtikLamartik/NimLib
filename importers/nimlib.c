@@ -19,6 +19,12 @@ typedef struct {
 
 typedef struct {
     const char** name;
+    const char** value;
+    int length;
+} Ladefs;
+
+typedef struct {
+    const char** name;
     const char** process_id;
     int length;
 } Laprocs;
@@ -50,6 +56,7 @@ extern int         isfile     (const char* path);
 extern int         isfolder   (const char* path);
 extern int         isroot     (void);
 extern int         killproc   (int process_id);
+extern Ladefs      ladefs     (void);
 extern Laprocs     laprocs    (void);
 extern Lf          lf         (void);
 extern void        mcopy      (const char* source, void* destination, int size);
