@@ -52,6 +52,7 @@ extern "C" {
     void        mkfolder   (const char* path);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
+    extern int  randint    (int minimum, int maximum);
     void*       reallocbuf (void* pointer1, int new_size);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
