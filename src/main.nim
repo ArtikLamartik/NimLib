@@ -1,5 +1,6 @@
 import std/strutils
 import std/terminal
+import std/random
 import std/posix
 import osproc
 import std/os
@@ -32,6 +33,17 @@ proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
 
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
+
+proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  var a: seq[cstring]
+  let cmdline = readFile("/proc/self/cmdline")
+  let parts = cmdline.split('\0')
+  for i in 1..<parts.len:
+    if parts[i].len > 0:
+      a.add(cstring(parts[i]))
+  if a.len == 0:
+    a.add(cstring(""))
+  return (cast[ptr UncheckedArray[cstring]](addr a[0]), a.len.int)
 
 proc getcf*(): cstring {.exportc, dynlib.} =
   return cstring(getCurrentDir())
@@ -107,6 +119,10 @@ proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
 
 proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
+
+proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
+  randomize()
+  return rand(minimum..maximum)
 
 proc reallocbuf*(pointer1: pointer; new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
