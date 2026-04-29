@@ -12,6 +12,12 @@ struct Infoproc {
     const char* command;
 };
 
+struct Ladefs {
+    const char** name;
+    const char** value;
+    int length;
+};
+
 struct Laprocs {
     const char** name;
     const char** process_id;
@@ -45,6 +51,7 @@ extern "C" {
     int         isfolder   (const char* path);
     int         isroot     (void);
     int         killproc   (int process_id);
+    Ladefs      ladefs     (void);
     Laprocs     laprocs    (void);
     Lf          lf         (void);
     void        mcopy      (const char* source, void* destination, int size);
