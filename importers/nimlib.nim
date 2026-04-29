@@ -37,6 +37,7 @@ importAll("../compiled/nimlib.so"):
   proc mkfolder*   (path: cstring)
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
+  proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
