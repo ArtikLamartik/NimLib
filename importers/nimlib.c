@@ -62,7 +62,7 @@ extern void*       reallocbuf (void* pointer1, int new_size);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
 extern int         spawnproc  (const char* command);
-extern const char* stdi       (void);
+extern const char* stdi       (int invisible);
 extern void        stdo       (const char* string1);
 extern int         strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (int count, ...);
