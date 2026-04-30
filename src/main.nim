@@ -5,6 +5,8 @@ import std/posix
 import osproc
 import std/os
 
+{.emit: "#include <stdarg.h>".}
+
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
 
@@ -161,7 +163,6 @@ proc strcomp*(string1: cstring; string2: cstring): int {.exportc, dynlib.} =
 
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   {.emit: """
-  #include <stdarg.h>
   static char buf[65536];
   buf[0] = '\0';
   va_list args;
