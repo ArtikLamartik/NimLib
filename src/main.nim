@@ -62,6 +62,9 @@ proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
   else:
     return ""
 
+proc getprogloc*(): cstring {.exportc, dynlib.} =
+  return cstring(getAppFilename())
+
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
 
