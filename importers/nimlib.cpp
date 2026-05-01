@@ -48,8 +48,8 @@ extern "C" {
     Getargs     getargs    (void);
     const char* getcf      (void);
     const char* getchr     (void);
-    const char* getdef     (const char* name);
     int         getcpid    (void);
+    const char* getdef     (const char* name);
     void        halt       (int exit_code);
     Infoproc    infoproc   (int process_id);
     int         isdef      (const char* name);
