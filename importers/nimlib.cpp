@@ -68,6 +68,8 @@ extern "C" {
     void        stdo       (const char* string1);
     int         strcomp    (const char* string1, const char* string2);
     const char* strformat  (int count, ...);
+    int         tocintcstr (const char* value);
+    const char* tocstrcint (int value);
     void        undef      (const char* name);
     void        wait       (int milliseconds);
 }
