@@ -6,7 +6,6 @@ import osproc
 import std/os
 
 {.emit: "#include <stdarg.h>".}
-{.emit: "#include <stdio.h>".}
 
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
