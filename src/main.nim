@@ -6,6 +6,7 @@ import osproc
 import std/os
 
 {.emit: "#include <stdarg.h>".}
+{.emit: "#include <stdio.h>".}
 
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
@@ -174,6 +175,12 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   va_end(args);
   return buf;
   """.}
+
+proc tocintcstr*(value: cstring): int {.exportc, dynlib.} =
+  return parseInt($value)
+
+proc tocstrcint*(value: int): cstring {.exportc, dynlib.} =
+  result = cstring($value)
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
