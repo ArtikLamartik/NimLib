@@ -13,8 +13,18 @@ proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
 proc cf*(path: cstring) {.exportc, dynlib.} =
   setCurrentDir($path)
 
-proc cls*() {.exportc, dynlib.} =
-  stdout.write("\x1b[2J\x1b[H")
+proc clrscr*() {.exportc, dynlib.} =
+  discard execCmd("clear")
+
+proc cursor*(visible: int) {.exportc, dynlib.} =
+  if visible == 0:
+    stdout.write("\x1b[?25l")
+  elif visible == 1:
+    stdout.write("\x1b[?25h")
+  stdout.flushFile()
+
+proc cursorto*(x: int, y: int) {.exportc, dynlib.} =
+  stdout.write("\x1b[" & $(y + 1) & ";" & $(x + 1) & "H")
   stdout.flushFile()
 
 proc def*(name: cstring; value: cstring) {.exportc, dynlib.} =
@@ -140,6 +150,10 @@ proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
 proc reallocbuf*(pointer1: pointer; new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
+proc resetbgfg*() {.exportc, dynlib.} =
+  stdout.write("\x1b[0m")
+  stdout.flushFile()
+
 proc rmfile*(path: cstring) {.exportc, dynlib.} =
   removeFile($path)
 
@@ -149,14 +163,19 @@ proc rmfolder*(path: cstring) {.exportc, dynlib.} =
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
 
-proc stdi*(invisible: int = 0): cstring {.exportc, dynlib.} =
-  try:
-    if invisible == 0:
-      return cstring(readLine(stdin))
-    elif invisible == 1:
-      return cstring(readPasswordFromStdin(prompt = ""))
-  except EOFError:
-    return ""
+proc setbg*(r: int, g: int, b: int) {.exportc, dynlib.} =
+  stdout.write("\x1b[48;2;" & $r & ";" & $g & ";" & $b & "m")
+  stdout.flushFile()
+
+proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
+  stdout.write("\x1b[38;2;" & $r & ";" & $g & ";" & $b & "m")
+  stdout.flushFile()
+
+proc stdi*(visible: int): cstring {.exportc, dynlib.} =
+  if visible == 1:
+    return cstring(readLine(stdin))
+  elif visible == 0:
+    return cstring(readPasswordFromStdin(prompt = ""))
 
 proc stdo*(string1: cstring) {.exportc, dynlib.} =
   write(stdout, string1)
