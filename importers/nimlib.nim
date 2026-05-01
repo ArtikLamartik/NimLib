@@ -47,5 +47,7 @@ importAll("../compiled/nimlib.so"):
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
+  proc tocintcstr* (value: cstring): int
+  proc tocstrcint* (value: int): cstring
   proc undef*      (name: cstring)
   proc wait*       (milliseconds: int)
