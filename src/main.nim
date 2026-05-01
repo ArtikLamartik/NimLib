@@ -159,7 +159,7 @@ proc stdo*(string1: cstring) {.exportc, dynlib.} =
   write(stdout, string1)
 
 proc strcomp*(string1: cstring; string2: cstring): int {.exportc, dynlib.} =
-  return int(cmp(string1, string2) != 0)
+  return int(cmp(string1, string2) == 0)
 
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   {.emit: """
@@ -179,10 +179,13 @@ proc tocintcstr*(value: cstring): int {.exportc, dynlib.} =
   return parseInt($value)
 
 proc tocstrcint*(value: int): cstring {.exportc, dynlib.} =
-  result = cstring($value)
+  return cstring($value)
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
 
 proc wait*(milliseconds: int) {.exportc, dynlib.} =
   sleep(milliseconds)
+
+proc where*(command: cstring): cstring {.exportc, dynlib.} =
+  return cstring($execProcess("which " & $command).strip())
