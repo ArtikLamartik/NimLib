@@ -53,14 +53,14 @@ proc getcf*(): cstring {.exportc, dynlib.} =
 proc getchr*(): cstring {.exportc, dynlib.} =
   return cstring($getch())
 
+proc getcpid*(): int {.exportc, dynlib.} =
+  return int(getCurrentProcessId())
+
 proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
   if existsEnv($name):
     return cstring($getEnv($name))
   else:
     return ""
-
-proc getcpid*(): int {.exportc, dynlib.} =
-  return int(getCurrentProcessId())
 
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
