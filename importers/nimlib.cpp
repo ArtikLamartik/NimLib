@@ -38,7 +38,9 @@ struct Lf {
 extern "C" {
     void*       allocbuf   (int size);
     void        cf         (const char* path);
-    void        cls        (void);
+    void        clrscr     (void);
+    void        cursor     (int visible);
+    void        cursorto   (int x, int y);
     void        def        (const char* name, const char* value);
     Exec        exec       (const char* command);
     const char* fileread   (const char* path);
@@ -50,7 +52,7 @@ extern "C" {
     const char* getchr     (void);
     int         getcpid    (void);
     const char* getdef     (const char* name);
-    const char* getprocloc (void);
+    const char* getprogloc (void);
     void        halt       (int exit_code);
     Infoproc    infoproc   (int process_id);
     int         isdef      (const char* name);
@@ -68,10 +70,13 @@ extern "C" {
     void        mvfolder   (const char* old_path, const char* new_path);
     extern int  randint    (int minimum, int maximum);
     void*       reallocbuf (void* pointer1, int new_size);
+    void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
+    void        setbg      (int r, int g, int b);
+    void        setfg      (int r, int g, int b);
     int         spawnproc  (const char* command);
-    const char* stdi       (int invisible = 0);
+    const char* stdi       (int visible);
     void        stdo       (const char* string1);
     int         strcomp    (const char* string1, const char* string2);
     const char* strformat  (int count, ...);
