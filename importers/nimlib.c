@@ -73,5 +73,7 @@ extern const char* stdi       (int invisible);
 extern void        stdo       (const char* string1);
 extern int         strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (int count, ...);
+extern int         tocintcstr (const char* value);
+extern const char* tocstrcint (int value);
 extern void        undef      (const char* name);
 extern void        wait       (int milliseconds);
