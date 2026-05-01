@@ -24,6 +24,7 @@ importAll("../build/nimlib.so"):
   proc getchr*     (): cstring
   proc getcpid*    (): int
   proc getdef*     (name: cstring): cstring
+  proc getprogloc* (): cstring
   proc halt*       (exit_code: int)
   proc infoproc*   (process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring]
   proc isdef*      (name: cstring): int
