@@ -3,6 +3,11 @@ struct Exec {
     int exit_code;
 };
 
+struct Getargs {
+    const char** args;
+    int length;
+};
+
 struct Infoproc {
     const char* name;
     const char* process_id;
@@ -40,6 +45,7 @@ extern "C" {
     int         filesize   (const char* path);
     void        filewrite  (const char* path, const char* content);
     void        freebuf    (void* pointer1);
+    Getargs     getargs    (void);
     const char* getcf      (void);
     const char* getchr     (void);
     const char* getdef     (const char* name);
