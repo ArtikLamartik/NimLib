@@ -72,4 +72,5 @@ extern "C" {
     const char* tocstrcint (int value);
     void        undef      (const char* name);
     void        wait       (int milliseconds);
+    const char* where      (const char* command);
 }
