@@ -12,7 +12,9 @@ macro importAll(lib: static[string], body: untyped): untyped =
 importAll("../build/nimlib.so"):
   proc allocbuf*   (size: int): pointer
   proc cf*         (path: cstring)
-  proc cls*        ()
+  proc clrscr*     ()
+  proc cursor*     (visible: int)
+  proc cursorto*   (x: int, y: int)
   proc def*        (name: cstring; value: cstring)
   proc exec*       (command: cstring): tuple[stdo: cstring, exit_code: int]
   proc fileread*   (path: cstring): cstring
@@ -42,10 +44,13 @@ importAll("../build/nimlib.so"):
   proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
+  proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
   proc spawnproc*  (command: cstring): int
-  proc stdi*       (invisible: int = 0): cstring
+  proc setbg*      (r: int, g: int, b: int)
+  proc setfg*      (r: int, g: int, b: int)
+  proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
