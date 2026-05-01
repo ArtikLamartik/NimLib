@@ -49,6 +49,7 @@ extern const char* getcf      (void);
 extern const char* getchr     (void);
 extern int         getcpid    (void);
 extern const char* getdef     (const char* name);
+extern const char* getprocloc (void);
 extern void        halt       (int exit_code);
 extern Infoproc    infoproc   (int process_id);
 extern int         isdef      (const char* name);
