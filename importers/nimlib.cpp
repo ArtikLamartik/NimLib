@@ -50,6 +50,7 @@ extern "C" {
     const char* getchr     (void);
     int         getcpid    (void);
     const char* getdef     (const char* name);
+    const char* getprocloc (void);
     void        halt       (int exit_code);
     Infoproc    infoproc   (int process_id);
     int         isdef      (const char* name);
