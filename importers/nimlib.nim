@@ -19,6 +19,7 @@ importAll("../compiled/nimlib.so"):
   proc filesize*   (path: cstring): int
   proc filewrite*  (path: cstring; content: cstring)
   proc freebuf*    (pointer1: pointer)
+  proc getargs*    (): tuple[args: ptr UncheckedArray[cstring], length: int]
   proc getcf*      (): cstring
   proc getchr*     (): cstring
   proc getdef*     (name: cstring): cstring
@@ -51,3 +52,4 @@ importAll("../compiled/nimlib.so"):
   proc tocstrcint* (value: int): cstring
   proc undef*      (name: cstring)
   proc wait*       (milliseconds: int)
+  proc where*      (command: cstring): cstring
