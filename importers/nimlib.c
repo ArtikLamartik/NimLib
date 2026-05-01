@@ -77,3 +77,4 @@ extern int         tocintcstr (const char* value);
 extern const char* tocstrcint (int value);
 extern void        undef      (const char* name);
 extern void        wait       (int milliseconds);
+extern const char* where      (const char* command);
