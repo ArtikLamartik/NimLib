@@ -65,6 +65,7 @@ extern Lf          lf         (void);
 extern void        mcopy      (const char* source, void* destination, int size);
 extern void        mkfile     (const char* path);
 extern void        mkfolder   (const char* path);
+extern int         msgbox     (const char* title, int count, ...);
 extern void        mvfile     (const char* old_path, const char* new_path);
 extern void        mvfolder   (const char* old_path, const char* new_path);
 extern int         randint    (int minimum, int maximum);
