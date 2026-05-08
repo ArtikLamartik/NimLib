@@ -1,3 +1,4 @@
+import std/exitprocs
 import std/strutils
 import std/terminal
 import std/random
@@ -33,7 +34,7 @@ proc cursorto*(x: int, y: int) {.exportc, dynlib.} =
   stdout.write("\x1b[" & $(y + 1) & ";" & $(x + 1) & "H")
   stdout.flushFile()
 
-proc def*(name: cstring; value: cstring) {.exportc, dynlib.} =
+proc def*(name: cstring, value: cstring) {.exportc, dynlib.} =
   putEnv($name, $value)
 
 proc exec*(command: cstring): tuple[stdo: cstring, exit_code: int] {.exportc, dynlib.} =
@@ -46,7 +47,7 @@ proc fileread*(path: cstring): cstring {.exportc, dynlib.} =
 proc filesize*(path: cstring): int {.exportc, dynlib.} =
   return int(getFileSize($path))
 
-proc filewrite*(path: cstring; content: cstring) {.exportc, dynlib.} =
+proc filewrite*(path: cstring, content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
@@ -129,12 +130,14 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArr
   var t: seq[cstring]
   for kind, name in walkDir(getCurrentDir()):
     if kind == pcFile:
-      p.add(cstring(name)); t.add(cstring("file"))
+      p.add(cstring(name))
+      t.add(cstring("file"))
     elif kind == pcDir:
-      p.add(cstring(name)); t.add(cstring("folder"))
+      p.add(cstring(name))
+      t.add(cstring("folder"))
   return (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.int)
 
-proc mcopy*(source: cstring; destination: pointer; size: int) {.exportc, dynlib.} =
+proc mcopy*(source: cstring, destination: pointer, size: int) {.exportc, dynlib.} =
   copyMem(destination, source, size)
 
 proc mkfile*(path: cstring) {.exportc, dynlib.} =
@@ -145,6 +148,8 @@ proc mkfolder*(path: cstring) {.exportc, dynlib.} =
 
 proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
   {.emit: """
+  printf("\x1b[0m");
+  fflush(stdout);
   const char* items[65536];
   va_list args;
   va_start(args, `count`);
@@ -163,8 +168,11 @@ proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
   newt.c_lflag &= ~(ICANON | ECHO);
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
   int selected = 0;
+  printf("\033[?1049h");
+  fflush(stdout);
   while (1) {
     printf("\033[2J\033[H");
+    fflush(stdout);
     printf("+");
     for (int i = 0; i < maxw; i++) printf("-");
     printf("+\n");
@@ -181,6 +189,7 @@ proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
     printf("+");
     for (int i = 0; i < maxw; i++) printf("-");
     printf("+\n");
+    fflush(stdout);
     char c = getchar();
     if (c == '\033') {
       getchar();
@@ -192,21 +201,22 @@ proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
     }
   }
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-  printf("\033[2J\033[H");
+  printf("\033[?1049l");
+  fflush(stdout);
   return selected;
   """.}
 
-proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
+proc mvfile*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveFile($old_path, $new_path)
 
-proc mvfolder*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
+proc mvfolder*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
 
 proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
   randomize()
   return rand(minimum..maximum)
 
-proc reallocbuf*(pointer1: pointer; new_size: int): pointer {.exportc, dynlib.} =
+proc reallocbuf*(pointer1: pointer, new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
 proc resetbgfg*() {.exportc, dynlib.} =
@@ -219,8 +229,11 @@ proc rmfile*(path: cstring) {.exportc, dynlib.} =
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
-proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
-  return int(startProcess($command).processID)
+proc scope*(atexit: cint; function: proc () {.noconv.}) {.exportc, dynlib.} =
+  if atexit == 0:
+    defer: function()
+  elif atexit == 1:
+    addExitProc(function)
 
 proc setbg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[48;2;" & $r & ";" & $g & ";" & $b & "m")
@@ -230,16 +243,19 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[38;2;" & $r & ";" & $g & ";" & $b & "m")
   stdout.flushFile()
 
+proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
+  return int(startProcess($command).processID)
+
 proc stdi*(visible: int): cstring {.exportc, dynlib.} =
-  if visible == 1:
-    return cstring(readLine(stdin))
-  elif visible == 0:
+  if visible == 0:
     return cstring(readPasswordFromStdin(prompt = ""))
+  elif visible == 1:
+    return cstring(readLine(stdin))
 
 proc stdo*(string1: cstring) {.exportc, dynlib.} =
   write(stdout, string1)
 
-proc strcomp*(string1: cstring; string2: cstring): int {.exportc, dynlib.} =
+proc strcomp*(string1: cstring, string2: cstring): int {.exportc, dynlib.} =
   return int(cmp(string1, string2) == 0)
 
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
@@ -270,3 +286,10 @@ proc wait*(milliseconds: int) {.exportc, dynlib.} =
 
 proc where*(command: cstring): cstring {.exportc, dynlib.} =
   return cstring($execProcess("which " & $command).strip())
+
+proc cleanup() {.noconv.} =
+  cursor(1)
+  discard execCmdEx("stty sane")
+  resetbgfg()
+
+exitprocs.addExitProc(cleanup)
