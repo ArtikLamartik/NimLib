@@ -69,12 +69,12 @@ extern "C" {
     int         msgbox     (const char* title, int count, ...);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
-    extern int  randint    (int minimum, int maximum);
+    int         randint    (int minimum, int maximum);
     void*       reallocbuf (void* pointer1, int new_size);
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
-    void        scope      (int atexit, void (*function)(void))
+    void        scope      (int atexit, void (*function)(void));
     void        setbg      (int r, int g, int b);
     void        setfg      (int r, int g, int b);
     int         spawnproc  (const char* command);
