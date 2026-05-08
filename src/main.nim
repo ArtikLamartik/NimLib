@@ -5,7 +5,13 @@ import std/posix
 import osproc
 import std/os
 
-{.emit: "#include <stdarg.h>".}
+{.emit: """
+#include <termios.h>
+#include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+""".}
 
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
@@ -136,6 +142,59 @@ proc mkfile*(path: cstring) {.exportc, dynlib.} =
 
 proc mkfolder*(path: cstring) {.exportc, dynlib.} =
   createDir($path)
+
+proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
+  {.emit: """
+  const char* items[65536];
+  va_list args;
+  va_start(args, `count`);
+  for (int i = 0; i < `count`; i++)
+    items[i] = va_arg(args, const char*);
+  va_end(args);
+  int maxw = strlen(`title`);
+  for (int i = 0; i < `count`; i++) {
+    int l = strlen(items[i]);
+    if (l > maxw) maxw = l;
+  }
+  maxw += 4;
+  struct termios oldt, newt;
+  tcgetattr(STDIN_FILENO, &oldt);
+  newt = oldt;
+  newt.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+  int selected = 0;
+  while (1) {
+    printf("\033[2J\033[H");
+    printf("+");
+    for (int i = 0; i < maxw; i++) printf("-");
+    printf("+\n");
+    printf("| \033[1m%-*s\033[0m |\n", maxw - 2, `title`);
+    for (int i = 0; i < `count`; i++) {
+      printf("+");
+      for (int j = 0; j < maxw; j++) printf("-");
+      printf("+\n");
+      if (i == selected)
+        printf("| \033[7m%-*s\033[0m |\n", maxw - 2, items[i]);
+      else
+        printf("| %-*s |\n", maxw - 2, items[i]);
+    }
+    printf("+");
+    for (int i = 0; i < maxw; i++) printf("-");
+    printf("+\n");
+    char c = getchar();
+    if (c == '\033') {
+      getchar();
+      char arrow = getchar();
+      if (arrow == 'A' && selected > 0) selected--;
+      if (arrow == 'B' && selected < `count` - 1) selected++;
+    } else if (c == '\n') {
+      break;
+    }
+  }
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+  printf("\033[2J\033[H");
+  return selected;
+  """.}
 
 proc mvfile*(old_path: cstring; new_path: cstring) {.exportc, dynlib.} =
   moveFile($old_path, $new_path)
