@@ -75,7 +75,7 @@ extern void        rmfolder   (const char* path);
 extern void        setbg      (int r, int g, int b);
 extern void        setfg      (int r, int g, int b);
 extern int         spawnproc  (const char* command);
-extern const char* stdi       (int invisible);
+extern const char* stdi       (int visible);
 extern void        stdo       (const char* string1);
 extern int         strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (int count, ...);
