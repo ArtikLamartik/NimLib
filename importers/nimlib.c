@@ -73,6 +73,7 @@ extern void*       reallocbuf (void* pointer1, int new_size);
 extern void        resetbgfg  (void);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
+extern void        scope      (int atexit, void (*function)(void));
 extern void        setbg      (int r, int g, int b);
 extern void        setfg      (int r, int g, int b);
 extern int         spawnproc  (const char* command);
