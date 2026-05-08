@@ -40,6 +40,7 @@ importAll("../build/nimlib.so"):
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
+  proc msgbox*     (title: cstring, count: int): int {.varargs.}
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc randint*    (minimum: int, maximum: int): int
