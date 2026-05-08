@@ -48,9 +48,10 @@ importAll("../build/nimlib.so"):
   proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
-  proc spawnproc*  (command: cstring): int
+  proc scope*      (atexit: int, function: proc () {.noconv.})
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
+  proc spawnproc*  (command: cstring): int
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
