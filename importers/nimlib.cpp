@@ -74,6 +74,7 @@ extern "C" {
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
+    void        scope      (int atexit, void (*function)(void))
     void        setbg      (int r, int g, int b);
     void        setfg      (int r, int g, int b);
     int         spawnproc  (const char* command);
