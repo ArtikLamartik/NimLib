@@ -76,6 +76,7 @@ extern void        rmfolder   (const char* path);
 extern void        scope      (int atexit, void (*function)(void));
 extern void        setbg      (int r, int g, int b);
 extern void        setfg      (int r, int g, int b);
+extern void        sig        (int signal, void (*function)(void));
 extern int         spawnproc  (const char* command);
 extern const char* stdi       (int visible);
 extern void        stdo       (const char* string1);
