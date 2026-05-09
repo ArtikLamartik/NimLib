@@ -77,6 +77,7 @@ extern "C" {
     void        scope      (int atexit, void (*function)(void));
     void        setbg      (int r, int g, int b);
     void        setfg      (int r, int g, int b);
+    void        sig        (int signal, void (*function)(void));
     int         spawnproc  (const char* command);
     const char* stdi       (int visible);
     void        stdo       (const char* string1);
