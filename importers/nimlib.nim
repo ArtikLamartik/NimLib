@@ -51,6 +51,7 @@ importAll("../build/nimlib.so"):
   proc scope*      (atexit: int, function: proc () {.noconv.})
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
+  proc sig*        (signal: int, function: proc() {.noconv.})
   proc spawnproc*  (command: cstring): int
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
