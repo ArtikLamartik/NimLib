@@ -251,6 +251,9 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[38;2;" & $r & ";" & $g & ";" & $b & "m")
   stdout.flushFile()
 
+proc sig*(signal: int, function: proc(_: int) {.noconv.}) {.exportc, dynlib.} =
+  discard signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
+
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
 
