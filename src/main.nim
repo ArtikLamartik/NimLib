@@ -14,6 +14,14 @@ import std/os
 #include <stdio.h>
 """.}
 
+var exitqueue: seq[proc() {.noconv.}] = @[]
+
+proc runfifoexit() {.noconv.} =
+  for f in exitqueue:
+    f()
+
+addExitProc(runfifoexit)
+
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
 
@@ -229,11 +237,11 @@ proc rmfile*(path: cstring) {.exportc, dynlib.} =
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
-proc scope*(atexit: cint; function: proc () {.noconv.}) {.exportc, dynlib.} =
+proc scope*(atexit: int, function: proc () {.noconv.}) {.exportc, dynlib.} =
   if atexit == 0:
     defer: function()
   elif atexit == 1:
-    addExitProc(function)
+    exitqueue.add(function)
 
 proc setbg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[48;2;" & $r & ";" & $g & ";" & $b & "m")
@@ -292,4 +300,4 @@ proc cleanup() {.noconv.} =
   discard execCmdEx("stty sane")
   resetbgfg()
 
-exitprocs.addExitProc(cleanup)
+addExitProc(cleanup)
