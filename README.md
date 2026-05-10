@@ -1,3 +1,3 @@
 NimLib - A Linux Library made in Nim
 
-[*only works on Linux*]
+[*only works on Linux, MacOS and BSD*]
