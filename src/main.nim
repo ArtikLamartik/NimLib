@@ -1,4 +1,5 @@
 import std/exitprocs
+import std/sequtils
 import std/strutils
 import std/terminal
 import std/random
@@ -63,14 +64,19 @@ proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
 
 proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var a: seq[cstring]
-  let cmdline = readFile("/proc/self/cmdline")
-  let parts = cmdline.split('\0')
-  for i in 1..<parts.len:
-    if parts[i].len > 0:
-      a.add(cstring(parts[i]))
+  when defined(linux):
+    let cmdline = readFile("/proc/self/cmdline")
+    let parts = cmdline.split('\0')
+    for i in 1..<parts.len:
+      if parts[i].len > 0:
+        a.add(cstring(parts[i]))
+  elif defined(bsd) or defined(macosx):
+    let output = execProcess("sysctl -n kern.proc.args " & $getCurrentProcessId())
+    for arg in output.splitWhitespace():
+      a.add(cstring(arg))
   if a.len == 0:
     a.add(cstring(""))
-  return (cast[ptr UncheckedArray[cstring]](addr a[0]), a.len.int)
+  result = (cast[ptr UncheckedArray[cstring]](addr a[0]), a.len.int)
 
 proc getcf*(): cstring {.exportc, dynlib.} =
   return cstring(getCurrentDir())
@@ -94,9 +100,17 @@ proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
 
 proc infoproc*(process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring] {.exportc, dynlib.} =
-  let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
-  let line = output.strip()
-  let parts = line.splitWhitespace(maxsplit=5)
+  when defined(linux):
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
+    let line = output.strip()
+    let parts = line.splitWhitespace(maxsplit=5)
+  elif defined(bsd) or defined(macosx):
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,start,command")
+    let lines = output.strip().splitLines()
+    let line = if lines.len > 1: lines[1] else: ""
+    let parts = line.splitWhitespace(maxsplit=5)
+  if parts.len < 6:
+    return ("".cstring, "".cstring, "".cstring, "".cstring, "".cstring, "".cstring)
   return (cstring(parts[0]), cstring(parts[1]), cstring(parts[2]), cstring(parts[3]), cstring(parts[4]), cstring(parts[5]))
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
@@ -123,15 +137,28 @@ proc ladefs*(): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArr
   return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr v[0]), n.len.int)
 
 proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  var n: seq[cstring]
-  var p: seq[cstring]
-  let output = execProcess("ps -eo pid,comm --no-headers")
+  var n: seq[string]
+  var p: seq[string]
+  when defined(linux):
+    let output = execProcess("ps -eo pid,comm --no-headers")
+  elif defined(bsd) or defined(macosx):
+    let output = execProcess("ps -eo pid,comm")
   for line in output.splitLines():
-    let parts = line.strip().split()
-    if parts.len == 2:
-      p.add(cstring(parts[0]))
-      n.add(cstring(parts[1]))
-  return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr p[0]), n.len.int)
+    let stripped = line.strip()
+    if stripped.len == 0:
+      continue
+    let parts = stripped.splitWhitespace()
+    if parts.len >= 2:
+      when defined(linux):
+        p.add(parts[0])
+        n.add(parts[1])
+      elif defined(bsd) or defined(macosx):
+        if parts[0] != "PID":
+          p.add(parts[0])
+          n.add(parts[1])
+  var nc = n.mapIt(cstring(it))
+  var pc = p.mapIt(cstring(it))
+  result = (cast[ptr UncheckedArray[cstring]](addr nc[0]), cast[ptr UncheckedArray[cstring]](addr pc[0]), nc.len.int)
 
 proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var p: seq[cstring]
