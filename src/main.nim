@@ -4,6 +4,7 @@ import std/strutils
 import std/terminal
 import std/random
 import std/posix
+import std/times
 import osproc
 import std/os
 
@@ -46,18 +47,43 @@ proc cursorto*(x: int, y: int) {.exportc, dynlib.} =
 proc def*(name: cstring, value: cstring) {.exportc, dynlib.} =
   putEnv($name, $value)
 
-proc exec*(command: cstring): tuple[stdo: cstring, exit_code: int] {.exportc, dynlib.} =
+proc exec*(command: cstring): tuple[output: cstring, exit_code: int] {.exportc, dynlib.} =
   let (stdo, exit_code) = execCmdEx($command)
   return (cstring(stdo), int(exit_code))
+
+proc fileinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int] {.exportc, dynlib.} =
+  let p = $path
+  if not fileExists(p):
+    return ("".cstring, "".cstring, 0, 0)
+  let name = p.splitPath().tail
+  let last_edit = int(getFileInfo(p).lastWriteTime.toUnix())
+  let file_size = int(getFileSize(p))
+  when defined(linux):
+    let (creator, _) = execCmdEx("stat -c '%U' " & p)
+  elif defined(bsd) or defined(macosx):
+    let (creator, _) = execCmdEx("stat -f '%Su' " & p)
+  return (cstring(name), cstring(creator.strip()), last_edit, file_size)
 
 proc fileread*(path: cstring): cstring {.exportc, dynlib.} =
   return cstring(readFile($path))
 
-proc filesize*(path: cstring): int {.exportc, dynlib.} =
-  return int(getFileSize($path))
-
 proc filewrite*(path: cstring, content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
+
+proc folderinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int] {.exportc, dynlib.} =
+  let p = $path
+  if not dirExists(p):
+    return ("".cstring, "".cstring, 0, 0)
+  let name = p.splitPath().tail
+  let last_edit = int(getFileInfo(p).lastWriteTime.toUnix())
+  var folder_size: int = 0
+  for file in walkDirRec(p):
+    folder_size += int(getFileSize(file))
+  when defined(linux):
+    let (creator, _) = execCmdEx("stat -c '%U' " & p)
+  elif defined(bsd) or defined(macosx):
+    let (creator, _) = execCmdEx("stat -f '%Su' " & p)
+  result = (cstring(name), cstring(creator.strip()), last_edit, folder_size)
 
 proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
@@ -98,20 +124,6 @@ proc getprogloc*(): cstring {.exportc, dynlib.} =
 
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
-
-proc infoproc*(process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring] {.exportc, dynlib.} =
-  when defined(linux):
-    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
-    let line = output.strip()
-    let parts = line.splitWhitespace(maxsplit=5)
-  elif defined(bsd) or defined(macosx):
-    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,start,command")
-    let lines = output.strip().splitLines()
-    let line = if lines.len > 1: lines[1] else: ""
-    let parts = line.splitWhitespace(maxsplit=5)
-  if parts.len < 6:
-    return ("".cstring, "".cstring, "".cstring, "".cstring, "".cstring, "".cstring)
-  return (cstring(parts[0]), cstring(parts[1]), cstring(parts[2]), cstring(parts[3]), cstring(parts[4]), cstring(parts[5]))
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
@@ -247,6 +259,18 @@ proc mvfile*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
 proc mvfolder*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
 
+proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring] {.exportc, dynlib.} =
+  when defined(linux):
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
+    let line = output.strip()
+    let parts = line.splitWhitespace(maxsplit=5)
+  elif defined(bsd) or defined(macosx):
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,start,command")
+    let lines = output.strip().splitLines()
+    let line = if lines.len > 1: lines[1] else: ""
+    let parts = line.splitWhitespace(maxsplit=5)
+  return (cstring(parts[0]), int(parseInt(parts[1])), int(parseInt(parts[2])), cstring(parts[3]), int(parseInt(parts[4])), cstring(parts[5]))
+
 proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
   randomize()
   return rand(minimum..maximum)
@@ -310,10 +334,13 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   return buf;
   """.}
 
-proc tocintcstr*(value: cstring): int {.exportc, dynlib.} =
+proc timern*(): int {.exportc, dynlib.} =
+  return int(getTime().toUnix())
+
+proc tointstr*(value: cstring): int {.exportc, dynlib.} =
   return parseInt($value)
 
-proc tocstrcint*(value: int): cstring {.exportc, dynlib.} =
+proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
