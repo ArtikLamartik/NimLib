@@ -16,10 +16,11 @@ importAll("../build/nimlib.so"):
   proc cursor*     (visible: int)
   proc cursorto*   (x: int, y: int)
   proc def*        (name: cstring; value: cstring)
-  proc exec*       (command: cstring): tuple[stdo: cstring, exit_code: int]
+  proc exec*       (command: cstring): tuple[output: cstring, exit_code: int]
+  proc fileinfo*   (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int]
   proc fileread*   (path: cstring): cstring
-  proc filesize*   (path: cstring): int
   proc filewrite*  (path: cstring; content: cstring)
+  proc folderinfo* (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int]
   proc freebuf*    (pointer1: pointer)
   proc getargs*    (): tuple[args: ptr UncheckedArray[cstring], length: int]
   proc getcf*      (): cstring
@@ -28,7 +29,6 @@ importAll("../build/nimlib.so"):
   proc getdef*     (name: cstring): cstring
   proc getprogloc* (): cstring
   proc halt*       (exit_code: int)
-  proc infoproc*   (process_id: int): tuple[name: cstring, process_id: cstring, parent_process_id: cstring, user_id: cstring, start_time: cstring, command: cstring]
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
@@ -43,12 +43,13 @@ importAll("../build/nimlib.so"):
   proc msgbox*     (title: cstring, count: int): int {.varargs.}
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
+  proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
   proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
-  proc scope*      (atexit: int, function: proc () {.noconv.})
+  proc scope*      (atexit: int, function: proc() {.noconv.})
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
   proc sig*        (signal: int, function: proc() {.noconv.})
@@ -57,8 +58,9 @@ importAll("../build/nimlib.so"):
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
-  proc tocintcstr* (value: cstring): int
-  proc tocstrcint* (value: int): cstring
+  proc timern*     (): int
+  proc tointstr*   (value: cstring): int
+  proc tostrint*   (value: int): cstring
   proc undef*      (name: cstring)
   proc wait*       (milliseconds: int)
   proc where*      (command: cstring): cstring
