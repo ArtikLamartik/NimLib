@@ -237,7 +237,7 @@ proc rmfile*(path: cstring) {.exportc, dynlib.} =
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
-proc scope*(atexit: int, function: proc () {.noconv.}) {.exportc, dynlib.} =
+proc scope*(atexit: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   if atexit == 0:
     defer: function()
   elif atexit == 1:
@@ -251,8 +251,8 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[38;2;" & $r & ";" & $g & ";" & $b & "m")
   stdout.flushFile()
 
-proc sig*(signal: int, function: proc(_: int) {.noconv.}) {.exportc, dynlib.} =
-  discard signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
+proc sig*(signal: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
+  signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
 
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
@@ -299,8 +299,7 @@ proc where*(command: cstring): cstring {.exportc, dynlib.} =
   return cstring($execProcess("which " & $command).strip())
 
 proc cleanup() {.noconv.} =
-  cursor(1)
-  discard execCmdEx("stty sane")
   resetbgfg()
+  cursor(1)
 
-addExitProc(cleanup)
+scope(1, cleanup)
