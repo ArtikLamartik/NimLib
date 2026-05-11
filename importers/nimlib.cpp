@@ -1,6 +1,6 @@
 struct Exec {
     const char* output;
-    int exit_code;
+    int         exit_code;
 };
 
 struct Fileinfo {
