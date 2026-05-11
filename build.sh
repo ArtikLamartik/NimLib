@@ -1,2 +1,2 @@
 #!/bin/bash
-nim c --app:lib --out:compiled/nimlib.so src/main.nim
+nim c --app:lib --out:build/nimlib.so src/main.nim
