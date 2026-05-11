@@ -9,11 +9,18 @@ import osproc
 import std/os
 
 {.emit: """
+#include <pthread.h>
 #include <termios.h>
+#include <signal.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#define MAX_THREADS 65536
+static pthread_t thread_handles[MAX_THREADS];
+static void* thread_fns[MAX_THREADS];
+static int thread_count = 0;
 """.}
 
 var exitqueue: seq[proc() {.noconv.}] = @[]
@@ -140,6 +147,16 @@ proc isroot*(): int {.exportc, dynlib.} =
 proc killproc*(process_id: int) {.exportc, dynlib.} =
   discard kill(Pid(process_id), SIGKILL)
 
+proc killthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  for (int i = 0; i < thread_count; i++) {
+    if (thread_fns[i] == (void*)`function`) {
+      pthread_cancel(thread_handles[i]);
+      break;
+    }
+  }
+  """.}
+
 proc ladefs*(): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var n: seq[cstring]
   var v: seq[cstring]
@@ -259,6 +276,13 @@ proc mvfile*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
 proc mvfolder*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
 
+proc ping*(url: cstring): int {.exportc, dynlib.} =
+  when defined(macosx):
+    let (_, code) = execCmdEx("ping -c 1 -t 1 " & $url)
+  elif defined(linux) or defined(bsd):
+    let (_, code) = execCmdEx("ping -c 1 -W 1 " & $url)
+  return int(code == 0)
+
 proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring] {.exportc, dynlib.} =
   when defined(linux):
     let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
@@ -305,6 +329,15 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
 proc sig*(signal: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
 
+proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  pthread_t t;
+  pthread_create(&t, NULL, (void*(*)(void*))`function`, NULL);
+  thread_handles[thread_count] = t;
+  thread_fns[thread_count] = (void*)`function`;
+  thread_count++;
+  """.}
+
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
 
@@ -332,6 +365,17 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   }
   va_end(args);
   return buf;
+  """.}
+
+proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  for (int i = 0; i < thread_count; i++) {
+    if (thread_fns[i] == (void*)`function`) {
+      pthread_join(thread_handles[i], NULL);
+      thread_fns[i] = NULL;
+      break;
+    }
+  }
   """.}
 
 proc timern*(): int {.exportc, dynlib.} =
