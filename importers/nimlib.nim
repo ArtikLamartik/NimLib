@@ -34,6 +34,7 @@ importAll("../build/nimlib.so"):
   proc isfolder*   (path: cstring): int
   proc isroot*     (): int
   proc killproc*   (process_id: int)
+  proc killthr*    (function: proc() {.noconv.})
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
   proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int]
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int]
@@ -43,6 +44,7 @@ importAll("../build/nimlib.so"):
   proc msgbox*     (title: cstring, count: int): int {.varargs.}
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
+  proc ping*       (url: cstring): int
   proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
@@ -53,11 +55,13 @@ importAll("../build/nimlib.so"):
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
   proc sig*        (signal: int, function: proc() {.noconv.})
+  proc spawnthr*   (function: proc() {.noconv.})
   proc spawnproc*  (command: cstring): int
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
+  proc syncthr*    (function: proc() {.noconv.})
   proc timern*     (): int
   proc tointstr*   (value: cstring): int
   proc tostrint*   (value: int): cstring
