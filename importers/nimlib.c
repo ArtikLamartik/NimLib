@@ -82,6 +82,7 @@ extern void        mkfolder   (const char* path);
 extern int         msgbox     (const char* title, int count, ...);
 extern void        mvfile     (const char* old_path, const char* new_path);
 extern void        mvfolder   (const char* old_path, const char* new_path);
+extern int         ping       (const char* url);
 extern Procinfo    procinfo   (int process_id);
 extern int         randint    (int minimum, int maximum);
 extern void*       reallocbuf (void* pointer1, int new_size);
@@ -92,11 +93,13 @@ extern void        scope      (int atexit, void (*function)(void));
 extern void        setbg      (int r, int g, int b);
 extern void        setfg      (int r, int g, int b);
 extern void        sig        (int signal, void (*function)(void));
+extern void        spawnthr   (void (*function)(void))
 extern int         spawnproc  (const char* command);
 extern const char* stdi       (int visible);
 extern void        stdo       (const char* string1);
 extern int         strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (int count, ...);
+extern void        syncthr    (void (*function)(void))
 extern int         timern     (void);
 extern int         tointstr   (const char* value);
 extern const char* tostrint   (int value);
