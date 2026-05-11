@@ -83,6 +83,7 @@ extern "C" {
     int         msgbox     (const char* title, int count, ...);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
+    int         ping       (const char* url);
     Procinfo    procinfo   (int process_id);
     int         randint    (int minimum, int maximum);
     void*       reallocbuf (void* pointer1, int new_size);
@@ -93,12 +94,14 @@ extern "C" {
     void        setbg      (int r, int g, int b);
     void        setfg      (int r, int g, int b);
     void        sig        (int signal, void (*function)(void));
+    void        spawnthr   (void (*function)(void))
     int         spawnproc  (const char* command);
     const char* stdi       (int visible);
     void        stdo       (const char* string1);
     int         strcomp    (const char* string1, const char* string2);
     const char* strformat  (int count, ...);
-    int         timern     (void);
+    void        syncthr    (void (*function)(void))
+    long        timern     (void);
     int         tointstr   (const char* value);
     const char* tostrint   (int value);
     void        undef      (const char* name);
