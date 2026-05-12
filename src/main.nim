@@ -381,8 +381,20 @@ proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
 proc timern*(): int {.exportc, dynlib.} =
   return int(getTime().toUnix())
 
+proc tofltint*(value: int): float {.exportc, dynlib.} =
+  return float(value)
+
+proc tofltstr*(value: cstring): float {.exportc, dynlib.} =
+  return float(parseInt($value))
+
+proc tointflt*(value: float): int {.exportc, dynlib.} =
+  return int(value)
+
 proc tointstr*(value: cstring): int {.exportc, dynlib.} =
   return parseInt($value)
+
+proc tostrflt*(value: float): cstring {.exportc, dynlib.} =
+  return cstring($value)
 
 proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
