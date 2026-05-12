@@ -93,15 +93,19 @@ extern void        scope      (int atexit, void (*function)(void));
 extern void        setbg      (int r, int g, int b);
 extern void        setfg      (int r, int g, int b);
 extern void        sig        (int signal, void (*function)(void));
-extern void        spawnthr   (void (*function)(void))
+extern void        spawnthr   (void (*function)(void));
 extern int         spawnproc  (const char* command);
 extern const char* stdi       (int visible);
 extern void        stdo       (const char* string1);
 extern int         strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (int count, ...);
-extern void        syncthr    (void (*function)(void))
+extern void        syncthr    (void (*function)(void));
 extern int         timern     (void);
+extern long double tofltint   (int value);
+extern long double tofltstr   (const char* value);
+extern int         tointflt   (long double value);
 extern int         tointstr   (const char* value);
+extern const char* tostrflt   (long double value);
 extern const char* tostrint   (int value);
 extern void        undef      (const char* name);
 extern void        wait       (int milliseconds);
