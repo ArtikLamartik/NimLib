@@ -63,7 +63,11 @@ importAll("../build/nimlib.so"):
   proc strformat*  (count: int): cstring {.varargs.}
   proc syncthr*    (function: proc() {.noconv.})
   proc timern*     (): int
+  proc tofltint*   (value: int): float
+  proc tofltstr*   (value: cstring): float
+  proc tointflt*   (value: float): int
   proc tointstr*   (value: cstring): int
+  proc tostrflt*   (value: float): cstring
   proc tostrint*   (value: int): cstring
   proc undef*      (name: cstring)
   proc wait*       (milliseconds: int)
