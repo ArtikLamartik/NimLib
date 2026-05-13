@@ -13,6 +13,7 @@ importAll("../build/nimlib.so"):
   proc allocbuf*   (size: int): pointer
   proc cf*         (path: cstring)
   proc clrscr*     ()
+  proc cron*       (milliseconds: int, function: proc() {.noconv.})
   proc cursor*     (visible: int)
   proc cursorto*   (x: int, y: int)
   proc def*        (name: cstring; value: cstring)
@@ -33,6 +34,7 @@ importAll("../build/nimlib.so"):
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
   proc isroot*     (): int
+  proc killjob*    (function: proc() {.noconv.})
   proc killproc*   (process_id: int)
   proc killthr*    (function: proc() {.noconv.})
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
@@ -51,6 +53,7 @@ importAll("../build/nimlib.so"):
   proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
+  proc schedule*   (milliseconds: int, function: proc() {.noconv.})
   proc scope*      (atexit: int, function: proc() {.noconv.})
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
@@ -63,6 +66,8 @@ importAll("../build/nimlib.so"):
   proc strformat*  (count: int): cstring {.varargs.}
   proc syncthr*    (function: proc() {.noconv.})
   proc timern*     (): int
+  proc timerstart* (name: cstring)
+  proc timerstop*  (name: cstring): int
   proc tofltint*   (value: int): float
   proc tofltstr*   (value: cstring): float
   proc tointflt*   (value: float): int
