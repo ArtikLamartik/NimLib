@@ -53,6 +53,7 @@ extern "C" {
     void*       allocbuf   (int size);
     void        cf         (const char* path);
     void        clrscr     (void);
+    void        cron       (int milliseconds, void (*function)(void));
     void        cursor     (int visible);
     void        cursorto   (int x, int y);
     void        def        (const char* name, const char* value);
@@ -73,7 +74,9 @@ extern "C" {
     int         isfile     (const char* path);
     int         isfolder   (const char* path);
     int         isroot     (void);
+    void        killjob    (void (*function)(void));
     int         killproc   (int process_id);
+    void        killthr    (void (*function)(void));
     Ladefs      ladefs     (void);
     Laprocs     laprocs    (void);
     Lf          lf         (void);
@@ -90,6 +93,7 @@ extern "C" {
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
+    void        schedule   (int milliseconds, void (*function)(void));
     void        scope      (int atexit, void (*function)(void));
     void        setbg      (int r, int g, int b);
     void        setfg      (int r, int g, int b);
@@ -102,6 +106,8 @@ extern "C" {
     const char* strformat  (int count, ...);
     void        syncthr    (void (*function)(void));
     long        timern     (void);
+    void        timerstart (const char* name);
+    int         timerstop  (const char* name);
     double      tofltint   (int value);
     double      tofltstr   (const char* value);
     int         tointflt   (double value);
