@@ -17,10 +17,31 @@ import std/os
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <time.h>
 #define MAX_THREADS 65536
 static pthread_t thread_handles[MAX_THREADS];
 static void* thread_fns[MAX_THREADS];
 static int thread_count = 0;
+#define MAX_JOBS 1024
+static pthread_t job_handles[MAX_JOBS];
+static void* job_fns[MAX_JOBS];
+static int job_active[MAX_JOBS];
+static int job_count = 0;
+typedef struct { void (*fn)(); int ms; int repeat; int* active; } JobArgs;
+static void* job_runner(void* arg) {
+  JobArgs* a = (JobArgs*)arg;
+  do {
+    usleep(a->ms * 1000);
+    if (*a->active)
+      a->fn();
+  } while (a->repeat && *a->active);
+  free(a);
+  return NULL;
+}
+#define MAX_TIMERS 1024
+typedef struct { const char* name; struct timespec start; } Timer;
+static Timer timers[MAX_TIMERS];
+static int timer_count = 0;
 """.}
 
 var exitqueue: seq[proc() {.noconv.}] = @[]
@@ -39,6 +60,20 @@ proc cf*(path: cstring) {.exportc, dynlib.} =
 
 proc clrscr*() {.exportc, dynlib.} =
   discard execCmd("clear")
+
+proc cron*(milliseconds: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  int idx = job_count;
+  job_active[idx] = 1;
+  job_fns[idx] = (void*)`function`;
+  JobArgs* args = (JobArgs*)malloc(sizeof(JobArgs));
+  args->fn = (void(*)())`function`;
+  args->ms = `milliseconds`;
+  args->repeat = 1;
+  args->active = &job_active[idx];
+  pthread_create(&job_handles[idx], NULL, job_runner, args);
+  job_count++;
+  """.}
 
 proc cursor*(visible: int) {.exportc, dynlib.} =
   if visible == 0:
@@ -143,6 +178,18 @@ proc isfolder*(path: cstring): int {.exportc, dynlib.} =
 
 proc isroot*(): int {.exportc, dynlib.} =
   return int(isAdmin() == true)
+
+proc killjob*(function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  for (int i = 0; i < job_count; i++) {
+    if (job_fns[i] == (void*)`function`) {
+      job_active[i] = 0;
+      pthread_join(job_handles[i], NULL);
+      job_fns[i] = NULL;
+      break;
+    }
+  }
+  """.}
 
 proc killproc*(process_id: int) {.exportc, dynlib.} =
   discard kill(Pid(process_id), SIGKILL)
@@ -312,6 +359,20 @@ proc rmfile*(path: cstring) {.exportc, dynlib.} =
 proc rmfolder*(path: cstring) {.exportc, dynlib.} =
   removeDir($path)
 
+proc schedule*(milliseconds: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
+  {.emit: """
+  int idx = job_count;
+  job_active[idx] = 1;
+  job_fns[idx] = (void*)`function`;
+  JobArgs* args = (JobArgs*)malloc(sizeof(JobArgs));
+  args->fn = (void(*)())`function`;
+  args->ms = `milliseconds`;
+  args->repeat = 0;
+  args->active = &job_active[idx];
+  pthread_create(&job_handles[idx], NULL, job_runner, args);
+  job_count++;
+  """.}
+
 proc scope*(atexit: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   if atexit == 0:
     defer: function()
@@ -380,6 +441,33 @@ proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
 
 proc timern*(): int {.exportc, dynlib.} =
   return int(getTime().toUnix())
+
+proc timerstart*(name: cstring) {.exportc, dynlib.} =
+  {.emit: """
+  for (int i = 0; i < timer_count; i++) {
+    if (strcmp(timers[i].name, `name`) == 0) {
+      clock_gettime(CLOCK_MONOTONIC, &timers[i].start);
+      return;
+    }
+  }
+  timers[timer_count].name = `name`;
+  clock_gettime(CLOCK_MONOTONIC, &timers[timer_count].start);
+  timer_count++;
+  """.}
+
+proc timerstop*(name: cstring): int {.exportc, dynlib.} =
+  {.emit: """
+  struct timespec end;
+  clock_gettime(CLOCK_MONOTONIC, &end);
+  for (int i = 0; i < timer_count; i++) {
+    if (strcmp(timers[i].name, `name`) == 0) {
+      long ms = (end.tv_sec - timers[i].start.tv_sec) * 1000 + (end.tv_nsec - timers[i].start.tv_nsec) / 1000000;
+      `result` = ms;
+      return;
+    }
+  }
+  `result` = -1;
+  """.}
 
 proc tofltint*(value: int): float {.exportc, dynlib.} =
   return float(value)
