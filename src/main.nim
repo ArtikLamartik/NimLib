@@ -7,6 +7,8 @@ import std/posix
 import std/times
 import osproc
 import std/os
+import std/re
+import math
 
 {.emit: """
 #include <pthread.h>
@@ -22,7 +24,7 @@ import std/os
 static pthread_t thread_handles[MAX_THREADS];
 static void* thread_fns[MAX_THREADS];
 static int thread_count = 0;
-#define MAX_JOBS 1024
+#define MAX_JOBS 65536
 static pthread_t job_handles[MAX_JOBS];
 static void* job_fns[MAX_JOBS];
 static int job_active[MAX_JOBS];
@@ -38,7 +40,7 @@ static void* job_runner(void* arg) {
   free(a);
   return NULL;
 }
-#define MAX_TIMERS 1024
+#define MAX_TIMERS 65536
 typedef struct { const char* name; struct timespec start; } Timer;
 static Timer timers[MAX_TIMERS];
 static int timer_count = 0;
@@ -166,6 +168,12 @@ proc getprogloc*(): cstring {.exportc, dynlib.} =
 
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
+
+proc has*(pattern: cstring, text: cstring): int {.exportc, dynlib.} =
+  let t = $text
+  if t.contains(re($pattern)):
+    return 1
+  return 0
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
@@ -439,8 +447,8 @@ proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   }
   """.}
 
-proc timern*(): int {.exportc, dynlib.} =
-  return int(getTime().toUnix())
+proc timern*(): float {.exportc, dynlib.} =
+  return epochTime()
 
 proc timerstart*(name: cstring) {.exportc, dynlib.} =
   {.emit: """
@@ -489,6 +497,10 @@ proc tostrint*(value: int): cstring {.exportc, dynlib.} =
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
+
+proc until*(timestamp: float) {.exportc, dynlib.} =
+  if timestamp > epochTime():
+    sleep(int(round((timestamp - epochTime()) * 1000.0)))
 
 proc wait*(milliseconds: int) {.exportc, dynlib.} =
   sleep(milliseconds)
