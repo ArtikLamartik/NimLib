@@ -30,6 +30,7 @@ importAll("../build/nimlib.so"):
   proc getdef*     (name: cstring): cstring
   proc getprogloc* (): cstring
   proc halt*       (exit_code: int)
+  proc has*        (pattern: cstring, text: cstring): int
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
@@ -43,7 +44,6 @@ importAll("../build/nimlib.so"):
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
-  proc msgbox*     (title: cstring, count: int): int {.varargs.}
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc ping*       (url: cstring): int
@@ -65,7 +65,7 @@ importAll("../build/nimlib.so"):
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
   proc syncthr*    (function: proc() {.noconv.})
-  proc timern*     (): int
+  proc timern*     (): float
   proc timerstart* (name: cstring)
   proc timerstop*  (name: cstring): int
   proc tofltint*   (value: int): float
@@ -75,5 +75,6 @@ importAll("../build/nimlib.so"):
   proc tostrflt*   (value: float): cstring
   proc tostrint*   (value: int): cstring
   proc undef*      (name: cstring)
+  proc until*      (timestamp: float)
   proc wait*       (milliseconds: int)
   proc where*      (command: cstring): cstring
