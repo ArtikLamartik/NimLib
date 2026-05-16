@@ -70,6 +70,7 @@ extern "C" {
     const char* getdef     (const char* name);
     const char* getprogloc (void);
     void        halt       (int exit_code);
+    int         has        (const char* pattern, const char* text);
     int         isdef      (const char* name);
     int         isfile     (const char* path);
     int         isfolder   (const char* path);
@@ -83,7 +84,6 @@ extern "C" {
     void        mcopy      (const char* source, void* destination, int size);
     void        mkfile     (const char* path);
     void        mkfolder   (const char* path);
-    int         msgbox     (const char* title, int count, ...);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
     int         ping       (const char* url);
@@ -105,7 +105,7 @@ extern "C" {
     int         strcomp    (const char* string1, const char* string2);
     const char* strformat  (int count, ...);
     void        syncthr    (void (*function)(void));
-    long        timern     (void);
+    double      timern     (void);
     void        timerstart (const char* name);
     int         timerstop  (const char* name);
     double      tofltint   (int value);
@@ -115,6 +115,7 @@ extern "C" {
     const char* tostrflt   (double value);
     const char* tostrint   (int value);
     void        undef      (const char* name);
+    void        until      (double timestamp);
     void        wait       (int milliseconds);
     const char* where      (const char* command);
 }
