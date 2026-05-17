@@ -116,6 +116,7 @@ extern "C" {
     const char* tostrint   (int value);
     void        undef      (const char* name);
     void        until      (double timestamp);
+    void        vidbuf     (int mode);
     void        wait       (int milliseconds);
     const char* where      (const char* command);
 }
