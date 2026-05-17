@@ -1,6 +1,6 @@
 typedef struct {
     const char* output;
-    int         exit_code;
+    long        exit_code;
 } Exec;
 
 typedef struct {
@@ -19,42 +19,42 @@ typedef struct {
 
 typedef struct {
     const char** args;
-    int          length;
+    long         length;
 } Getargs;
 
 typedef struct {
     const char** name;
     const char** value;
-    int          length;
+    long         length;
 } Ladefs;
 
 typedef struct {
     const char** name;
-    const char** process_id;
-    int          length;
+    long         process_id;
+    long         length;
 } Laprocs;
 
 typedef struct {
     const char** paths;
     const char** types_of;
-    int          length;
+    long         length;
 } Lf;
 
 typedef struct {
     const char* name;
-    const char* process_id;
-    const char* parent_process_id;
+    long        process_id;
+    long        parent_process_id;
     const char* user_name;
-    const char* start_time;
+    long        start_time;
     const char* command;
 } Procinfo;
 
-extern void*       allocbuf   (int size);
+extern void*       allocbuf   (long size);
 extern void        cf         (const char* path);
 extern void        clrscr     (void);
-extern void        cron       (int milliseconds, void (*function)(void));
-extern void        cursor     (int visible);
-extern void        cursorto   (int x, int y);
+extern void        cron       (long milliseconds, void (*function)(void));
+extern void        cursor     (long visible);
+extern void        cursorto   (long x, long y);
 extern void        def        (const char* name, const char* value);
 extern Exec        exec       (const char* command);
 extern Fileinfo    fileinfo   (const char* path);
@@ -65,56 +65,56 @@ extern void        freebuf    (void* pointer1);
 extern Getargs     getargs    (void);
 extern const char* getcf      (void);
 extern const char* getchr     (void);
-extern int         getcpid    (void);
+extern long        getcpid    (void);
 extern const char* getdef     (const char* name);
 extern const char* getprogloc (void);
-extern void        halt       (int exit_code);
-extern int         has        (const char* pattern, const char* text);
-extern int         isdef      (const char* name);
-extern int         isfile     (const char* path);
-extern int         isfolder   (const char* path);
-extern int         isroot     (void);
+extern void        halt       (long exit_code);
+extern long        has        (const char* text, const char* pattern);
+extern long        isdef      (const char* name);
+extern long        isfile     (const char* path);
+extern long        isfolder   (const char* path);
+extern long        isroot     (void);
 extern void        killjob    (void (*function)(void));
-extern int         killproc   (int process_id);
+extern long        killproc   (long process_id);
 extern void        killthr    (void (*function)(void));
 extern Ladefs      ladefs     (void);
 extern Laprocs     laprocs    (void);
 extern Lf          lf         (void);
-extern void        mcopy      (const char* source, void* destination, int size);
+extern void        mcopy      (const char* source, void* destination, long size);
 extern void        mkfile     (const char* path);
 extern void        mkfolder   (const char* path);
 extern void        mvfile     (const char* old_path, const char* new_path);
 extern void        mvfolder   (const char* old_path, const char* new_path);
-extern int         ping       (const char* url);
-extern Procinfo    procinfo   (int process_id);
-extern int         randint    (int minimum, int maximum);
-extern void*       reallocbuf (void* pointer1, int new_size);
+extern long        ping       (const char* url);
+extern Procinfo    procinfo   (long process_id);
+extern long        randint    (long minimum, long maximum);
+extern void*       reallocbuf (void* pointer1, long new_size);
 extern void        resetbgfg  (void);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
-extern void        schedule   (int milliseconds, void (*function)(void));
-extern void        scope      (int atexit, void (*function)(void));
-extern void        setbg      (int r, int g, int b);
-extern void        setfg      (int r, int g, int b);
-extern void        sig        (int signal, void (*function)(void));
+extern void        schedule   (long milliseconds, void (*function)(void));
+extern void        scope      (long atexit, void (*function)(void));
+extern void        setbg      (long r, long g, long b);
+extern void        setfg      (long r, long g, long b);
+extern void        sig        (long signal, void (*function)(void));
 extern void        spawnthr   (void (*function)(void));
-extern int         spawnproc  (const char* command);
-extern const char* stdi       (int visible);
+extern long        spawnproc  (const char* command);
+extern const char* stdi       (long visible);
 extern void        stdo       (const char* string1);
-extern int         strcomp    (const char* string1, const char* string2);
-extern const char* strformat  (int count, ...);
+extern long        strcomp    (const char* string1, const char* string2);
+extern const char* strformat  (long count, ...);
 extern void        syncthr    (void (*function)(void));
 extern double      timern     (void);
 extern void        timerstart (const char* name);
-extern int         timerstop  (const char* name);
-extern double      tofltint   (int value);
+extern long        timerstop  (const char* name);
+extern double      tofltint   (long value);
 extern double      tofltstr   (const char* value);
-extern int         tointflt   (double value);
-extern int         tointstr   (const char* value);
+extern long        tointflt   (double value);
+extern long        tointstr   (const char* value);
 extern const char* tostrflt   (double value);
-extern const char* tostrint   (int value);
+extern const char* tostrint   (long value);
 extern void        undef      (const char* name);
 extern void        until      (double timestamp);
-extern void        vidbuf     (int mode);
-extern void        wait       (int milliseconds);
+extern void        vidbuf     (long mode);
+extern void        wait       (long milliseconds);
 extern const char* where      (const char* command);
