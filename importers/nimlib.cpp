@@ -1,6 +1,6 @@
 struct Exec {
     const char* output;
-    int exit_code;
+    long        exit_code;
 };
 
 struct Fileinfo {
@@ -19,43 +19,43 @@ struct Folderinfo {
 
 struct Getargs {
     const char** args;
-    int          length;
+    long         length;
 };
 
 struct Ladefs {
     const char** name;
     const char** value;
-    int          length;
+    long         length;
 };
 
 struct Laprocs {
     const char** name;
-    const char** process_id;
-    int          length;
+    long*        process_id;
+    long         length;
 };
 
 struct Lf {
     const char** paths;
     const char** types_of;
-    int          length;
+    long         length;
 };
 
 struct Procinfo {
     const char* name;
-    const char* process_id;
-    const char* parent_process_id;
+    long        process_id;
+    long        parent_process_id;
     const char* user_name;
-    const char* start_time;
+    long        start_time;
     const char* command;
 };
 
 extern "C" {
-    void*       allocbuf   (int size);
+    void*       allocbuf   (long size);
     void        cf         (const char* path);
     void        clrscr     (void);
-    void        cron       (int milliseconds, void (*function)(void));
-    void        cursor     (int visible);
-    void        cursorto   (int x, int y);
+    void        cron       (long milliseconds, void (*function)(void));
+    void        cursor     (long visible);
+    void        cursorto   (long x, long y);
     void        def        (const char* name, const char* value);
     Exec        exec       (const char* command);
     Fileinfo    fileinfo   (const char* path);
@@ -66,57 +66,57 @@ extern "C" {
     Getargs     getargs    (void);
     const char* getcf      (void);
     const char* getchr     (void);
-    int         getcpid    (void);
+    long        getcpid    (void);
     const char* getdef     (const char* name);
     const char* getprogloc (void);
-    void        halt       (int exit_code);
-    int         has        (const char* pattern, const char* text);
-    int         isdef      (const char* name);
-    int         isfile     (const char* path);
-    int         isfolder   (const char* path);
-    int         isroot     (void);
+    void        halt       (long exit_code);
+    long        has        (const char* text, const char* pattern);
+    long        isdef      (const char* name);
+    long        isfile     (const char* path);
+    long        isfolder   (const char* path);
+    long        isroot     (void);
     void        killjob    (void (*function)(void));
-    int         killproc   (int process_id);
+    long        killproc   (long process_id);
     void        killthr    (void (*function)(void));
     Ladefs      ladefs     (void);
     Laprocs     laprocs    (void);
     Lf          lf         (void);
-    void        mcopy      (const char* source, void* destination, int size);
+    void        mcopy      (const char* source, void* destination, long size);
     void        mkfile     (const char* path);
     void        mkfolder   (const char* path);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
-    int         ping       (const char* url);
-    Procinfo    procinfo   (int process_id);
-    int         randint    (int minimum, int maximum);
-    void*       reallocbuf (void* pointer1, int new_size);
+    long        ping       (const char* url);
+    Procinfo    procinfo   (long process_id);
+    long        randint    (long minimum, long maximum);
+    void*       reallocbuf (void* pointer1, long new_size);
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
-    void        schedule   (int milliseconds, void (*function)(void));
-    void        scope      (int atexit, void (*function)(void));
-    void        setbg      (int r, int g, int b);
-    void        setfg      (int r, int g, int b);
-    void        sig        (int signal, void (*function)(void));
+    void        schedule   (long milliseconds, void (*function)(void));
+    void        scope      (long atexit, void (*function)(void));
+    void        setbg      (long r, long g, long b);
+    void        setfg      (long r, long g, long b);
+    void        sig        (long signal, void (*function)(void));
     void        spawnthr   (void (*function)(void));
-    int         spawnproc  (const char* command);
-    const char* stdi       (int visible);
+    long        spawnproc  (const char* command);
+    const char* stdi       (long visible);
     void        stdo       (const char* string1);
-    int         strcomp    (const char* string1, const char* string2);
-    const char* strformat  (int count, ...);
+    long        strcomp    (const char* string1, const char* string2);
+    const char* strformat  (long count, ...);
     void        syncthr    (void (*function)(void));
     double      timern     (void);
     void        timerstart (const char* name);
-    int         timerstop  (const char* name);
-    double      tofltint   (int value);
+    long        timerstop  (const char* name);
+    double      tofltint   (long value);
     double      tofltstr   (const char* value);
-    int         tointflt   (double value);
-    int         tointstr   (const char* value);
+    long        tointflt   (double value);
+    long        tointstr   (const char* value);
     const char* tostrflt   (double value);
-    const char* tostrint   (int value);
+    const char* tostrint   (long value);
     void        undef      (const char* name);
     void        until      (double timestamp);
-    void        vidbuf     (int mode);
-    void        wait       (int milliseconds);
+    void        vidbuf     (long mode);
+    void        wait       (long milliseconds);
     const char* where      (const char* command);
 }
