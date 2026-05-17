@@ -265,66 +265,6 @@ proc mkfile*(path: cstring) {.exportc, dynlib.} =
 proc mkfolder*(path: cstring) {.exportc, dynlib.} =
   createDir($path)
 
-proc msgbox*(title: cstring, count: int): int {.exportc, dynlib, varargs.} =
-  {.emit: """
-  printf("\x1b[0m");
-  fflush(stdout);
-  const char* items[65536];
-  va_list args;
-  va_start(args, `count`);
-  for (int i = 0; i < `count`; i++)
-    items[i] = va_arg(args, const char*);
-  va_end(args);
-  int maxw = strlen(`title`);
-  for (int i = 0; i < `count`; i++) {
-    int l = strlen(items[i]);
-    if (l > maxw) maxw = l;
-  }
-  maxw += 4;
-  struct termios oldt, newt;
-  tcgetattr(STDIN_FILENO, &oldt);
-  newt = oldt;
-  newt.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-  int selected = 0;
-  printf("\033[?1049h");
-  fflush(stdout);
-  while (1) {
-    printf("\033[2J\033[H");
-    fflush(stdout);
-    printf("+");
-    for (int i = 0; i < maxw; i++) printf("-");
-    printf("+\n");
-    printf("| \033[1m%-*s\033[0m |\n", maxw - 2, `title`);
-    for (int i = 0; i < `count`; i++) {
-      printf("+");
-      for (int j = 0; j < maxw; j++) printf("-");
-      printf("+\n");
-      if (i == selected)
-        printf("| \033[7m%-*s\033[0m |\n", maxw - 2, items[i]);
-      else
-        printf("| %-*s |\n", maxw - 2, items[i]);
-    }
-    printf("+");
-    for (int i = 0; i < maxw; i++) printf("-");
-    printf("+\n");
-    fflush(stdout);
-    char c = getchar();
-    if (c == '\033') {
-      getchar();
-      char arrow = getchar();
-      if (arrow == 'A' && selected > 0) selected--;
-      if (arrow == 'B' && selected < `count` - 1) selected++;
-    } else if (c == '\n') {
-      break;
-    }
-  }
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-  printf("\033[?1049l");
-  fflush(stdout);
-  return selected;
-  """.}
-
 proc mvfile*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveFile($old_path, $new_path)
 
@@ -501,6 +441,16 @@ proc undef*(name: cstring) {.exportc, dynlib.} =
 proc until*(timestamp: float) {.exportc, dynlib.} =
   if timestamp > epochTime():
     sleep(int(round((timestamp - epochTime()) * 1000.0)))
+
+proc vidbuf*(mode: int) {.exportc, dynlib.} =
+  {.emit: """
+  if (`mode` == 0) {
+    fprintf(stdout, "\033[?1049l");
+  } else if (`mode` == 1) {
+    fprintf(stdout, "\033[?1049h");
+  }
+  fflush(stdout);
+  """.}
 
 proc wait*(milliseconds: int) {.exportc, dynlib.} =
   sleep(milliseconds)
