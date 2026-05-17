@@ -169,7 +169,7 @@ proc getprogloc*(): cstring {.exportc, dynlib.} =
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
 
-proc has*(pattern: cstring, text: cstring): int {.exportc, dynlib.} =
+proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
   let t = $text
   if t.contains(re($pattern)):
     return 1
@@ -220,9 +220,9 @@ proc ladefs*(): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArr
     v.add(cstring(val))
   return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr v[0]), n.len.int)
 
-proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  var n: seq[string]
+proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int] {.exportc, dynlib.} =
   var p: seq[string]
+  var n: seq[string]
   when defined(linux):
     let output = execProcess("ps -eo pid,comm --no-headers")
   elif defined(bsd) or defined(macosx):
@@ -241,8 +241,11 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
           p.add(parts[0])
           n.add(parts[1])
   var nc = n.mapIt(cstring(it))
-  var pc = p.mapIt(cstring(it))
-  result = (cast[ptr UncheckedArray[cstring]](addr nc[0]), cast[ptr UncheckedArray[cstring]](addr pc[0]), nc.len.int)
+  var pc = p.mapIt(parseInt(it))
+  var cnc = cast[ptr UncheckedArray[cstring]](addr nc[0])
+  var cpc = cast[ptr UncheckedArray[int]](addr pc[0])
+  echo cnc[1], " - ", cpc[1]
+  return (cast[ptr UncheckedArray[cstring]](addr nc[0]), cast[ptr UncheckedArray[int]](addr pc[0]), nc.len.int)
 
 proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var p: seq[cstring]
