@@ -115,5 +115,6 @@ extern const char* tostrflt   (double value);
 extern const char* tostrint   (int value);
 extern void        undef      (const char* name);
 extern void        until      (double timestamp);
+extern void        vidbuf     (int mode);
 extern void        wait       (int milliseconds);
 extern const char* where      (const char* command);
