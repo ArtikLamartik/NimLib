@@ -30,7 +30,7 @@ importAll("../build/nimlib.so"):
   proc getdef*     (name: cstring): cstring
   proc getprogloc* (): cstring
   proc halt*       (exit_code: int)
-  proc has*        (pattern: cstring, text: cstring): int
+  proc has*        (text: cstring, pattern: cstring): int
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
@@ -39,7 +39,7 @@ importAll("../build/nimlib.so"):
   proc killproc*   (process_id: int)
   proc killthr*    (function: proc() {.noconv.})
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
-  proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[cstring], length: int]
+  proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int]
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int]
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
