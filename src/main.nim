@@ -2,6 +2,7 @@ import std/exitprocs
 import std/sequtils
 import std/strutils
 import std/terminal
+import std/base64
 import std/random
 import std/posix
 import std/times
@@ -11,6 +12,7 @@ import std/re
 import math
 
 {.emit: """
+#include <sys/ioctl.h>
 #include <pthread.h>
 #include <termios.h>
 #include <signal.h>
@@ -166,6 +168,21 @@ proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
 proc getprogloc*(): cstring {.exportc, dynlib.} =
   return cstring(getAppFilename())
 
+proc getermsize*(): tuple[colums: int, rows: int] {.exportc, dynlib.} =
+  {.emit: """
+  struct winsize ws;
+  int cols = 80;
+  int rows = 24;
+  if (ioctl(1, TIOCGWINSZ, &ws) == 0) {
+    cols = ws.ws_col;
+    rows = ws.ws_row;
+    if (cols <= 0) cols = 80;
+    if (rows <= 0) rows = 24;
+  }
+  `result`.Field0 = cols;
+  `result`.Field1 = rows;
+  """.}
+
 proc halt*(exit_code: int) {.exportc, dynlib.} =
   quit(exit_code)
 
@@ -247,7 +264,7 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
   echo cnc[1], " - ", cpc[1]
   return (cast[ptr UncheckedArray[cstring]](addr nc[0]), cast[ptr UncheckedArray[int]](addr pc[0]), nc.len.int)
 
-proc lf*(): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+proc lf*(): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var p: seq[cstring]
   var t: seq[cstring]
   for kind, name in walkDir(getCurrentDir()):
@@ -420,6 +437,37 @@ proc timerstop*(name: cstring): int {.exportc, dynlib.} =
   `result` = -1;
   """.}
 
+proc tob64str*(forurl: int, value: cstring, key: cstring): cstring {.exportc, dynlib.} =
+  let vLen = value.len
+  let kLen = key.len
+  var buf = newString(vLen)
+  for i in 0 ..< vLen:
+    buf[i] = value[i]
+  for i in 0 ..< vLen:
+    buf[i] = char(uint8(buf[i]) xor uint8(key[i mod kLen]))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    buf[i] = char((b shl 3) or (b shr 5))
+  for i in 0 ..< vLen:
+    buf[i] = char(uint8(buf[i]) xor uint8(key[(kLen - 1) - (i mod kLen)]))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    buf[i] = char((b shr 2) or (b shl 6))
+  for i in 0 ..< vLen - 1:
+    buf[i] = char(uint8(buf[i]) xor uint8(buf[i + 1]))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    let rotated = char((b shl 5) or (b shr 3))
+    buf[i] = char(uint8(rotated) xor uint8(key[i mod kLen]) xor uint8(i and 0xFF))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    let rotated = char((b shr 4) or (b shl 4))
+    buf[i] = char(uint8(rotated) xor uint8(key[(kLen - 1) - (i mod kLen)]))
+  if forurl == 0:
+    return cstring(encode(buf, safe = false))
+  if forurl == 1:
+    return cstring(encode(buf, safe = true))
+
 proc tofltint*(value: int): float {.exportc, dynlib.} =
   return float(value)
 
@@ -431,6 +479,33 @@ proc tointflt*(value: float): int {.exportc, dynlib.} =
 
 proc tointstr*(value: cstring): int {.exportc, dynlib.} =
   return parseInt($value)
+
+proc tostrb64*(value: cstring, key: cstring): cstring {.exportc, dynlib.} =
+  let decoded = decode($value)
+  let vLen = decoded.len
+  let kLen = key.len
+  var buf = newString(vLen)
+  for i in 0 ..< vLen:
+    buf[i] = decoded[i]
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i]) xor uint8(key[(kLen - 1) - (i mod kLen)])
+    buf[i] = char((b shr 4) or (b shl 4))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i]) xor uint8(key[i mod kLen]) xor uint8(i and 0xFF)
+    buf[i] = char((b shr 5) or (b shl 3))
+  for i in countdown(vLen - 2, 0):
+    buf[i] = char(uint8(buf[i]) xor uint8(buf[i + 1]))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    buf[i] = char((b shl 2) or (b shr 6))
+  for i in 0 ..< vLen:
+    buf[i] = char(uint8(buf[i]) xor uint8(key[(kLen - 1) - (i mod kLen)]))
+  for i in 0 ..< vLen:
+    let b = uint8(buf[i])
+    buf[i] = char((b shr 3) or (b shl 5))
+  for i in 0 ..< vLen:
+    buf[i] = char(uint8(buf[i]) xor uint8(key[i mod kLen]))
+  return cstring(buf)
 
 proc tostrflt*(value: float): cstring {.exportc, dynlib.} =
   return cstring($value)
