@@ -23,6 +23,11 @@ typedef struct {
 } Getargs;
 
 typedef struct {
+    long columns;
+    long rows;
+} Getermsize;
+
+typedef struct {
     const char** name;
     const char** value;
     long         length;
@@ -36,7 +41,7 @@ typedef struct {
 
 typedef struct {
     const char** paths;
-    const char** types_of;
+    const char** type_of;
     long         length;
 } Lf;
 
@@ -68,6 +73,7 @@ extern const char* getchr     (void);
 extern long        getcpid    (void);
 extern const char* getdef     (const char* name);
 extern const char* getprogloc (void);
+extern Getermsize  getermsize (void);
 extern void        halt       (long exit_code);
 extern long        has        (const char* text, const char* pattern);
 extern long        isdef      (const char* name);
@@ -107,10 +113,12 @@ extern void        syncthr    (void (*function)(void));
 extern double      timern     (void);
 extern void        timerstart (const char* name);
 extern long        timerstop  (const char* name);
+extern const char* tob64str   (long forurl, const char* value, const char* key);
 extern double      tofltint   (long value);
 extern double      tofltstr   (const char* value);
 extern long        tointflt   (double value);
 extern long        tointstr   (const char* value);
+extern const char* tostrb64   (const char* value, const char* key);
 extern const char* tostrflt   (double value);
 extern const char* tostrint   (long value);
 extern void        undef      (const char* name);
