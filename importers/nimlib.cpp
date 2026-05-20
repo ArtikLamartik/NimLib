@@ -22,6 +22,11 @@ struct Getargs {
     long         length;
 };
 
+struct Getermsize {
+    long columns;
+    long rows;
+};
+
 struct Ladefs {
     const char** name;
     const char** value;
@@ -36,7 +41,7 @@ struct Laprocs {
 
 struct Lf {
     const char** paths;
-    const char** types_of;
+    const char** type_of;
     long         length;
 };
 
@@ -69,6 +74,7 @@ extern "C" {
     long        getcpid    (void);
     const char* getdef     (const char* name);
     const char* getprogloc (void);
+    Getermsize  getermsize (void);
     void        halt       (long exit_code);
     long        has        (const char* text, const char* pattern);
     long        isdef      (const char* name);
@@ -108,10 +114,12 @@ extern "C" {
     double      timern     (void);
     void        timerstart (const char* name);
     long        timerstop  (const char* name);
+    const char* tob64str   (long forurl, const char* value, const char* key);
     double      tofltint   (long value);
     double      tofltstr   (const char* value);
     long        tointflt   (double value);
     long        tointstr   (const char* value);
+    const char* tostrb64   (const char* value, const char* key);
     const char* tostrflt   (double value);
     const char* tostrint   (long value);
     void        undef      (const char* name);
