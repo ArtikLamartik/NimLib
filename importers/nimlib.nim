@@ -29,6 +29,7 @@ importAll("../build/nimlib.so"):
   proc getcpid*    (): int
   proc getdef*     (name: cstring): cstring
   proc getprogloc* (): cstring
+  proc getermsize* (): tuple[columns: int, rows: int]
   proc halt*       (exit_code: int)
   proc has*        (text: cstring, pattern: cstring): int
   proc isdef*      (name: cstring): int
@@ -40,7 +41,7 @@ importAll("../build/nimlib.so"):
   proc killthr*    (function: proc() {.noconv.})
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
   proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int]
-  proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], types_of: ptr UncheckedArray[cstring], length: int]
+  proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArray[cstring], length: int]
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
@@ -68,10 +69,12 @@ importAll("../build/nimlib.so"):
   proc timern*     (): float
   proc timerstart* (name: cstring)
   proc timerstop*  (name: cstring): int
+  proc tob64str*   (forurl: int, value: cstring, key: cstring): cstring
   proc tofltint*   (value: int): float
   proc tofltstr*   (value: cstring): float
   proc tointflt*   (value: float): int
   proc tointstr*   (value: cstring): int
+  proc tostrb64*   (value: cstring, key: cstring): cstring
   proc tostrflt*   (value: float): cstring
   proc tostrint*   (value: int): cstring
   proc undef*      (name: cstring)
