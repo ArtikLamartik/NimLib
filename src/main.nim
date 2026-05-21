@@ -539,5 +539,20 @@ proc where*(command: cstring): cstring {.exportc, dynlib.} =
 proc cleanup() {.noconv.} =
   resetbgfg()
   cursor(1)
+  {.emit: """
+  for (int i = 0; i < job_count; i++) {
+    if (job_active[i]) {
+      job_active[i] = 0;
+      pthread_join(job_handles[i], NULL);
+    }
+  }
+  for (int i = 0; i < thread_count; i++) {
+    if (thread_fns[i] != NULL) {
+      pthread_cancel(thread_handles[i]);
+      pthread_join(thread_handles[i], NULL);
+      thread_fns[i] = NULL;
+    }
+  }
+  """.}
 
 scope(1, cleanup)
