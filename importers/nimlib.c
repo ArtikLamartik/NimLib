@@ -123,6 +123,7 @@ extern const char* tostrflt   (double value);
 extern const char* tostrint   (long value);
 extern void        undef      (const char* name);
 extern void        until      (double timestamp);
+extern const char* version    (void);
 extern void        vidbuf     (long mode);
 extern void        wait       (long milliseconds);
 extern const char* where      (const char* command);
