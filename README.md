@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.0`
+Version `0.1.1`
 
 # NimLib Documentation
 
@@ -1186,6 +1186,26 @@ const char*
 
 **Description:**
 Concatenates `count` variadic string arguments into a single string. Uses a static 64 KB internal buffer.
+
+---
+
+**Name:**
+`
+strsize
+`
+
+**Arguments:**
+```c
+const char* string1
+```
+
+**Return:**
+```c
+long
+```
+
+**Description:**
+Returns the length of a string.
 
 ---
 
