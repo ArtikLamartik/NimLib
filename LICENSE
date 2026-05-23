@@ -1,108 +1,195 @@
-NimLib License (NLL-1.0.0)
+NimLib License (NLL-2.0.0)
 Copyright (c) 2026 ArtikLamartik
 
+PREAMBLE
+This License grants permissions to use, modify, and distribute the NimLib 
+Software under clearly defined conditions. It is intended to support open 
+source collaboration while protecting the Licensor's commercial interests. 
+By exercising any rights under this License, You agree to be bound by its 
+terms. If You do not agree, do not use the Software.
+
 1. DEFINITIONS
-   "Software" refers to the NimLib library, including all source code,
-   compiled binaries, documentation, and associated files provided by
-   ArtikLamartik.
+   1.1 "Software" means the NimLib library, including all source code, 
+       object code, compiled binaries, documentation, examples, and 
+       associated files provided by or on behalf of ArtikLamartik.
 
-   "You" refers to any individual or entity exercising permissions
-   granted by this License.
+   1.2 "You" (or "Your") means any natural person or legal entity 
+       exercising permissions granted by this License.
 
-   "Open Source Distribution" means distributing the Software or a
-   derivative work under a publicly available, OSI-approved or similar
-   open-source license.
+   1.3 "Open Source Distribution" means distributing the Software or a 
+       derivative work under a license that is approved by the Open Source 
+       Initiative (OSI) as of the date of distribution. Licenses not on 
+       the OSI list require prior written approval from ArtikLamartik.
 
-   "Commercial Application" means any closed-source, proprietary, or
-   otherwise non-open-source software that incorporates, links to, or
-   depends on NimLib.
+   1.4 "Commercial Application" means any software, service, or system 
+       that: (a) is developed for commercial advantage or monetary 
+       compensation; (b) is not distributed under an OSI-approved license; 
+       or (c) incorporates, links to, depends on, or exposes functionality 
+       derived from the Software, regardless of whether the Software is 
+       distributed, hosted, or used internally.
 
-   "Subscription" means any recurring, periodic, or usage-based payment
-   model, including but not limited to monthly/annual fees, SaaS
-   licensing, or pay-per-use charges.
+   1.5 "Subscription" means any recurring, periodic, usage-based, or 
+       tiered payment model, including but not limited to: monthly/annual 
+       fees, SaaS licensing, pay-per-use charges, enterprise support 
+       contracts tied to Software functionality, or monetization of access 
+       to a service that relies on the Software.
 
-   "Modified Version" means any version of the Software where the source
-   code or binary has been altered, patched, extended, or derived from
-   the original Software.
+   1.6 "Modified Version" means any version of the Software in which the 
+       source code, object code, binary, configuration, or runtime behavior 
+       has been altered, patched, extended, derived from, or functionally 
+       modified—including via dynamic configuration, plugin systems, 
+       runtime injection, hooking, memory patching, or wrapper code that 
+       changes core functionality.
+
+   1.7 "Incorporation" means any method by which the Software is used in 
+       connection with another work, including: static linking, dynamic 
+       linking, side-by-side distribution, package manager dependencies, 
+       runtime loading, API exposure, microservice communication, or 
+       inter-process communication where the Software provides material 
+       functionality.
 
 2. GRANT OF PERMISSIONS BY USE CASE
 
    2.1 Open Source Distribution & Modification Rights
-   If you distribute NimLib or a derivative work under an Open Source
-   Distribution model, you are granted the right to:
-   a) Use, copy, modify, merge, fork, and create Modified Versions of
-      the Software.
-   b) Distribute Modified Versions under any open-source license, 
-      provided that Sections 3.1 (Change Disclosure) and 4 (Attribution)
-      are strictly met.
-   c) Use the Software for personal, academic, research, or non-commercial
-      purposes.
+   If You distribute the Software or a Modified Version under an 
+   Open Source Distribution model, You are granted a worldwide, 
+   non-exclusive, royalty-free, non-transferable license to:
+   (a) use, copy, modify, merge, publish, fork, and create Modified 
+       Versions of the Software;
+   (b) distribute Modified Versions under any OSI-approved license, 
+       provided Sections 3.1 (Change Disclosure) and 4 (Attribution) 
+       are strictly satisfied;
+   (c) use the Software for personal, academic, research, or 
+       non-commercial purposes without distribution.
 
    2.2 Commercial Application & One-Time Payment Rights
-   If you use NimLib in a Commercial Application, you are granted the
-   right to:
-   a) Link to, bundle, or distribute NimLib (statically or dynamically)
-      within proprietary, closed-source software.
-   b) Sell, license, or distribute the Commercial Application for a
-      one-time purchase or perpetual license fee.
-   c) Retain proprietary rights over your own application code.
+   If You use the Software in a Commercial Application, You are granted 
+   a worldwide, non-exclusive, royalty-free, non-transferable license to:
+   (a) Incorporate the Software (statically, dynamically, or otherwise) 
+       into proprietary, closed-source software or internal systems;
+   (b) sell, license, or distribute the Commercial Application under a 
+       one-time purchase, perpetual license, or fixed-fee model;
+   (c) retain all proprietary rights in Your original code, provided 
+       such code does not constitute a Modified Version of the Software.
 
 3. RESTRICTIONS & CONDITIONS
 
    3.1 Change Disclosure Requirement (Open Source Only)
-   If you distribute a Modified Version of NimLib under Section 2.1, you
-   MUST include a prominent notice in the source code and documentation
-   stating:
-   a) That the Software has been modified from the original NimLib.
-   b) The date of the modification.
-   c) A clear summary of the changes made (e.g., via a CHANGELOG file, or header comments).
+   If You distribute a Modified Version under Section 2.1, You MUST 
+   include a prominent, machine-readable notice in all source files, 
+   documentation, and distribution metadata stating:
+   (a) that the Software has been modified from the original NimLib;
+   (b) the date(s) of modification;
+   (c) a clear, itemized summary of changes (e.g., via CHANGELOG, 
+       commit history, or header comments).
 
    Example Notice:
-   "This version of NimLib was modified by [Your Name] on [Date].
-   Changes include: [List of specific changes]."
+   "This version of NimLib was modified by [Name/Entity] on [Date].
+   Changes: [Specific, verifiable description of modifications]."
 
    3.2 Commercial Modification Prohibition
-   You may NOT modify, alter, reverse-engineer, decompile, patch, or
-   create Modified Versions of the NimLib source code or compiled binaries
-   for use in any Commercial Application. NimLib must be included in its
-   exact, unmodified form as provided by ArtikLamartik.
+   You may NOT create, distribute, or use a Modified Version of the 
+   Software in any Commercial Application. This prohibition expressly 
+   includes: reverse engineering, decompiling, disassembling, runtime 
+   patching, dynamic configuration that alters core behavior, plugin 
+   systems that override fundamental functionality, or any technique 
+   that results in functional deviation from the unmodified Software 
+   as provided by ArtikLamartik. The Software must be used in its 
+   exact, unaltered form in Commercial Applications.
 
    3.3 Subscription & Recurring Payment Prohibition
-   Charging Subscriptions, recurring fees, or usage-based licensing for
-   any software that incorporates or depends on NimLib is expressly
-   prohibited under this License.
+   You may NOT charge Subscriptions, recurring fees, usage-based 
+   licensing, or any monetization model tied to access, functionality, 
+   or value derived from the Software. This prohibition applies to:
+   (a) software products incorporating the Software;
+   (b) hosted services, SaaS platforms, managed offerings, or cloud 
+       deployments that rely on the Software;
+   (c) support, maintenance, or enterprise agreements where the 
+       underlying value proposition depends on the Software.
 
    3.4 General Restrictions
-   You may not remove, obscure, or alter any copyright, license, or
-   attribution notices present in the original Software.
+   You may not remove, obscure, alter, or circumvent any copyright, 
+   license, patent, trademark, or attribution notices present in the 
+   original Software. All copies, modified or unmodified, must retain 
+   this License text and copyright notices.
 
 4. ATTRIBUTION REQUIREMENT
-   For ALL permitted uses (Open Source and Commercial), you must include
-   the following notice in your software's documentation, about screen,
-   or legal notices file:
+   For ALL permitted uses (Open Source and Commercial), You must 
+   include the following notice in a conspicuous location within Your 
+   software: documentation, "About" screen, legal notices file, or 
+   machine-readable metadata (e.g., package.json, Cargo.toml):
 
    "This software uses NimLib, Copyright (c) 2026 ArtikLamartik.
-   Licensed under NLL-1.0.0"
+   Licensed under NLL-2.0.0: https://github.com/ArtikLamartik/NimLib/blob/main/LICENSE"
 
-5. NO WARRANTY & LIMITATION OF LIABILITY ("AS IS")
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
-   IN NO EVENT SHALL ARTIKLAMARTIK BE LIABLE FOR ANY CLAIM, DAMAGES, OR
-   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE,
-   ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE
-   OR OTHER DEALINGS IN THE SOFTWARE.
+5. PATENT GRANT
+   Subject to the terms of this License, each contributor hereby grants 
+   You a perpetual, worldwide, non-exclusive, royalty-free patent license 
+   to make, have made, use, sell, offer for sale, import, and otherwise 
+   transfer the Software, solely for uses permitted under this License. 
+   This patent grant terminates automatically if You initiate patent 
+   litigation against any entity alleging that the Software infringes 
+   a patent.
 
-6. TERMINATION
-   Your rights under this License terminate automatically if you:
-   a) Modify NimLib for use in a Commercial Application,
-   b) Charge Subscriptions for software using NimLib,
-   c) Fail to provide Change Disclosure for Modified Open Source versions, or
-   d) Fail to comply with the Attribution requirement in Section 4.
-   Upon termination, you must cease distribution and remove NimLib from
-   all active projects.
+6. NO WARRANTY & LIMITATION OF LIABILITY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF 
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND 
+   NON-INFRINGEMENT. IN NO EVENT SHALL ARTIKLAMARTIK OR CONTRIBUTORS 
+   BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
+   OR CONSEQUENTIAL DAMAGES (INCLUDING PROCUREMENT OF SUBSTITUTE GOODS 
+   OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+   OF THE POSSIBILITY OF SUCH DAMAGE.
 
-7. CONTACT & ALTERNATIVE LICENSING
-   For commercial projects requiring modification rights, subscription
-   models, or alternative licensing terms, please contact ArtikLamartik
-   to discuss a separate commercial agreement.
+7. TERMINATION
+   7.1 Automatic Termination: Your rights under this License terminate 
+       immediately and automatically if You:
+       (a) modify the Software for use in a Commercial Application;
+       (b) charge Subscriptions for any product or service relying on 
+           the Software;
+       (c) fail to provide Change Disclosure for Modified Open Source 
+           versions as required in Section 3.1;
+       (d) fail to comply with the Attribution requirement in Section 4; or
+       (e) breach any material term of this License and fail to cure 
+           such breach within thirty (30) days of written notice.
+
+   7.2 Effect of Termination: Upon termination:
+       (a) all licenses granted to You cease immediately;
+       (b) You must cease all use, distribution, and development 
+           involving the Software;
+       (c) You must destroy or return all copies of the Software in 
+           Your possession or control;
+       (d) lawfully distributed copies of the Software prior to 
+           termination may continue to be used by downstream recipients 
+           under the terms of this License, but may not be further 
+           modified or redistributed by You.
+
+   7.3 Survival: Sections 4 (Attribution), 5 (Patent Grant), 6 (No 
+       Warranty), 7.2–7.4, 8 (Severability), and 
+       9 (Entire Agreement) survive termination.
+
+8. SEVERABILITY
+   If any provision of this License is held to be invalid, illegal, or 
+   unenforceable under applicable law, the validity, legality, and 
+   enforceability of the remaining provisions shall not be affected. 
+   The invalid provision shall be reformed to the minimum extent 
+   necessary to make it valid and enforceable while preserving the 
+   original intent.
+
+9. ENTIRE AGREEMENT & AMENDMENTS
+    This License constitutes the entire agreement between You and 
+    ArtikLamartik regarding the Software and supersedes all prior or 
+    contemporaneous understandings. No amendment or modification of 
+    this License is effective unless in writing and signed by 
+    ArtikLamartik. ArtikLamartik reserves the right to release future 
+    versions of the Software under different license terms; such 
+    changes apply only to new versions, not to copies already licensed 
+    under NLL-2.0.0.
+
+10. CONTACT & ALTERNATIVE LICENSING
+    For commercial projects requiring modification rights, subscription 
+    models, white-labeling, or alternative licensing terms, please 
+    contact ArtikLamartik on discord (artiklamartik) to discuss 
+    a separate commercial agreement. Written agreements executed by 
+    ArtikLamartik expressly override conflicting terms in this License.
