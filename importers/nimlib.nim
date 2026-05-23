@@ -79,6 +79,7 @@ importAll("../build/nimlib.so"):
   proc tostrint*   (value: int): cstring
   proc undef*      (name: cstring)
   proc until*      (timestamp: float)
+  proc version*    (): cstring
   proc vidbuf*     (mode: int)
   proc wait*       (milliseconds: int)
   proc where*      (command: cstring): cstring
