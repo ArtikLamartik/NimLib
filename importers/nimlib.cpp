@@ -124,6 +124,7 @@ extern "C" {
     const char* tostrint   (long value);
     void        undef      (const char* name);
     void        until      (double timestamp);
+    const char* version    (void);
     void        vidbuf     (long mode);
     void        wait       (long milliseconds);
     const char* where      (const char* command);
