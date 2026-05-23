@@ -109,6 +109,7 @@ extern const char* stdi       (long visible);
 extern void        stdo       (const char* string1);
 extern long        strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (long count, ...);
+extern long        strsize    (const char* string1);
 extern void        syncthr    (void (*function)(void));
 extern double      timern     (void);
 extern void        timerstart (const char* name);
