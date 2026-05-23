@@ -520,6 +520,9 @@ proc until*(timestamp: float) {.exportc, dynlib.} =
   if timestamp > epochTime():
     sleep(int(round((timestamp - epochTime()) * 1000.0)))
 
+proc version*(): cstring {.exportc, dynlib.} =
+  return "0.1.0".cstring
+
 proc vidbuf*(mode: int) {.exportc, dynlib.} =
   {.emit: """
   if (`mode` == 0) {
