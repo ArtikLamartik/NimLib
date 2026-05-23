@@ -1,3 +1,0 @@
-| Github | Discord |
-|--------|---------|
-| ArtikLamartik | artiklamartik |
