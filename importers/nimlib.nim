@@ -65,6 +65,7 @@ importAll("../build/nimlib.so"):
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
+  proc strsize*    (string1: cstring): int
   proc syncthr*    (function: proc() {.noconv.})
   proc timern*     (): float
   proc timerstart* (name: cstring)
