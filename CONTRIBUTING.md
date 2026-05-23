@@ -21,4 +21,4 @@ Or if you'd rather not open an issue, DM me on Discord: **artiklamartik**
 
 | Github | Discord |
 |--------|---------|
-| [ArtikLamartik](https://github.com/ArtikLamartik) | artiklamartik |
+| [ArtikLamartik](https://github.com/ArtikLamartik) | [artiklamartik](https://discord.com/users/831612778040393768) |
