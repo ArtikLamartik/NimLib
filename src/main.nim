@@ -11,6 +11,8 @@ import std/os
 import std/re
 import math
 
+var VERSION = "0.1.1"
+
 {.emit: """
 #include <sys/ioctl.h>
 #include <pthread.h>
@@ -300,15 +302,15 @@ proc ping*(url: cstring): int {.exportc, dynlib.} =
 
 proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring] {.exportc, dynlib.} =
   when defined(linux):
-    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,stime,cmd --no-headers")
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,etimes,cmd --no-headers")
     let line = output.strip()
     let parts = line.splitWhitespace(maxsplit=5)
   elif defined(bsd) or defined(macosx):
-    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,start,command")
+    let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,etimes,command")
     let lines = output.strip().splitLines()
     let line = if lines.len > 1: lines[1] else: ""
     let parts = line.splitWhitespace(maxsplit=5)
-  return (cstring(parts[0]), int(parseInt(parts[1])), int(parseInt(parts[2])), cstring(parts[3]), int(parseInt(parts[4])), cstring(parts[5]))
+  return (cstring(parts[0]), int(parseInt(parts[1])), int(parseInt(parts[2])), cstring(parts[3]), int(int(epochTime()) - parseInt(parts[4])), cstring(parts[5]))
 
 proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
   randomize()
@@ -395,6 +397,9 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   va_end(args);
   return buf;
   """.}
+
+proc strsize*(string1: cstring): int {.exportc, dynlib.} =
+  return int(len($string1))
 
 proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   {.emit: """
@@ -521,7 +526,7 @@ proc until*(timestamp: float) {.exportc, dynlib.} =
     sleep(int(round((timestamp - epochTime()) * 1000.0)))
 
 proc version*(): cstring {.exportc, dynlib.} =
-  return "0.1.0".cstring
+  return VERSION.cstring
 
 proc vidbuf*(mode: int) {.exportc, dynlib.} =
   {.emit: """
