@@ -1,5 +1,5 @@
 # NimLib - A Library made in Nim
 
-[*only works on Linux, MacOS and BSD*]
+[***only works on Linux, MacOS and BSD***]
 
 Version `0.1.0`
