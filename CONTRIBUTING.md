@@ -16,3 +16,9 @@ Open an issue on GitHub with the right label:
 | [`wontfix`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Awontfix) | This will not be worked on |
 
 Or if you'd rather not open an issue, DM me on Discord: **artiklamartik**
+
+## People that have contributed to NimLib
+
+| Github | Discord |
+|--------|---------|
+| ArtikLamartik | artiklamartik |
