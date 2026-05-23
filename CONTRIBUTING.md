@@ -1,0 +1,18 @@
+# Contributing to NimLib
+
+Thank you for your interest in contributing to **NimLib**! Whether you're fixing a bug, adding a feature, improving documentation, or sharing feedback, your help is highly valued.
+
+### Found a bug or have a question?
+
+Open an issue on GitHub with the right label:
+
+| Label | Description |
+|-------|-------------|
+| [`bug`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Abug) | Something isn't working |
+| [`documentation`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Adocumentation) | Improvements or additions to documentation |
+| [`enhancement`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Aenhancement) | New feature or request |
+| [`help wanted`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3A%22help+wanted%22) | Extra attention is needed |
+| [`question`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Aquestion) | Further information is requested |
+| [`wontfix`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Awontfix) | This will not be worked on |
+
+Or if you'd rather not open an issue, DM me on Discord: **artiklamartik**
