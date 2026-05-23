@@ -17,8 +17,8 @@ Open an issue on GitHub with the right label:
 
 Or if you'd rather not open an issue, DM me on Discord: **artiklamartik**
 
-## People that have contributed to NimLib
+## Special Thanks
 
-| Github | Discord |
-|--------|---------|
-| [ArtikLamartik](https://github.com/ArtikLamartik) | [artiklamartik](https://discord.com/users/831612778040393768) |
+| Github | Discord | Role |
+|--------|---------|------|
+| [ArtikLamartik](https://github.com/ArtikLamartik) | [artiklamartik](https://discord.com/users/831612778040393768) | ***Author*** |
