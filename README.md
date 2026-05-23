@@ -4,7 +4,7 @@
 
 Version `0.1.1`
 
-# NimLib - Documentation
+## NimLib - Documentation
 
 **Name:**
 `
