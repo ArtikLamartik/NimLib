@@ -110,6 +110,7 @@ extern "C" {
     void        stdo       (const char* string1);
     long        strcomp    (const char* string1, const char* string2);
     const char* strformat  (long count, ...);
+    long        strsize    (const char* string1);
     void        syncthr    (void (*function)(void));
     double      timern     (void);
     void        timerstart (const char* name);
