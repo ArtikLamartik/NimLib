@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.1"
+var VERSION = "0.1.2"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -379,7 +379,8 @@ proc stdi*(visible: int): cstring {.exportc, dynlib.} =
     return cstring(readLine(stdin))
 
 proc stdo*(string1: cstring) {.exportc, dynlib.} =
-  write(stdout, string1)
+  stdout.write(string1)
+  stdout.flushFile()
 
 proc strcomp*(string1: cstring, string2: cstring): int {.exportc, dynlib.} =
   return int(cmp(string1, string2) == 0)
