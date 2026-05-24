@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.2"
+var VERSION = "0.1.3"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -186,7 +186,9 @@ proc getermsize*(): tuple[colums: int, rows: int] {.exportc, dynlib.} =
   """.}
 
 proc halt*(exit_code: int) {.exportc, dynlib.} =
-  quit(exit_code)
+  {.emit: """
+  _exit(`exit_code`);
+  """.}
 
 proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
   let t = $text
