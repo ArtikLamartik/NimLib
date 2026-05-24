@@ -30,7 +30,7 @@ importAll("../build/nimlib.so"):
   proc getdef*     (name: cstring): cstring
   proc getprogloc* (): cstring
   proc getermsize* (): tuple[columns: int, rows: int]
-  proc halt*       (exit_code: int)
+  proc halt*       (atexit: int, exit_code: int)
   proc has*        (text: cstring, pattern: cstring): int
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
