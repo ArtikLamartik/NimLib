@@ -21,6 +21,7 @@ importAll("../build/nimlib.so"):
   proc fileinfo*   (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int]
   proc fileread*   (path: cstring): cstring
   proc filewrite*  (path: cstring; content: cstring)
+  proc find*       (text: cstring, pattern: cstring): tuple[start_index: ptr UncheckedArray[int], stop_index: ptr UncheckedArray[int], length: int]
   proc folderinfo* (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int]
   proc freebuf*    (pointer1: pointer)
   proc getargs*    (): tuple[args: ptr UncheckedArray[cstring], length: int]
