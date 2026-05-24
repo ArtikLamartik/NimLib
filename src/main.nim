@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.4"
+var VERSION = "0.1.5"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -117,6 +117,23 @@ proc fileread*(path: cstring): cstring {.exportc, dynlib.} =
 
 proc filewrite*(path: cstring, content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
+
+proc find*(text: cstring, pattern: cstring): tuple[start_index: ptr UncheckedArray[int], stop_index: ptr UncheckedArray[int], length: int] {.exportc, dynlib.} =
+  let t = $text
+  let rePattern = re($pattern)
+  var starts: seq[int]
+  var stops: seq[int]
+  var offset = 0
+  while offset < t.len:
+    let bounds = findBounds(t, rePattern, start = offset)
+    if bounds.first < 0:
+      break
+    starts.add(bounds.first)
+    stops.add(bounds.last)
+    offset = bounds.last + 1
+  starts.add(0)
+  stops.add(0)
+  return (cast[ptr UncheckedArray[int]](addr starts[0]), cast[ptr UncheckedArray[int]](addr stops[0]), starts.len.int - 1)
 
 proc folderinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int] {.exportc, dynlib.} =
   let p = $path
