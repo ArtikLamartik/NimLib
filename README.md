@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.4`
+Version `0.1.5`
 
 # NimLib Documentation
 
@@ -197,6 +197,31 @@ void
 ```
 
 **Description:** Writes a string to a file, overwriting any existing content.
+
+---
+
+**Name:** `find`
+
+**Arguments:**
+```c
+const char* text, const char* pattern
+```
+
+**Return:**
+```c
+Find
+```
+
+**Find:**
+```c
+typedef struct {
+    long* start_index;
+    long* stop_index;
+    long  length;
+} Find;
+```
+
+**Description:** Finds all the regular expression `pattern` matches in `text`, returning their start/stop indices and total count.
 
 ---
 
