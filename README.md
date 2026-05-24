@@ -4,7 +4,7 @@
 
 Version `0.1.5`
 
-# NimLib Documentation
+### NimLib Documentation
 
 **Name:** `allocbuf`
 
