@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.5"
+var VERSION = "0.1.6"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -340,6 +340,10 @@ proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
 
 proc reallocbuf*(pointer1: pointer, new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
+
+proc replacing*(text: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
+  let rePattern = re($pattern)
+  return cstring(replace($text, rePattern, $replacement))
 
 proc resetbgfg*() {.exportc, dynlib.} =
   stdout.write("\x1b[0m")
