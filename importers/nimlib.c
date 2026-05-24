@@ -102,6 +102,7 @@ extern long        ping       (const char* url);
 extern Procinfo    procinfo   (long process_id);
 extern long        randint    (long minimum, long maximum);
 extern void*       reallocbuf (void* pointer1, long new_size);
+extern const char* replacing  (const char* text, const char* pattern, const char* replacement);
 extern void        resetbgfg  (void);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
