@@ -2,9 +2,9 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.3`
+Version `0.1.4`
 
-## NimLib Documentation
+# NimLib Documentation
 
 **Name:** `allocbuf`
 
@@ -374,7 +374,7 @@ typedef struct {
 
 **Arguments:**
 ```c
-long exit_code
+long atexit, long exit_code
 ```
 
 **Return:**
@@ -382,7 +382,7 @@ long exit_code
 void
 ```
 
-**Description:** Terminates the process immediately with the given exit code.
+**Description:** Terminates the process immediately with the given exit code. If `atexit` is `0` then it exits softly and exits hardly if `1`
 
 ---
 
