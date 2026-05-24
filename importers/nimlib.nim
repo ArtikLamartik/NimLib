@@ -52,6 +52,7 @@ importAll("../build/nimlib.so"):
   proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
+  proc replacing*  (text: cstring, pattern: cstring, replacement: cstring): cstring
   proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
