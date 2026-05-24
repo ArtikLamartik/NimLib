@@ -74,7 +74,7 @@ extern long        getcpid    (void);
 extern const char* getdef     (const char* name);
 extern const char* getprogloc (void);
 extern Getermsize  getermsize (void);
-extern void        halt       (long exit_code);
+extern void        halt       (long atexit, long exit_code);
 extern long        has        (const char* text, const char* pattern);
 extern long        isdef      (const char* name);
 extern long        isfile     (const char* path);
