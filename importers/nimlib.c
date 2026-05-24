@@ -11,6 +11,12 @@ typedef struct {
 } Fileinfo;
 
 typedef struct {
+    long* start_index;
+    long* stop_index;
+    long  length;
+} Find;
+
+typedef struct {
     const char* name;
     const char* creator;
     long        last_edit;
@@ -65,6 +71,7 @@ extern Exec        exec       (const char* command);
 extern Fileinfo    fileinfo   (const char* path);
 extern const char* fileread   (const char* path);
 extern void        filewrite  (const char* path, const char* content);
+extern Find        find       (const char* text, const char* pattern);
 extern Folderinfo  folderinfo (const char* path);
 extern void        freebuf    (void* pointer1);
 extern Getargs     getargs    (void);
