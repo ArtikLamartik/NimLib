@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.2`
+Version `0.1.3`
 
 ## NimLib Documentation
 
