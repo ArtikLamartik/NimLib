@@ -10,6 +10,12 @@ struct Fileinfo {
     long        file_size;
 };
 
+struct Find {
+    long* start_index;
+    long* stop_index;
+    long  length;
+};
+
 struct Folderinfo {
     const char* name;
     const char* creator;
@@ -66,6 +72,7 @@ extern "C" {
     Fileinfo    fileinfo   (const char* path);
     const char* fileread   (const char* path);
     void        filewrite  (const char* path, const char* content);
+    Find        find       (const char* text, const char* pattern);
     Folderinfo  folderinfo (const char* path);
     void        freebuf    (void* pointer1);
     Getargs     getargs    (void);
