@@ -103,6 +103,7 @@ extern "C" {
     Procinfo    procinfo   (long process_id);
     long        randint    (long minimum, long maximum);
     void*       reallocbuf (void* pointer1, long new_size);
+    const char* replacing  (const char* text, const char* pattern, const char* replacement);
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
