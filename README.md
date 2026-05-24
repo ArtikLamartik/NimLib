@@ -2,9 +2,9 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.5`
+Version `0.1.6`
 
-## NimLib Documentation
+### NimLib Documentation
 
 **Name:** `allocbuf`
 
@@ -767,6 +767,22 @@ void*
 ```
 
 **Description:** Resizes a previously allocated memory buffer to `new_size` bytes.
+
+---
+
+**Name:** `replacing`
+
+**Arguments:**
+```c
+const char* text, const char* pattern, const char* replacement
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Replaces all the regular expression `pattern` matches in `text` with `replacement`, returning the replaced string.
 
 ---
 
