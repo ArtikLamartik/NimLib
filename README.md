@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.7`
+Version `0.1.8`
 
 ## NimLib Documentation
 
@@ -51,6 +51,38 @@ void
 ```
 
 **Description:** Clears the terminal screen.
+
+---
+
+#### **Name:** `cpfile`
+
+**Arguments:**
+```c
+const char* source, const char* destination
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Copies a file from `source` to `destination`.
+
+---
+
+#### **Name:** `cpfolder`
+
+**Arguments:**
+```c
+const char* source, const char* destination
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Copies a folder from `source` into `destination`, including the folder itself.
 
 ---
 
@@ -614,6 +646,22 @@ typedef struct {
 
 ---
 
+#### **Name:** `lowstr`
+
+**Arguments:**
+```c
+const char* string1
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Converts a string to lowercase.
+
+---
+
 #### **Name:** `mcopy`
 
 **Arguments:**
@@ -770,7 +818,7 @@ void*
 
 ---
 
-#### **Name:** `replacing`
+#### **Name:** `replacestr`
 
 **Arguments:**
 ```c
@@ -946,7 +994,7 @@ long
 
 ---
 
-#### **Name:** `splitting`
+#### **Name:** `splitstr`
 
 **Arguments:**
 ```c
@@ -955,15 +1003,15 @@ const char* text, const char* pattern
 
 **Return:**
 ```c
-Splitting
+Splitstr
 ```
 
-**Splitting:**
+**Splitstr:**
 ```c
 typedef struct {
     const char** parts;
     long         length;
-} Splitting;
+} Splitstr;
 ```
 
 **Description:** Splits the `text` string into an array of substrings using the regular expression `pattern` as the delimiter.
@@ -1242,6 +1290,22 @@ const char*
 
 ---
 
+#### **Name:** `trimstr`
+
+**Arguments:**
+```c
+long sides, const char* text, const char* pattern
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Trims `pattern` from a string. If `sides` is `0` then it trims from both sides, but if it is either `1` or `2` it will trim from the left and the right respectively.
+
+---
+
 #### **Name:** `undef`
 
 **Arguments:**
@@ -1271,6 +1335,22 @@ void
 ```
 
 **Description:** Sleeps until the given Unix timestamp (as returned by `timern`). Returns immediately if the timestamp is in the past.
+
+---
+
+#### **Name:** `upstr`
+
+**Arguments:**
+```c
+const char* string1
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Converts a string to uppercase.
 
 ---
 
