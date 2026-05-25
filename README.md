@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.6`
+Version `0.1.7`
 
 ### NimLib Documentation
 
@@ -943,6 +943,30 @@ long
 ```
 
 **Description:** Starts a command as a new child process and returns its PID.
+
+---
+
+**Name:** `splitting`
+
+**Arguments:**
+```c
+const char* text, const char* pattern
+```
+
+**Return:**
+```c
+Splitting
+```
+
+**Splitting:**
+```c
+typedef struct {
+    const char** parts;
+    long         length;
+} Splitting;
+```
+
+**Description:** Splits the `text` string into an array of substrings using the regular expression `pattern` as the delimiter.
 
 ---
 
