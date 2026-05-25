@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.6"
+var VERSION = "0.1.7"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -386,6 +386,9 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
 proc sig*(signal: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
 
+proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
+  return int(startProcess($command).processID)
+
 proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   {.emit: """
   pthread_t t;
@@ -395,8 +398,23 @@ proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   thread_count++;
   """.}
 
-proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
-  return int(startProcess($command).processID)
+proc splitting*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  let t = $text
+  let rePattern = re($pattern)
+  var storage: seq[string]
+  var parts: seq[cstring]
+  var offset = 0
+  while offset < t.len:
+    let bounds = findBounds(t, rePattern, start = offset)
+    if bounds.first < 0:
+      break
+    storage.add(t[offset..bounds.first - 1])
+    offset = bounds.last + 1
+  storage.add(t[offset..^1])
+  storage.add("")
+  for s in storage.mitems:
+    parts.add(cstring(s))
+  return (cast[ptr UncheckedArray[cstring]](addr parts[0]), parts.len.int - 1)
 
 proc stdi*(visible: int): cstring {.exportc, dynlib.} =
   if visible == 0:
