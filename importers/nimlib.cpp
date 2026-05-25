@@ -60,6 +60,11 @@ struct Procinfo {
     const char* command;
 };
 
+struct Splitting {
+    const char** parts;
+    long         length;
+};
+
 extern "C" {
     void*       allocbuf   (long size);
     void        cf         (const char* path);
@@ -112,8 +117,9 @@ extern "C" {
     void        setbg      (long r, long g, long b);
     void        setfg      (long r, long g, long b);
     void        sig        (long signal, void (*function)(void));
-    void        spawnthr   (void (*function)(void));
     long        spawnproc  (const char* command);
+    void        spawnthr   (void (*function)(void));
+    Splitting   splitting  (const char* text, const char* pattern);
     const char* stdi       (long visible);
     void        stdo       (const char* string1);
     long        strcomp    (const char* string1, const char* string2);
