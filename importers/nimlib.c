@@ -60,6 +60,11 @@ typedef struct {
     const char* command;
 } Procinfo;
 
+typedef struct {
+    const char** parts;
+    long         length;
+} Splitting;
+
 extern void*       allocbuf   (long size);
 extern void        cf         (const char* path);
 extern void        clrscr     (void);
@@ -111,8 +116,9 @@ extern void        scope      (long atexit, void (*function)(void));
 extern void        setbg      (long r, long g, long b);
 extern void        setfg      (long r, long g, long b);
 extern void        sig        (long signal, void (*function)(void));
-extern void        spawnthr   (void (*function)(void));
 extern long        spawnproc  (const char* command);
+extern void        spawnthr   (void (*function)(void));
+extern Splitting   splitting  (const char* text, const char* pattern);
 extern const char* stdi       (long visible);
 extern void        stdo       (const char* string1);
 extern long        strcomp    (const char* string1, const char* string2);
