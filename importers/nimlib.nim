@@ -9,10 +9,12 @@ macro importAll(lib: static[string], body: untyped): untyped =
       node.body = newEmptyNode()
       result.add(node)
 
-importAll("../build/nimlib.so"):
+importAll("./build/nimlib.so"):
   proc allocbuf*   (size: int): pointer
   proc cf*         (path: cstring)
   proc clrscr*     ()
+  proc cpfile*     (source: cstring, destination: cstring)
+  proc cpfolder*   (source: cstring, destination: cstring)
   proc cron*       (milliseconds: int, function: proc() {.noconv.})
   proc cursor*     (visible: int)
   proc cursorto*   (x: int, y: int)
@@ -43,6 +45,7 @@ importAll("../build/nimlib.so"):
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
   proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int]
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArray[cstring], length: int]
+  proc lowstr*     (string1: cstring): cstring
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
@@ -52,7 +55,7 @@ importAll("../build/nimlib.so"):
   proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
-  proc replacing*  (text: cstring, pattern: cstring, replacement: cstring): cstring
+  proc replacestr* (text: cstring, pattern: cstring, replacement: cstring): cstring
   proc resetbgfg*  ()
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
@@ -63,7 +66,7 @@ importAll("../build/nimlib.so"):
   proc sig*        (signal: int, function: proc() {.noconv.})
   proc spawnproc*  (command: cstring): int
   proc spawnthr*   (function: proc() {.noconv.})
-  proc splitting*  (text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
+  proc splitstr*   (text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
@@ -81,8 +84,10 @@ importAll("../build/nimlib.so"):
   proc tostrb64*   (value: cstring, key: cstring): cstring
   proc tostrflt*   (value: float): cstring
   proc tostrint*   (value: int): cstring
+  proc trimstr*    (sides: int, text: cstring, pattern: cstring): cstring
   proc undef*      (name: cstring)
   proc until*      (timestamp: float)
+  proc upstr*      (string1: cstring): cstring
   proc version*    (): cstring
   proc vidbuf*     (mode: int)
   proc wait*       (milliseconds: int)
