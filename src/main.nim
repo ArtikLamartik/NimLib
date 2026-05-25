@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.7"
+var VERSION = "0.1.8"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -66,6 +66,21 @@ proc cf*(path: cstring) {.exportc, dynlib.} =
 
 proc clrscr*() {.exportc, dynlib.} =
   discard execCmd("clear")
+
+proc cpfile*(source: cstring, destination: cstring) {.exportc, dynlib.} =
+  let src = $source
+  let dst = $destination
+  let filename = src.splitPath().tail
+  if dirExists(dst):
+    copyFile(src, dst / filename)
+  else:
+    copyFile(src, dst)
+
+proc cpfolder*(source: cstring, destination: cstring) {.exportc, dynlib.} =
+  let src = $source
+  let dst = $destination
+  let foldername = src.splitPath().tail
+  copyDir(src, dst / foldername)
 
 proc cron*(milliseconds: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   {.emit: """
@@ -154,20 +169,21 @@ proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
   dealloc(pointer1)
 
 proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  var a: seq[cstring]
+  var args: seq[string]
   when defined(linux):
     let cmdline = readFile("/proc/self/cmdline")
     let parts = cmdline.split('\0')
     for i in 1..<parts.len:
       if parts[i].len > 0:
-        a.add(cstring(parts[i]))
+        args.add(parts[i])
   elif defined(bsd) or defined(macosx):
     let output = execProcess("sysctl -n kern.proc.args " & $getCurrentProcessId())
     for arg in output.splitWhitespace():
-      a.add(cstring(arg))
-  if a.len == 0:
-    a.add(cstring(""))
-  result = (cast[ptr UncheckedArray[cstring]](addr a[0]), a.len.int)
+      args.add(arg)
+  if args.len == 0:
+    args.add("")
+  var args_cstr = args.mapIt(cstring(it))
+  result = (cast[ptr UncheckedArray[cstring]](addr args_cstr[0]), args.len.int)
 
 proc getcf*(): cstring {.exportc, dynlib.} =
   return cstring(getCurrentDir())
@@ -254,16 +270,18 @@ proc killthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   """.}
 
 proc ladefs*(): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  var n: seq[cstring]
-  var v: seq[cstring]
+  var names: seq[string]
+  var values: seq[string]
   for key, val in envPairs():
-    n.add(cstring(key))
-    v.add(cstring(val))
-  return (cast[ptr UncheckedArray[cstring]](addr n[0]), cast[ptr UncheckedArray[cstring]](addr v[0]), n.len.int)
+    names.add(key)
+    values.add(val)
+  var names_cstr = names.mapIt(cstring(it))
+  var values_cstr = values.mapIt(cstring(it))
+  return (cast[ptr UncheckedArray[cstring]](addr names_cstr[0]), cast[ptr UncheckedArray[cstring]](addr values_cstr[0]), names_cstr.len.int)
 
 proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int] {.exportc, dynlib.} =
-  var p: seq[string]
-  var n: seq[string]
+  var process_ids: seq[string]
+  var names: seq[string]
   when defined(linux):
     let output = execProcess("ps -eo pid,comm --no-headers")
   elif defined(bsd) or defined(macosx):
@@ -275,30 +293,32 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
     let parts = stripped.splitWhitespace()
     if parts.len >= 2:
       when defined(linux):
-        p.add(parts[0])
-        n.add(parts[1])
+        process_ids.add(parts[0])
+        names.add(parts[1])
       elif defined(bsd) or defined(macosx):
         if parts[0] != "PID":
-          p.add(parts[0])
-          n.add(parts[1])
-  var nc = n.mapIt(cstring(it))
-  var pc = p.mapIt(parseInt(it))
-  var cnc = cast[ptr UncheckedArray[cstring]](addr nc[0])
-  var cpc = cast[ptr UncheckedArray[int]](addr pc[0])
-  echo cnc[1], " - ", cpc[1]
-  return (cast[ptr UncheckedArray[cstring]](addr nc[0]), cast[ptr UncheckedArray[int]](addr pc[0]), nc.len.int)
+          process_ids.add(parts[0])
+          names.add(parts[1])
+  var names_cstr = names.mapIt(cstring(it))
+  var process_ids_int = process_ids.mapIt(parseInt(it))
+  return (cast[ptr UncheckedArray[cstring]](addr names_cstr[0]), cast[ptr UncheckedArray[int]](addr process_ids_int[0]), names_cstr.len.int)
 
 proc lf*(): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  var p: seq[cstring]
-  var t: seq[cstring]
-  for kind, name in walkDir(getCurrentDir()):
-    if kind == pcFile:
-      p.add(cstring(name))
-      t.add(cstring("file"))
-    elif kind == pcDir:
-      p.add(cstring(name))
-      t.add(cstring("folder"))
-  return (cast[ptr UncheckedArray[cstring]](addr p[0]), cast[ptr UncheckedArray[cstring]](addr t[0]), p.len.int)
+  var paths: seq[string]
+  var types: seq[string]
+  for entry in walkDir(getCurrentDir()):
+    if entry.kind == pcFile:
+      paths.add(entry.path)
+      types.add("file")
+    elif entry.kind == pcDir:
+      paths.add(entry.path)
+      types.add("folder")
+  var paths_cstr = paths.mapIt(cstring(it))
+  var types_cstr = types.mapIt(cstring(it))
+  return (cast[ptr UncheckedArray[cstring]](addr paths_cstr[0]), cast[ptr UncheckedArray[cstring]](addr types_cstr[0]), paths_cstr.len.int)
+
+proc lowstr*(string1: cstring): cstring =
+  return cstring(toLower($string1))
 
 proc mcopy*(source: cstring, destination: pointer, size: int) {.exportc, dynlib.} =
   copyMem(destination, source, size)
@@ -341,7 +361,7 @@ proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
 proc reallocbuf*(pointer1: pointer, new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
-proc replacing*(text: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
+proc replacestr*(text: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
   let rePattern = re($pattern)
   return cstring(replace($text, rePattern, $replacement))
 
@@ -398,11 +418,11 @@ proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   thread_count++;
   """.}
 
-proc splitting*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+proc splitstr*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   let t = $text
   let rePattern = re($pattern)
   var storage: seq[string]
-  var parts: seq[cstring]
+  var parts: seq[string]
   var offset = 0
   while offset < t.len:
     let bounds = findBounds(t, rePattern, start = offset)
@@ -413,8 +433,9 @@ proc splitting*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArra
   storage.add(t[offset..^1])
   storage.add("")
   for s in storage.mitems:
-    parts.add(cstring(s))
-  return (cast[ptr UncheckedArray[cstring]](addr parts[0]), parts.len.int - 1)
+    parts.add(s)
+  var parts_cstr = parts.mapIt(cstring(it))
+  return (cast[ptr UncheckedArray[cstring]](addr parts_cstr[0]), parts_cstr.len.int - 1)
 
 proc stdi*(visible: int): cstring {.exportc, dynlib.} =
   if visible == 0:
@@ -563,12 +584,25 @@ proc tostrflt*(value: float): cstring {.exportc, dynlib.} =
 proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
 
+proc trimstr*(sides: int, text: cstring, pattern: cstring): cstring {.exportc, dynlib.} =
+  let t = $text
+  let p = $pattern
+  if sides == 0:
+    return cstring(t.replacef(re("^(?:" & p & ")"), "").replacef(re("(?:" & p & ")$"), ""))
+  elif sides == 1:
+    return cstring(t.replacef(re("^(?:" & p & ")"), ""))
+  elif sides == 2:
+    return cstring(t.replacef(re("(?:" & p & ")$"), ""))
+
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
 
 proc until*(timestamp: float) {.exportc, dynlib.} =
   if timestamp > epochTime():
     sleep(int(round((timestamp - epochTime()) * 1000.0)))
+
+proc upstr*(string1: cstring): cstring {.exportc, dynlib.} =
+  return cstring(toUpper($string1))
 
 proc version*(): cstring {.exportc, dynlib.} =
   return VERSION.cstring
