@@ -60,7 +60,7 @@ struct Procinfo {
     const char* command;
 };
 
-struct Splitting {
+struct Splitstr {
     const char** parts;
     long         length;
 };
@@ -69,6 +69,8 @@ extern "C" {
     void*       allocbuf   (long size);
     void        cf         (const char* path);
     void        clrscr     (void);
+    void        cpfile     (const char* source, const char* destination);
+    void        cpfolder   (const char* source, const char* destination);
     void        cron       (long milliseconds, void (*function)(void));
     void        cursor     (long visible);
     void        cursorto   (long x, long y);
@@ -99,6 +101,7 @@ extern "C" {
     Ladefs      ladefs     (void);
     Laprocs     laprocs    (void);
     Lf          lf         (void);
+    const char* lowstr     (const char* string1);
     void        mcopy      (const char* source, void* destination, long size);
     void        mkfile     (const char* path);
     void        mkfolder   (const char* path);
@@ -108,7 +111,7 @@ extern "C" {
     Procinfo    procinfo   (long process_id);
     long        randint    (long minimum, long maximum);
     void*       reallocbuf (void* pointer1, long new_size);
-    const char* replacing  (const char* text, const char* pattern, const char* replacement);
+    const char* replacestr (const char* text, const char* pattern, const char* replacement);
     void        resetbgfg  (void);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
@@ -119,7 +122,7 @@ extern "C" {
     void        sig        (long signal, void (*function)(void));
     long        spawnproc  (const char* command);
     void        spawnthr   (void (*function)(void));
-    Splitting   splitting  (const char* text, const char* pattern);
+    Splitstr    splitstr   (const char* text, const char* pattern);
     const char* stdi       (long visible);
     void        stdo       (const char* string1);
     long        strcomp    (const char* string1, const char* string2);
@@ -137,8 +140,10 @@ extern "C" {
     const char* tostrb64   (const char* value, const char* key);
     const char* tostrflt   (double value);
     const char* tostrint   (long value);
+    const char* trimstr    (long sides, const char* text, const char* pattern);
     void        undef      (const char* name);
     void        until      (double timestamp);
+    const char* upstr      (const char* string1);
     const char* version    (void);
     void        vidbuf     (long mode);
     void        wait       (long milliseconds);
