@@ -6,7 +6,7 @@ Version `0.1.7`
 
 ## NimLib Documentation
 
-**Name:** `allocbuf`
+#### **Name:** `allocbuf`
 
 **Arguments:**
 ```c
@@ -22,7 +22,7 @@ void*
 
 ---
 
-**Name:** `cf`
+#### **Name:** `cf`
 
 **Arguments:**
 ```c
@@ -38,7 +38,7 @@ void
 
 ---
 
-**Name:** `clrscr`
+#### **Name:** `clrscr`
 
 **Arguments:**
 ```c
@@ -54,7 +54,7 @@ void
 
 ---
 
-**Name:** `cron`
+#### **Name:** `cron`
 
 **Arguments:**
 ```c
@@ -70,7 +70,7 @@ void
 
 ---
 
-**Name:** `cursor`
+#### **Name:** `cursor`
 
 **Arguments:**
 ```c
@@ -86,7 +86,7 @@ void
 
 ---
 
-**Name:** `cursorto`
+#### **Name:** `cursorto`
 
 **Arguments:**
 ```c
@@ -102,7 +102,7 @@ void
 
 ---
 
-**Name:** `def`
+#### **Name:** `def`
 
 **Arguments:**
 ```c
@@ -118,7 +118,7 @@ void
 
 ---
 
-**Name:** `exec`
+#### **Name:** `exec`
 
 **Arguments:**
 ```c
@@ -142,7 +142,7 @@ typedef struct {
 
 ---
 
-**Name:** `fileinfo`
+#### **Name:** `fileinfo`
 
 **Arguments:**
 ```c
@@ -168,7 +168,7 @@ typedef struct {
 
 ---
 
-**Name:** `fileread`
+#### **Name:** `fileread`
 
 **Arguments:**
 ```c
@@ -184,7 +184,7 @@ const char*
 
 ---
 
-**Name:** `filewrite`
+#### **Name:** `filewrite`
 
 **Arguments:**
 ```c
@@ -200,7 +200,7 @@ void
 
 ---
 
-**Name:** `find`
+#### **Name:** `find`
 
 **Arguments:**
 ```c
@@ -225,7 +225,7 @@ typedef struct {
 
 ---
 
-**Name:** `folderinfo`
+#### **Name:** `folderinfo`
 
 **Arguments:**
 ```c
@@ -251,7 +251,7 @@ typedef struct {
 
 ---
 
-**Name:** `freebuf`
+#### **Name:** `freebuf`
 
 **Arguments:**
 ```c
@@ -267,7 +267,7 @@ void
 
 ---
 
-**Name:** `getargs`
+#### **Name:** `getargs`
 
 **Arguments:**
 ```c
@@ -291,7 +291,7 @@ typedef struct {
 
 ---
 
-**Name:** `getcf`
+#### **Name:** `getcf`
 
 **Arguments:**
 ```c
@@ -307,7 +307,7 @@ const char*
 
 ---
 
-**Name:** `getchr`
+#### **Name:** `getchr`
 
 **Arguments:**
 ```c
@@ -323,7 +323,7 @@ const char*
 
 ---
 
-**Name:** `getcpid`
+#### **Name:** `getcpid`
 
 **Arguments:**
 ```c
@@ -339,7 +339,7 @@ long
 
 ---
 
-**Name:** `getdef`
+#### **Name:** `getdef`
 
 **Arguments:**
 ```c
@@ -355,7 +355,7 @@ const char*
 
 ---
 
-**Name:** `getprogloc`
+#### **Name:** `getprogloc`
 
 **Arguments:**
 ```c
@@ -371,7 +371,7 @@ const char*
 
 ---
 
-**Name:** `getermsize`
+#### **Name:** `getermsize`
 
 **Arguments:**
 ```c
@@ -395,7 +395,7 @@ typedef struct {
 
 ---
 
-**Name:** `halt`
+#### **Name:** `halt`
 
 **Arguments:**
 ```c
@@ -411,7 +411,7 @@ void
 
 ---
 
-**Name:** `has`
+#### **Name:** `has`
 
 **Arguments:**
 ```c
@@ -427,7 +427,7 @@ long
 
 ---
 
-**Name:** `isdef`
+#### **Name:** `isdef`
 
 **Arguments:**
 ```c
@@ -443,7 +443,7 @@ long
 
 ---
 
-**Name:** `isfile`
+#### **Name:** `isfile`
 
 **Arguments:**
 ```c
@@ -459,7 +459,7 @@ long
 
 ---
 
-**Name:** `isfolder`
+#### **Name:** `isfolder`
 
 **Arguments:**
 ```c
@@ -475,7 +475,7 @@ long
 
 ---
 
-**Name:** `isroot`
+#### **Name:** `isroot`
 
 **Arguments:**
 ```c
@@ -491,7 +491,7 @@ long
 
 ---
 
-**Name:** `killjob`
+#### **Name:** `killjob`
 
 **Arguments:**
 ```c
@@ -507,7 +507,7 @@ void
 
 ---
 
-**Name:** `killproc`
+#### **Name:** `killproc`
 
 **Arguments:**
 ```c
@@ -523,7 +523,7 @@ void
 
 ---
 
-**Name:** `killthr`
+#### **Name:** `killthr`
 
 **Arguments:**
 ```c
@@ -539,7 +539,7 @@ void
 
 ---
 
-**Name:** `ladefs`
+#### **Name:** `ladefs`
 
 **Arguments:**
 ```c
@@ -564,7 +564,7 @@ typedef struct {
 
 ---
 
-**Name:** `laprocs`
+#### **Name:** `laprocs`
 
 **Arguments:**
 ```c
@@ -589,7 +589,7 @@ typedef struct {
 
 ---
 
-**Name:** `lf`
+#### **Name:** `lf`
 
 **Arguments:**
 ```c
@@ -614,7 +614,7 @@ typedef struct {
 
 ---
 
-**Name:** `mcopy`
+#### **Name:** `mcopy`
 
 **Arguments:**
 ```c
@@ -630,7 +630,7 @@ void
 
 ---
 
-**Name:** `mkfile`
+#### **Name:** `mkfile`
 
 **Arguments:**
 ```c
@@ -646,7 +646,7 @@ void
 
 ---
 
-**Name:** `mkfolder`
+#### **Name:** `mkfolder`
 
 **Arguments:**
 ```c
@@ -662,7 +662,7 @@ void
 
 ---
 
-**Name:** `mvfile`
+#### **Name:** `mvfile`
 
 **Arguments:**
 ```c
@@ -678,7 +678,7 @@ void
 
 ---
 
-**Name:** `mvfolder`
+#### **Name:** `mvfolder`
 
 **Arguments:**
 ```c
@@ -694,7 +694,7 @@ void
 
 ---
 
-**Name:** `ping`
+#### **Name:** `ping`
 
 **Arguments:**
 ```c
@@ -710,7 +710,7 @@ long
 
 ---
 
-**Name:** `procinfo`
+#### **Name:** `procinfo`
 
 **Arguments:**
 ```c
@@ -738,7 +738,7 @@ typedef struct {
 
 ---
 
-**Name:** `randint`
+#### **Name:** `randint`
 
 **Arguments:**
 ```c
@@ -754,7 +754,7 @@ long
 
 ---
 
-**Name:** `reallocbuf`
+#### **Name:** `reallocbuf`
 
 **Arguments:**
 ```c
@@ -770,7 +770,7 @@ void*
 
 ---
 
-**Name:** `replacing`
+#### **Name:** `replacing`
 
 **Arguments:**
 ```c
@@ -786,7 +786,7 @@ const char*
 
 ---
 
-**Name:** `resetbgfg`
+#### **Name:** `resetbgfg`
 
 **Arguments:**
 ```c
@@ -802,7 +802,7 @@ void
 
 ---
 
-**Name:** `rmfile`
+#### **Name:** `rmfile`
 
 **Arguments:**
 ```c
@@ -818,7 +818,7 @@ void
 
 ---
 
-**Name:** `rmfolder`
+#### **Name:** `rmfolder`
 
 **Arguments:**
 ```c
@@ -834,7 +834,7 @@ void
 
 ---
 
-**Name:** `schedule`
+#### **Name:** `schedule`
 
 **Arguments:**
 ```c
@@ -850,7 +850,7 @@ void
 
 ---
 
-**Name:** `scope`
+#### **Name:** `scope`
 
 **Arguments:**
 ```c
@@ -866,7 +866,7 @@ void
 
 ---
 
-**Name:** `setbg`
+#### **Name:** `setbg`
 
 **Arguments:**
 ```c
@@ -882,7 +882,7 @@ void
 
 ---
 
-**Name:** `setfg`
+#### **Name:** `setfg`
 
 **Arguments:**
 ```c
@@ -898,7 +898,7 @@ void
 
 ---
 
-**Name:** `sig`
+#### **Name:** `sig`
 
 **Arguments:**
 ```c
@@ -914,7 +914,7 @@ void
 
 ---
 
-**Name:** `spawnthr`
+#### **Name:** `spawnthr`
 
 **Arguments:**
 ```c
@@ -930,7 +930,7 @@ void
 
 ---
 
-**Name:** `spawnproc`
+#### **Name:** `spawnproc`
 
 **Arguments:**
 ```c
@@ -946,7 +946,7 @@ long
 
 ---
 
-**Name:** `splitting`
+#### **Name:** `splitting`
 
 **Arguments:**
 ```c
@@ -970,7 +970,7 @@ typedef struct {
 
 ---
 
-**Name:** `stdi`
+#### **Name:** `stdi`
 
 **Arguments:**
 ```c
@@ -986,7 +986,7 @@ const char*
 
 ---
 
-**Name:** `stdo`
+#### **Name:** `stdo`
 
 **Arguments:**
 ```c
@@ -1002,7 +1002,7 @@ void
 
 ---
 
-**Name:** `strcomp`
+#### **Name:** `strcomp`
 
 **Arguments:**
 ```c
@@ -1018,7 +1018,7 @@ long
 
 ---
 
-**Name:** `strformat`
+#### **Name:** `strformat`
 
 **Arguments:**
 ```c
@@ -1034,7 +1034,7 @@ const char*
 
 ---
 
-**Name:** `strsize`
+#### **Name:** `strsize`
 
 **Arguments:**
 ```c
@@ -1050,7 +1050,7 @@ long
 
 ---
 
-**Name:** `syncthr`
+#### **Name:** `syncthr`
 
 **Arguments:**
 ```c
@@ -1066,7 +1066,7 @@ void
 
 ---
 
-**Name:** `timern`
+#### **Name:** `timern`
 
 **Arguments:**
 ```c
@@ -1082,7 +1082,7 @@ double
 
 ---
 
-**Name:** `timerstart`
+#### **Name:** `timerstart`
 
 **Arguments:**
 ```c
@@ -1098,7 +1098,7 @@ void
 
 ---
 
-**Name:** `timerstop`
+#### **Name:** `timerstop`
 
 **Arguments:**
 ```c
@@ -1114,7 +1114,7 @@ long
 
 ---
 
-**Name:** `tob64str`
+#### **Name:** `tob64str`
 
 **Arguments:**
 ```c
@@ -1130,7 +1130,7 @@ const char*
 
 ---
 
-**Name:** `tofltint`
+#### **Name:** `tofltint`
 
 **Arguments:**
 ```c
@@ -1146,7 +1146,7 @@ double
 
 ---
 
-**Name:** `tofltstr`
+#### **Name:** `tofltstr`
 
 **Arguments:**
 ```c
@@ -1162,7 +1162,7 @@ double
 
 ---
 
-**Name:** `tointflt`
+#### **Name:** `tointflt`
 
 **Arguments:**
 ```c
@@ -1178,7 +1178,7 @@ long
 
 ---
 
-**Name:** `tointstr`
+#### **Name:** `tointstr`
 
 **Arguments:**
 ```c
@@ -1194,7 +1194,7 @@ long
 
 ---
 
-**Name:** `tostrb64`
+#### **Name:** `tostrb64`
 
 **Arguments:**
 ```c
@@ -1210,7 +1210,7 @@ const char*
 
 ---
 
-**Name:** `tostrflt`
+#### **Name:** `tostrflt`
 
 **Arguments:**
 ```c
@@ -1226,7 +1226,7 @@ const char*
 
 ---
 
-**Name:** `tostrint`
+#### **Name:** `tostrint`
 
 **Arguments:**
 ```c
@@ -1242,7 +1242,7 @@ const char*
 
 ---
 
-**Name:** `undef`
+#### **Name:** `undef`
 
 **Arguments:**
 ```c
@@ -1258,7 +1258,7 @@ void
 
 ---
 
-**Name:** `until`
+#### **Name:** `until`
 
 **Arguments:**
 ```c
@@ -1274,7 +1274,7 @@ void
 
 ---
 
-**Name:** `version`
+#### **Name:** `version`
 
 **Arguments:**
 ```c
@@ -1290,7 +1290,7 @@ const char*
 
 ---
 
-**Name:** `vidbuf`
+#### **Name:** `vidbuf`
 
 **Arguments:**
 ```c
@@ -1306,7 +1306,7 @@ void
 
 ---
 
-**Name:** `wait`
+#### **Name:** `wait`
 
 **Arguments:**
 ```c
@@ -1322,7 +1322,7 @@ void
 
 ---
 
-**Name:** `where`
+#### **Name:** `where`
 
 **Arguments:**
 ```c
