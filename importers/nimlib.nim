@@ -61,8 +61,9 @@ importAll("../build/nimlib.so"):
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
   proc sig*        (signal: int, function: proc() {.noconv.})
-  proc spawnthr*   (function: proc() {.noconv.})
   proc spawnproc*  (command: cstring): int
+  proc spawnthr*   (function: proc() {.noconv.})
+  proc splitting*  (text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
