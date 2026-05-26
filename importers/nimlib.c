@@ -11,12 +11,6 @@ typedef struct {
 } Fileinfo;
 
 typedef struct {
-    long* start_index;
-    long* stop_index;
-    long  length;
-} Find;
-
-typedef struct {
     const char* name;
     const char* creator;
     long        last_edit;
@@ -41,7 +35,7 @@ typedef struct {
 
 typedef struct {
     const char** name;
-    long         process_id;
+    long*        process_id;
     long         length;
 } Laprocs;
 
@@ -59,6 +53,11 @@ typedef struct {
     long        start_time;
     const char* command;
 } Procinfo;
+
+typedef struct {
+    const char** matches;
+    long         length;
+} Search;
 
 typedef struct {
     const char** parts;
@@ -79,7 +78,6 @@ extern void        execlive   (const char* command);
 extern Fileinfo    fileinfo   (const char* path);
 extern const char* fileread   (const char* path);
 extern void        filewrite  (const char* path, const char* content);
-extern Find        find       (const char* text, const char* pattern);
 extern Folderinfo  folderinfo (const char* path);
 extern void        freebuf    (void* pointer1);
 extern Getargs     getargs    (void);
@@ -90,7 +88,7 @@ extern const char* getdef     (const char* name);
 extern const char* getprogloc (void);
 extern Getermsize  getermsize (void);
 extern void        halt       (long atexit, long exit_code);
-extern long        has        (const char* text, const char* pattern);
+extern long        has        (const char* string1, const char* pattern);
 extern long        isdef      (const char* name);
 extern long        isfile     (const char* path);
 extern long        isfolder   (const char* path);
@@ -111,12 +109,15 @@ extern long        ping       (const char* url);
 extern Procinfo    procinfo   (long process_id);
 extern long        randint    (long minimum, long maximum);
 extern void*       reallocbuf (void* pointer1, long new_size);
-extern const char* replacestr (const char* text, const char* pattern, const char* replacement);
+extern const char* replacestr (const char* string1, const char* pattern, const char* replacement);
+extern const char* repstr     (const char* string1, long count);
 extern void        resetbgfg  (void);
+extern const char* revstr     (const char* string1);
 extern void        rmfile     (const char* path);
 extern void        rmfolder   (const char* path);
 extern void        schedule   (long milliseconds, void (*function)(void));
 extern void        scope      (long atexit, void (*function)(void));
+extern Search      search     (const char* string1, const char* pattern);
 extern void        setbg      (long r, long g, long b);
 extern void        setfg      (long r, long g, long b);
 extern void        sig        (long signal, void (*function)(void));
@@ -129,12 +130,13 @@ extern const char* sockrecv   (void);
 extern void        socksend   (const char* data);
 extern long        spawnproc  (const char* command);
 extern void        spawnthr   (void (*function)(void));
-extern Splitstr    splitstr   (const char* text, const char* pattern);
+extern Splitstr    splitstr   (const char* string1, const char* pattern);
 extern const char* stdi       (long visible);
 extern void        stdo       (const char* string1);
 extern long        strcomp    (const char* string1, const char* string2);
 extern const char* strformat  (long count, ...);
 extern long        strsize    (const char* string1);
+extern const char* substr     (const char* string1, long start_index, long stop_index);
 extern void        syncthr    (void (*function)(void));
 extern double      timern     (void);
 extern void        timerstart (const char* name);
@@ -147,7 +149,7 @@ extern long        tointstr   (const char* value);
 extern const char* tostrb64   (const char* value, const char* key);
 extern const char* tostrflt   (double value);
 extern const char* tostrint   (long value);
-extern const char* trimstr    (long sides, const char* text, const char* pattern);
+extern const char* trimstr    (long sides, const char* string1, const char* pattern);
 extern void        undef      (const char* name);
 extern void        until      (double timestamp);
 extern const char* upstr      (const char* string1);
