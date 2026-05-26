@@ -248,31 +248,6 @@ void
 
 ---
 
-#### **Name:** `find`
-
-**Arguments:**
-```c
-const char* text, const char* pattern
-```
-
-**Return:**
-```c
-Find
-```
-
-**Find:**
-```c
-typedef struct {
-    long* start_index;
-    long* stop_index;
-    long  length;
-} Find;
-```
-
-**Description:** Finds all the regular expression `pattern` matches in `text`, returning their start/stop indices and total count.
-
----
-
 #### **Name:** `folderinfo`
 
 **Arguments:**
@@ -463,7 +438,7 @@ void
 
 **Arguments:**
 ```c
-const char* text, const char* pattern
+const char* string1, const char* pattern
 ```
 
 **Return:**
@@ -628,7 +603,7 @@ Laprocs
 ```c
 typedef struct {
     const char** name;
-    long         process_id;
+    long*        process_id;
     long         length;
 } Laprocs;
 ```
@@ -838,7 +813,7 @@ void*
 
 **Arguments:**
 ```c
-const char* text, const char* pattern, const char* replacement
+const char* string1, const char* pattern, const char* replacement
 ```
 
 **Return:**
@@ -846,7 +821,23 @@ const char* text, const char* pattern, const char* replacement
 const char*
 ```
 
-**Description:** Replaces all the regular expression `pattern` matches in `text` with `replacement`, returning the replaced string.
+**Description:** Replaces all the regular expression `pattern` matches in `string1` with `replacement`, returning the replaced string.
+
+---
+
+#### **Name:** `repstr`
+
+**Arguments:**
+```c
+const char* string1, long count
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Repeats a string `count` times.
 
 ---
 
@@ -863,6 +854,22 @@ void
 ```
 
 **Description:** Resets the terminal foreground and background colors to their defaults.
+
+---
+
+#### **Name:** `revstr`
+
+**Arguments:**
+```c
+const char* string1
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Reverses a string.
 
 ---
 
@@ -927,6 +934,30 @@ void
 ```
 
 **Description:** Registers a cleanup function. `0` = run at end of current scope (defer), `1` = run on process exit.
+
+---
+
+#### **Name:** `search`
+
+**Arguments:**
+```c
+const char* string1, const char* pattern
+```
+
+**Return:**
+```c
+Search
+```
+
+**Search:**
+```c
+typedef struct {
+    const char** matches;
+    long         length;
+} Search;
+```
+
+**Description:** Searches all the regular expression `pattern` matches in `string1`, returning them and their count.
 
 ---
 
@@ -1126,7 +1157,7 @@ long
 
 **Arguments:**
 ```c
-const char* text, const char* pattern
+const char* string1, const char* pattern
 ```
 
 **Return:**
@@ -1142,7 +1173,7 @@ typedef struct {
 } Splitstr;
 ```
 
-**Description:** Splits the `text` string into an array of substrings using the regular expression `pattern` as the delimiter.
+**Description:** Splits the `string1` string into an array of substrings using the regular expression `pattern` as the delimiter.
 
 ---
 
@@ -1223,6 +1254,22 @@ long
 ```
 
 **Description:** Returns the length of a string.
+
+---
+
+#### **Name:** `substr`
+
+**Arguments:**
+```c
+const char* string1, long start_index, long stop_index
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Returns of a substring of `string1` from `start` to `stop` index (inclusive).
 
 ---
 
@@ -1422,7 +1469,7 @@ const char*
 
 **Arguments:**
 ```c
-long sides, const char* text, const char* pattern
+long sides, const char* string1, const char* pattern
 ```
 
 **Return:**
