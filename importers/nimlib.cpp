@@ -76,6 +76,7 @@ extern "C" {
     void        cursorto   (long x, long y);
     void        def        (const char* name, const char* value);
     Exec        exec       (const char* command);
+    void        execlive   (const char* command);
     Fileinfo    fileinfo   (const char* path);
     const char* fileread   (const char* path);
     void        filewrite  (const char* path, const char* content);
