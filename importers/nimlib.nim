@@ -20,6 +20,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc cursorto*   (x: int, y: int)
   proc def*        (name: cstring; value: cstring)
   proc exec*       (command: cstring): tuple[output: cstring, exit_code: int]
+  proc execlive*   (command: cstring)
   proc fileinfo*   (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int]
   proc fileread*   (path: cstring): cstring
   proc filewrite*  (path: cstring; content: cstring)
