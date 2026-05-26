@@ -1,12 +1,12 @@
 #!/bin/bash
 
 build() {
-    echo "Building."
+    echo "[Building]"
     nim c --app:lib --out:build/nimlib.so src/main.nim
 }
 
 install() {
-    echo "Installing."
+    echo "[Installing]"
     sudo cp build/nimlib.so /usr/lib32/
     sudo ldconfig
 }
