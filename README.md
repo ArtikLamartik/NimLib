@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.1.8`
+Version `0.1.9`
 
 ## NimLib Documentation
 
@@ -959,6 +959,118 @@ void
 ```
 
 **Description:** Registers a handler for a POSIX signal number. The function is called when the signal is received.
+
+---
+
+#### **Name:** `sockacc`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Waits for the next client to connect on an already-open server socket and returns the IP address of the connected client.
+
+---
+
+#### **Name:** `sockclose`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Closes the server socket and any active client connection on the server side.
+
+---
+
+#### **Name:** `sockcon`
+
+**Arguments:**
+```c
+const char* ipaddress, long port
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Connects to a server as a client. Use `sockdiscon` to close the client-side connection when done.
+
+---
+
+#### **Name:** `sockdiscon`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Disconnects the client socket opened by `sockcon`. Has no effect on the server side.
+
+---
+
+#### **Name:** `sockopen`
+
+**Arguments:**
+```c
+long port
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Opens a server socket on the given port. Returns the IP address of that client.
+
+---
+
+#### **Name:** `sockrecv`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Receives data from the active socket (server-side or client-side), it blocks until data arrives, has a buffer that grows if the incoming data exceeds 64KB and returns an empty string if no socket is open or the connection dropped.
+
+---
+
+#### **Name:** `socksend`
+
+**Arguments:**
+```c
+const char* data
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Sends data over the active socket (server-side or client-side) and has no effect if no socket is currently open.
 
 ---
 
