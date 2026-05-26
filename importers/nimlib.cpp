@@ -120,6 +120,13 @@ extern "C" {
     void        setbg      (long r, long g, long b);
     void        setfg      (long r, long g, long b);
     void        sig        (long signal, void (*function)(void));
+    const char* sockacc    (void);
+    void        sockclose  (void);
+    void        sockcon    (const char* ipaddress, long port);
+    void        sockdiscon (void);
+    const char* sockopen   (long port);
+    const char* sockrecv   (void);
+    void        socksend   (const char* data);
     long        spawnproc  (const char* command);
     void        spawnthr   (void (*function)(void));
     Splitstr    splitstr   (const char* text, const char* pattern);
