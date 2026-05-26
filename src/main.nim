@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.0"
+var VERSION = "0.2.1"
 
 {.emit: """
 #include <netinet/in.h>
@@ -121,6 +121,9 @@ proc exec*(command: cstring): tuple[output: cstring, exit_code: int] {.exportc, 
   let (stdo, exit_code) = execCmdEx($command)
   return (cstring(stdo), int(exit_code))
 
+proc execlive*(command: cstring) {.exportc, dynlib.} =
+  discard execCmd($command)
+
 proc fileinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int] {.exportc, dynlib.} =
   let p = $path
   if not fileExists(p):
@@ -177,10 +180,18 @@ proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
 
 proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var args: seq[string]
-  let cmdline = commandLineParams()
-  for i in 1..<cmdline.len:
-    if cmdline[i].len > 0:
-      args.add(cmdline[i])
+  when defined(linux):
+    let cmdline = readFile("/proc/self/cmdline")
+    let parts = cmdline.split('\0')
+    for i in 1..<parts.len:
+      if parts[i].len > 0:
+        args.add(parts[i])
+  elif defined(bsd) or defined(macosx):
+    let output = execProcess("sysctl -n kern.proc.args " & $getCurrentProcessId())
+    for arg in output.splitWhitespace():
+      args.add(arg)
+  if args.len == 0:
+    args.add("")
   var args_cstr = args.mapIt(cstring(it))
   result = (cast[ptr UncheckedArray[cstring]](addr args_cstr[0]), args.len.int)
 
