@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.2.0`
+Version `0.2.1`
 
 ## NimLib Documentation
 
@@ -171,6 +171,22 @@ typedef struct {
 ```
 
 **Description:** Runs a shell command synchronously and returns its stdout output and exit code.
+
+---
+
+#### **Name:** `execlive`
+
+**Arguments:**
+```c
+const char* command
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Runs a shell command synchronously and live in the terminal/console.
 
 ---
 
