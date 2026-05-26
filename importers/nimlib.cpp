@@ -10,12 +10,6 @@ struct Fileinfo {
     long        file_size;
 };
 
-struct Find {
-    long* start_index;
-    long* stop_index;
-    long  length;
-};
-
 struct Folderinfo {
     const char* name;
     const char* creator;
@@ -60,6 +54,11 @@ struct Procinfo {
     const char* command;
 };
 
+struct Search {
+    const char** matches;
+    long         length;
+};
+
 struct Splitstr {
     const char** parts;
     long         length;
@@ -80,7 +79,6 @@ extern "C" {
     Fileinfo    fileinfo   (const char* path);
     const char* fileread   (const char* path);
     void        filewrite  (const char* path, const char* content);
-    Find        find       (const char* text, const char* pattern);
     Folderinfo  folderinfo (const char* path);
     void        freebuf    (void* pointer1);
     Getargs     getargs    (void);
@@ -91,7 +89,7 @@ extern "C" {
     const char* getprogloc (void);
     Getermsize  getermsize (void);
     void        halt       (long atexit, long exit_code);
-    long        has        (const char* text, const char* pattern);
+    long        has        (const char* string1, const char* pattern);
     long        isdef      (const char* name);
     long        isfile     (const char* path);
     long        isfolder   (const char* path);
@@ -112,12 +110,15 @@ extern "C" {
     Procinfo    procinfo   (long process_id);
     long        randint    (long minimum, long maximum);
     void*       reallocbuf (void* pointer1, long new_size);
-    const char* replacestr (const char* text, const char* pattern, const char* replacement);
+    const char* replacestr (const char* string1, const char* pattern, const char* replacement);
+    const char* repstr     (const char* string1, long count);
     void        resetbgfg  (void);
+    const char* revstr     (const char* string1);
     void        rmfile     (const char* path);
     void        rmfolder   (const char* path);
     void        schedule   (long milliseconds, void (*function)(void));
     void        scope      (long atexit, void (*function)(void));
+    Search      search     (const char* string1, const char* pattern);
     void        setbg      (long r, long g, long b);
     void        setfg      (long r, long g, long b);
     void        sig        (long signal, void (*function)(void));
@@ -130,12 +131,13 @@ extern "C" {
     void        socksend   (const char* data);
     long        spawnproc  (const char* command);
     void        spawnthr   (void (*function)(void));
-    Splitstr    splitstr   (const char* text, const char* pattern);
+    Splitstr    splitstr   (const char* string1, const char* pattern);
     const char* stdi       (long visible);
     void        stdo       (const char* string1);
     long        strcomp    (const char* string1, const char* string2);
     const char* strformat  (long count, ...);
     long        strsize    (const char* string1);
+    const char* substr     (const char* string1, long start_index, long stop_index);
     void        syncthr    (void (*function)(void));
     double      timern     (void);
     void        timerstart (const char* name);
@@ -148,7 +150,7 @@ extern "C" {
     const char* tostrb64   (const char* value, const char* key);
     const char* tostrflt   (double value);
     const char* tostrint   (long value);
-    const char* trimstr    (long sides, const char* text, const char* pattern);
+    const char* trimstr    (long sides, const char* string1, const char* pattern);
     void        undef      (const char* name);
     void        until      (double timestamp);
     const char* upstr      (const char* string1);
