@@ -9,7 +9,7 @@ macro importAll(lib: static[string], body: untyped): untyped =
       node.body = newEmptyNode()
       result.add(node)
 
-importAll("/usr/lib32/"):
+importAll("/usr/lib32/nimlib.so"):
   proc allocbuf*   (size: int): pointer
   proc cf*         (path: cstring)
   proc clrscr*     ()
