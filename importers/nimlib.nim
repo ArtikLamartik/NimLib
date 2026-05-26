@@ -24,7 +24,6 @@ importAll("/usr/lib32/nimlib.so"):
   proc fileinfo*   (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, file_size: int]
   proc fileread*   (path: cstring): cstring
   proc filewrite*  (path: cstring; content: cstring)
-  proc find*       (text: cstring, pattern: cstring): tuple[start_index: ptr UncheckedArray[int], stop_index: ptr UncheckedArray[int], length: int]
   proc folderinfo* (path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int]
   proc freebuf*    (pointer1: pointer)
   proc getargs*    (): tuple[args: ptr UncheckedArray[cstring], length: int]
@@ -35,7 +34,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc getprogloc* (): cstring
   proc getermsize* (): tuple[columns: int, rows: int]
   proc halt*       (atexit: int, exit_code: int)
-  proc has*        (text: cstring, pattern: cstring): int
+  proc has*        (string1: cstring, pattern: cstring): int
   proc isdef*      (name: cstring): int
   proc isfile*     (path: cstring): int
   proc isfolder*   (path: cstring): int
@@ -56,12 +55,15 @@ importAll("/usr/lib32/nimlib.so"):
   proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
-  proc replacestr* (text: cstring, pattern: cstring, replacement: cstring): cstring
+  proc replacestr* (string1: cstring, pattern: cstring, replacement: cstring): cstring
+  proc repstr*     (string1: cstring, count: int): cstring
   proc resetbgfg*  ()
+  proc revstr*     (string1: cstring): cstring
   proc rmfile*     (path: cstring)
   proc rmfolder*   (path: cstring)
   proc schedule*   (milliseconds: int, function: proc() {.noconv.})
   proc scope*      (atexit: int, function: proc() {.noconv.})
+  proc search*     (string1: cstring, pattern: cstring): tuple[matches: ptr UncheckedArray[cstring], length: int]
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
   proc sig*        (signal: int, function: proc() {.noconv.})
@@ -74,12 +76,13 @@ importAll("/usr/lib32/nimlib.so"):
   proc socksend*   (data: cstring)
   proc spawnproc*  (command: cstring): int
   proc spawnthr*   (function: proc() {.noconv.})
-  proc splitstr*   (text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
+  proc splitstr*   (string1: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
   proc stdi*       (visible: int): cstring
   proc stdo*       (string1: cstring)
   proc strcomp*    (string1: cstring; string2: cstring): int
   proc strformat*  (count: int): cstring {.varargs.}
   proc strsize*    (string1: cstring): int
+  proc substr*     (string1: cstring, start_index: int, stop_index: int): cstring
   proc syncthr*    (function: proc() {.noconv.})
   proc timern*     (): float
   proc timerstart* (name: cstring)
@@ -92,7 +95,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc tostrb64*   (value: cstring, key: cstring): cstring
   proc tostrflt*   (value: float): cstring
   proc tostrint*   (value: int): cstring
-  proc trimstr*    (sides: int, text: cstring, pattern: cstring): cstring
+  proc trimstr*    (sides: int, string1: cstring, pattern: cstring): cstring
   proc undef*      (name: cstring)
   proc until*      (timestamp: float)
   proc upstr*      (string1: cstring): cstring
