@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.9"
+var VERSION = "0.2.0"
 
 {.emit: """
 #include <netinet/in.h>
@@ -177,18 +177,10 @@ proc freebuf*(pointer1: pointer) {.exportc, dynlib.} =
 
 proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var args: seq[string]
-  when defined(linux):
-    let cmdline = readFile("/proc/self/cmdline")
-    let parts = cmdline.split('\0')
-    for i in 1..<parts.len:
-      if parts[i].len > 0:
-        args.add(parts[i])
-  elif defined(bsd) or defined(macosx):
-    let output = execProcess("sysctl -n kern.proc.args " & $getCurrentProcessId())
-    for arg in output.splitWhitespace():
-      args.add(arg)
-  if args.len == 0:
-    args.add("")
+  let cmdline = commandLineParams()
+  for i in 1..<cmdline.len:
+    if cmdline[i].len > 0:
+      args.add(cmdline[i])
   var args_cstr = args.mapIt(cstring(it))
   result = (cast[ptr UncheckedArray[cstring]](addr args_cstr[0]), args.len.int)
 
