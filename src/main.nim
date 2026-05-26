@@ -11,9 +11,12 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.1.8"
+var VERSION = "0.1.9"
 
 {.emit: """
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include <pthread.h>
 #include <termios.h>
@@ -22,6 +25,7 @@ var VERSION = "0.1.8"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <netdb.h>
 #include <stdio.h>
 #include <time.h>
 #define MAX_THREADS 65536
@@ -48,6 +52,9 @@ static void* job_runner(void* arg) {
 typedef struct { const char* name; struct timespec start; } Timer;
 static Timer timers[MAX_TIMERS];
 static int timer_count = 0;
+static int sock_server_fd = -1;
+static int sock_client_fd = -1;
+static int sock_conn_fd = -1;
 """.}
 
 var exitqueue: seq[proc() {.noconv.}] = @[]
@@ -405,6 +412,85 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
 
 proc sig*(signal: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
+
+proc sockacc*(): cstring {.exportc, dynlib.} =
+  {.emit: """
+  struct sockaddr_in client_addr;
+  socklen_t client_len = sizeof(client_addr);
+  sock_conn_fd = accept(sock_server_fd, (struct sockaddr*)&client_addr, &client_len);
+  `result` = inet_ntoa(client_addr.sin_addr);
+  """.}
+
+proc sockclose*() {.exportc, dynlib.} =
+  {.emit: """
+  if (sock_conn_fd != -1) { close(sock_conn_fd); sock_conn_fd = -1; }
+  if (sock_server_fd != -1) { close(sock_server_fd); sock_server_fd = -1; }
+  """.}
+
+proc sockcon*(ipaddress: cstring, port: int) {.exportc, dynlib.} =
+  {.emit: """
+  struct sockaddr_in addr;
+  sock_client_fd = socket(AF_INET, SOCK_STREAM, 0);
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(`port`);
+  inet_pton(AF_INET, `ipaddress`, &addr.sin_addr);
+  connect(sock_client_fd, (struct sockaddr*)&addr, sizeof(addr));
+  """.}
+
+proc sockdiscon*() {.exportc, dynlib.} =
+  {.emit: """
+  if (sock_client_fd != -1) { close(sock_client_fd); sock_client_fd = -1; }
+  """.}
+
+proc sockopen*(port: int): cstring {.exportc, dynlib.} =
+  {.emit: """
+  struct sockaddr_in addr;
+  socklen_t addrlen = sizeof(addr);
+  sock_server_fd = socket(AF_INET, SOCK_STREAM, 0);
+  int opt = 1;
+  setsockopt(sock_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+  addr.sin_family = AF_INET;
+  addr.sin_addr.s_addr = INADDR_ANY;
+  addr.sin_port = htons(`port`);
+  bind(sock_server_fd, (struct sockaddr*)&addr, sizeof(addr));
+  listen(sock_server_fd, 1);
+  struct sockaddr_in client_addr;
+  socklen_t client_len = sizeof(client_addr);
+  sock_conn_fd = accept(sock_server_fd, (struct sockaddr*)&client_addr, &client_len);
+  `result` = inet_ntoa(client_addr.sin_addr);
+  """.}
+
+proc sockrecv*(): cstring {.exportc, dynlib.} =
+  {.emit: """
+  int fd = (sock_conn_fd != -1) ? sock_conn_fd : sock_client_fd;
+  if (fd == -1) { `result` = ""; return; }
+  size_t total = 0;
+  size_t capacity = 65536;
+  char* buf = (char*)malloc(capacity);
+  if (!buf) { `result` = ""; return; }
+  while (1) {
+    if (total >= capacity - 1) {
+      capacity *= 2;
+      char* newbuf = (char*)realloc(buf, capacity);
+      if (!newbuf) { free(buf); `result` = ""; return; }
+      buf = newbuf;
+    }
+    int n = recv(fd, buf + total, capacity - total - 1, 0);
+    if (n <= 0) break;
+    total += n;
+    int available = 0;
+    ioctl(fd, FIONREAD, &available);
+    if (available == 0) break;
+  }
+  buf[total] = '\0';
+  `result` = buf;
+  """.}
+
+proc socksend*(data: cstring) {.exportc, dynlib.} =
+  {.emit: """
+  int fd = (sock_conn_fd != -1) ? sock_conn_fd : sock_client_fd;
+  if (fd != -1) send(fd, `data`, strlen(`data`), 0);
+  """.}
 
 proc spawnproc*(command: cstring): int {.exportc, dynlib.} =
   return int(startProcess($command).processID)
