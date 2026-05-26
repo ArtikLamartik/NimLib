@@ -974,7 +974,7 @@ void
 const char*
 ```
 
-**Description:** Waits for the next client to connect on an already-open server socket and returns the IP address of the connected client.
+**Description:** Waits for the next client to connect on an already-open server socket. Returns the IP address of the connected client.
 
 ---
 
@@ -1054,7 +1054,7 @@ void
 const char*
 ```
 
-**Description:** Receives data from the active socket (server-side or client-side), it blocks until data arrives, has a buffer that grows if the incoming data exceeds 64KB and returns an empty string if no socket is open or the connection dropped.
+**Description:** Receives data from the active socket (server-side or client-side). It blocks until data arrives. Has a buffer that grows if the incoming data exceeds 64KB. Returns an empty string if no socket is open or the connection dropped.
 
 ---
 
@@ -1070,7 +1070,7 @@ const char* data
 void
 ```
 
-**Description:** Sends data over the active socket (server-side or client-side) and has no effect if no socket is currently open.
+**Description:** Sends data over the active socket (server-side or client-side). Has no effect if no socket is currently open.
 
 ---
 
