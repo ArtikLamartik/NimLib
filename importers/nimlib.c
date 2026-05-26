@@ -75,6 +75,7 @@ extern void        cursor     (long visible);
 extern void        cursorto   (long x, long y);
 extern void        def        (const char* name, const char* value);
 extern Exec        exec       (const char* command);
+extern void        execlive   (const char* command);
 extern Fileinfo    fileinfo   (const char* path);
 extern const char* fileread   (const char* path);
 extern void        filewrite  (const char* path, const char* content);
