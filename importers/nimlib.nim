@@ -64,6 +64,13 @@ importAll("./build/nimlib.so"):
   proc setbg*      (r: int, g: int, b: int)
   proc setfg*      (r: int, g: int, b: int)
   proc sig*        (signal: int, function: proc() {.noconv.})
+  proc sockacc*    (): cstring
+  proc sockclose*  ()
+  proc sockcon*    (ipaddress: cstring, port: int)
+  proc sockdiscon* ()
+  proc sockopen*   (port: int): cstring
+  proc sockrecv*   (): cstring
+  proc socksend*   (data: cstring)
   proc spawnproc*  (command: cstring): int
   proc spawnthr*   (function: proc() {.noconv.})
   proc splitstr*   (text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int]
