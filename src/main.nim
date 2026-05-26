@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.1"
+var VERSION = "0.2.2"
 
 {.emit: """
 #include <netinet/in.h>
@@ -143,23 +143,6 @@ proc fileread*(path: cstring): cstring {.exportc, dynlib.} =
 proc filewrite*(path: cstring, content: cstring) {.exportc, dynlib.} =
   writeFile($path, $content)
 
-proc find*(text: cstring, pattern: cstring): tuple[start_index: ptr UncheckedArray[int], stop_index: ptr UncheckedArray[int], length: int] {.exportc, dynlib.} =
-  let t = $text
-  let rePattern = re($pattern)
-  var starts: seq[int]
-  var stops: seq[int]
-  var offset = 0
-  while offset < t.len:
-    let bounds = findBounds(t, rePattern, start = offset)
-    if bounds.first < 0:
-      break
-    starts.add(bounds.first)
-    stops.add(bounds.last)
-    offset = bounds.last + 1
-  starts.add(0)
-  stops.add(0)
-  return (cast[ptr UncheckedArray[int]](addr starts[0]), cast[ptr UncheckedArray[int]](addr stops[0]), starts.len.int - 1)
-
 proc folderinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit: int, folder_size: int] {.exportc, dynlib.} =
   let p = $path
   if not dirExists(p):
@@ -236,9 +219,9 @@ proc halt*(atexit: int, exit_code: int) {.exportc, dynlib.} =
   elif atexit == 1:
     quit(exit_code)
 
-proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
-  let t = $text
-  if t.contains(re($pattern)):
+proc has*(string1: cstring, pattern: cstring): int {.exportc, dynlib.} =
+  let s = $string1
+  if s.contains(re($pattern)):
     return 1
   return 0
 
@@ -371,13 +354,22 @@ proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
 proc reallocbuf*(pointer1: pointer, new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
-proc replacestr*(text: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
+proc replacestr*(string1: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
   let rePattern = re($pattern)
-  return cstring(replace($text, rePattern, $replacement))
+  return cstring(replace($string1, rePattern, $replacement))
+
+proc repstr*(string1: cstring, count: int): cstring {.exportc, dynlib.} =
+  return cstring(repeat($string1, count))
 
 proc resetbgfg*() {.exportc, dynlib.} =
   stdout.write("\x1b[0m")
   stdout.flushFile()
+
+proc revstr*(string1: cstring): cstring {.exportc, dynlib.} =
+  var s = $string1
+  for i in 0..<s.len div 2:
+    swap(s[i], s[s.len - 1 - i])
+  return cstring(s)
 
 proc rmfile*(path: cstring) {.exportc, dynlib.} =
   removeFile($path)
@@ -404,6 +396,17 @@ proc scope*(atexit: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
     defer: function()
   elif atexit == 1:
     exitqueue.add(function)
+
+proc search*(string1: cstring, pattern: cstring): tuple[matches: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  var find_matches: seq[string]
+  let s = $string1
+  let rePattern = re($pattern)
+  for m in findAll(s, rePattern):
+    find_matches.add(m)
+  if find_matches.len == 0:
+    find_matches.add("")
+  var matches_cstr = find_matches.mapIt(cstring(it))
+  return (cast[ptr UncheckedArray[cstring]](addr matches_cstr[0]), find_matches.len.int)
 
 proc setbg*(r: int, g: int, b: int) {.exportc, dynlib.} =
   stdout.write("\x1b[48;2;" & $r & ";" & $g & ";" & $b & "m")
@@ -507,19 +510,19 @@ proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   thread_count++;
   """.}
 
-proc splitstr*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  let t = $text
+proc splitstr*(string1: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  let s = $string1
   let rePattern = re($pattern)
   var storage: seq[string]
   var parts: seq[string]
   var offset = 0
-  while offset < t.len:
-    let bounds = findBounds(t, rePattern, start = offset)
+  while offset < s.len:
+    let bounds = findBounds(s, rePattern, start = offset)
     if bounds.first < 0:
       break
-    storage.add(t[offset..bounds.first - 1])
+    storage.add(s[offset..bounds.first - 1])
     offset = bounds.last + 1
-  storage.add(t[offset..^1])
+  storage.add(s[offset..^1])
   storage.add("")
   for s in storage.mitems:
     parts.add(s)
@@ -555,6 +558,16 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
 
 proc strsize*(string1: cstring): int {.exportc, dynlib.} =
   return int(len($string1))
+
+proc substr*(string1: cstring, start_index: int, stop_index: int): cstring {.exportc, dynlib.} =
+  var s = $string1
+  var strt_index = 0
+  var stp_index = s.len - 1
+  if start_index >= 0:
+    strt_index = start_index
+  if stop_index <= s.len:
+    stp_index = stop_index
+  return cstring(s[strt_index..stp_index])
 
 proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   {.emit: """
@@ -673,15 +686,15 @@ proc tostrflt*(value: float): cstring {.exportc, dynlib.} =
 proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
 
-proc trimstr*(sides: int, text: cstring, pattern: cstring): cstring {.exportc, dynlib.} =
-  let t = $text
+proc trimstr*(sides: int, string1: cstring, pattern: cstring): cstring {.exportc, dynlib.} =
+  let s = $string1
   let p = $pattern
   if sides == 0:
-    return cstring(t.replacef(re("^(?:" & p & ")"), "").replacef(re("(?:" & p & ")$"), ""))
+    return cstring(s.replacef(re("^(?:" & p & ")"), "").replacef(re("(?:" & p & ")$"), ""))
   elif sides == 1:
-    return cstring(t.replacef(re("^(?:" & p & ")"), ""))
+    return cstring(s.replacef(re("^(?:" & p & ")"), ""))
   elif sides == 2:
-    return cstring(t.replacef(re("(?:" & p & ")$"), ""))
+    return cstring(s.replacef(re("(?:" & p & ")$"), ""))
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
