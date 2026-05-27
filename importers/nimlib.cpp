@@ -145,10 +145,12 @@ extern "C" {
     const char* tob64str   (long forurl, const char* value, const char* key);
     double      tofltint   (long value);
     double      tofltstr   (const char* value);
+    const char* tohexstr   (const char* value);
     long        tointflt   (double value);
     long        tointstr   (const char* value);
     const char* tostrb64   (const char* value, const char* key);
     const char* tostrflt   (double value);
+    const char* tostrhex   (const char* value);
     const char* tostrint   (long value);
     const char* trimstr    (long sides, const char* string1, const char* pattern);
     void        undef      (const char* name);
