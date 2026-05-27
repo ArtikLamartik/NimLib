@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.3"
+var VERSION = "0.2.4"
 
 {.emit: """
 #include <netinet/in.h>
@@ -28,11 +28,11 @@ var VERSION = "0.2.3"
 #include <netdb.h>
 #include <stdio.h>
 #include <time.h>
-#define MAX_THREADS 65536
+#define MAX_THREADS 131072
 static pthread_t thread_handles[MAX_THREADS];
 static void* thread_fns[MAX_THREADS];
 static int thread_count = 0;
-#define MAX_JOBS 65536
+#define MAX_JOBS 131072
 static pthread_t job_handles[MAX_JOBS];
 static void* job_fns[MAX_JOBS];
 static int job_active[MAX_JOBS];
@@ -48,7 +48,7 @@ static void* job_runner(void* arg) {
   free(a);
   return NULL;
 }
-#define MAX_TIMERS 65536
+#define MAX_TIMERS 131072
 typedef struct { const char* name; struct timespec start; } Timer;
 static Timer timers[MAX_TIMERS];
 static int timer_count = 0;
@@ -219,9 +219,9 @@ proc halt*(atexit: int, exit_code: int) {.exportc, dynlib.} =
   elif atexit == 1:
     quit(exit_code)
 
-proc has*(string1: cstring, pattern: cstring): int {.exportc, dynlib.} =
-  let s = $string1
-  if s.contains(re($pattern)):
+proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
+  let t = $text
+  if t.contains(re($pattern)):
     return 1
   return 0
 
@@ -310,8 +310,8 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArra
   var types_cstr = types.mapIt(cstring(it))
   return (cast[ptr UncheckedArray[cstring]](addr paths_cstr[0]), cast[ptr UncheckedArray[cstring]](addr types_cstr[0]), paths_cstr.len.int)
 
-proc lowstr*(string1: cstring): cstring =
-  return cstring(toLower($string1))
+proc lowstr*(text: cstring): cstring =
+  return cstring(toLower($text))
 
 proc mcopy*(source: cstring, destination: pointer, size: int) {.exportc, dynlib.} =
   copyMem(destination, source, size)
@@ -354,22 +354,22 @@ proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
 proc reallocbuf*(pointer1: pointer, new_size: int): pointer {.exportc, dynlib.} =
   return realloc(pointer1, new_size)
 
-proc replacestr*(string1: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
+proc replacestr*(text: cstring, pattern: cstring, replacement: cstring): cstring {.exportc, dynlib.} =
   let rePattern = re($pattern)
-  return cstring(replace($string1, rePattern, $replacement))
+  return cstring(replace($text, rePattern, $replacement))
 
-proc repstr*(string1: cstring, count: int): cstring {.exportc, dynlib.} =
-  return cstring(repeat($string1, count))
+proc repstr*(text: cstring, count: int): cstring {.exportc, dynlib.} =
+  return cstring(repeat($text, count))
 
 proc resetbgfg*() {.exportc, dynlib.} =
   stdout.write("\x1b[0m")
   stdout.flushFile()
 
-proc revstr*(string1: cstring): cstring {.exportc, dynlib.} =
-  var s = $string1
-  for i in 0..<s.len div 2:
-    swap(s[i], s[s.len - 1 - i])
-  return cstring(s)
+proc revstr*(text: cstring): cstring {.exportc, dynlib.} =
+  var t = $text
+  for i in 0..<t.len div 2:
+    swap(t[i], t[t.len - 1 - i])
+  return cstring(t)
 
 proc rmfile*(path: cstring) {.exportc, dynlib.} =
   removeFile($path)
@@ -397,11 +397,11 @@ proc scope*(atexit: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   elif atexit == 1:
     exitqueue.add(function)
 
-proc search*(string1: cstring, pattern: cstring): tuple[matches: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+proc search*(text: cstring, pattern: cstring): tuple[matches: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
   var find_matches: seq[string]
-  let s = $string1
+  let t = $text
   let rePattern = re($pattern)
-  for m in findAll(s, rePattern):
+  for m in findAll(t, rePattern):
     find_matches.add(m)
   if find_matches.len == 0:
     find_matches.add("")
@@ -471,7 +471,7 @@ proc sockrecv*(): cstring {.exportc, dynlib.} =
   int fd = (sock_conn_fd != -1) ? sock_conn_fd : sock_client_fd;
   if (fd == -1) { `result` = ""; return; }
   size_t total = 0;
-  size_t capacity = 65536;
+  size_t capacity = 131072;
   char* buf = (char*)malloc(capacity);
   if (!buf) { `result` = ""; return; }
   while (1) {
@@ -510,22 +510,22 @@ proc spawnthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   thread_count++;
   """.}
 
-proc splitstr*(string1: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
-  let s = $string1
+proc splitstr*(text: cstring, pattern: cstring): tuple[parts: ptr UncheckedArray[cstring], length: int] {.exportc, dynlib.} =
+  let t = $text
   let rePattern = re($pattern)
   var storage: seq[string]
   var parts: seq[string]
   var offset = 0
-  while offset < s.len:
-    let bounds = findBounds(s, rePattern, start = offset)
+  while offset < t.len:
+    let bounds = findBounds(t, rePattern, start = offset)
     if bounds.first < 0:
       break
-    storage.add(s[offset..bounds.first - 1])
+    storage.add(t[offset..bounds.first - 1])
     offset = bounds.last + 1
-  storage.add(s[offset..^1])
+  storage.add(t[offset..^1])
   storage.add("")
-  for s in storage.mitems:
-    parts.add(s)
+  for t in storage.mitems:
+    parts.add(t)
   var parts_cstr = parts.mapIt(cstring(it))
   return (cast[ptr UncheckedArray[cstring]](addr parts_cstr[0]), parts_cstr.len.int - 1)
 
@@ -535,16 +535,16 @@ proc stdi*(visible: int): cstring {.exportc, dynlib.} =
   elif visible == 1:
     return cstring(readLine(stdin))
 
-proc stdo*(string1: cstring) {.exportc, dynlib.} =
-  stdout.write(string1)
+proc stdo*(text: cstring) {.exportc, dynlib.} =
+  stdout.write(text)
   stdout.flushFile()
 
-proc strcomp*(string1: cstring, string2: cstring): int {.exportc, dynlib.} =
-  return int(cmp(string1, string2) == 0)
+proc strcomp*(text1: cstring, text2: cstring): int {.exportc, dynlib.} =
+  return int(cmp(text1, text2) == 0)
 
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   {.emit: """
-  static char buf[65536];
+  static char buf[131072];
   buf[0] = '\0';
   va_list args;
   va_start(args, `count`);
@@ -556,18 +556,29 @@ proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   return buf;
   """.}
 
-proc strsize*(string1: cstring): int {.exportc, dynlib.} =
-  return int(len($string1))
+proc strinsert*(text1: cstring, text2: cstring, index: int): cstring {.exportc, dynlib.} =
+  var t1 = $text1
+  var t2 = $text2
+  var idx = index
+  if idx < 0:
+    idx = 0
+  elif idx > t1.len:
+    idx = t1.len
+  t1.insert(t2, idx)
+  return cstring(t1)
 
-proc substr*(string1: cstring, start_index: int, stop_index: int): cstring {.exportc, dynlib.} =
-  var s = $string1
+proc strsize*(text: cstring): int {.exportc, dynlib.} =
+  return int(len($text))
+
+proc substr*(text: cstring, start_index: int, stop_index: int): cstring {.exportc, dynlib.} =
+  var t = $text
   var strt_index = 0
-  var stp_index = s.len - 1
+  var stp_index = t.len - 1
   if start_index >= 0:
     strt_index = start_index
-  if stop_index <= s.len:
+  if stop_index <= t.len:
     stp_index = stop_index
-  return cstring(s[strt_index..stp_index])
+  return cstring(t[strt_index..stp_index])
 
 proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
   {.emit: """
@@ -697,15 +708,15 @@ proc tostrhex*(value: cstring): cstring {.exportc, dynlib.} =
 proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
 
-proc trimstr*(sides: int, string1: cstring, pattern: cstring): cstring {.exportc, dynlib.} =
-  let s = $string1
+proc trimstr*(text: cstring, sides: int, pattern: cstring): cstring {.exportc, dynlib.} =
+  let t = $text
   let p = $pattern
   if sides == 0:
-    return cstring(s.replacef(re("^(?:" & p & ")"), "").replacef(re("(?:" & p & ")$"), ""))
+    return cstring(t.replacef(re("^(?:" & p & ")"), "").replacef(re("(?:" & p & ")$"), ""))
   elif sides == 1:
-    return cstring(s.replacef(re("^(?:" & p & ")"), ""))
+    return cstring(t.replacef(re("^(?:" & p & ")"), ""))
   elif sides == 2:
-    return cstring(s.replacef(re("(?:" & p & ")$"), ""))
+    return cstring(t.replacef(re("(?:" & p & ")$"), ""))
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
@@ -714,8 +725,8 @@ proc until*(timestamp: float) {.exportc, dynlib.} =
   if timestamp > epochTime():
     sleep(int(round((timestamp - epochTime()) * 1000.0)))
 
-proc upstr*(string1: cstring): cstring {.exportc, dynlib.} =
-  return cstring(toUpper($string1))
+proc upstr*(text: cstring): cstring {.exportc, dynlib.} =
+  return cstring(toUpper($text))
 
 proc version*(): cstring {.exportc, dynlib.} =
   return VERSION.cstring
