@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.2.3`
+Version `0.2.4`
 
 ## NimLib Documentation
 
@@ -438,7 +438,7 @@ void
 
 **Arguments:**
 ```c
-const char* string1, const char* pattern
+const char* text, const char* pattern
 ```
 
 **Return:**
@@ -641,7 +641,7 @@ typedef struct {
 
 **Arguments:**
 ```c
-const char* string1
+const char* text
 ```
 
 **Return:**
@@ -813,7 +813,7 @@ void*
 
 **Arguments:**
 ```c
-const char* string1, const char* pattern, const char* replacement
+const char* text, const char* pattern, const char* replacement
 ```
 
 **Return:**
@@ -821,7 +821,7 @@ const char* string1, const char* pattern, const char* replacement
 const char*
 ```
 
-**Description:** Replaces all the regular expression `pattern` matches in `string1` with `replacement`, returning the replaced string.
+**Description:** Replaces all the regular expression `pattern` matches in `text` with `replacement`, returning the replaced string.
 
 ---
 
@@ -829,7 +829,7 @@ const char*
 
 **Arguments:**
 ```c
-const char* string1, long count
+const char* text, long count
 ```
 
 **Return:**
@@ -861,7 +861,7 @@ void
 
 **Arguments:**
 ```c
-const char* string1
+const char* text
 ```
 
 **Return:**
@@ -941,7 +941,7 @@ void
 
 **Arguments:**
 ```c
-const char* string1, const char* pattern
+const char* text, const char* pattern
 ```
 
 **Return:**
@@ -957,7 +957,7 @@ typedef struct {
 } Search;
 ```
 
-**Description:** Searches all the regular expression `pattern` matches in `string1`, returning them and their count.
+**Description:** Searches all the regular expression `pattern` matches in `text`, returning them and their count.
 
 ---
 
@@ -1101,7 +1101,7 @@ void
 const char*
 ```
 
-**Description:** Receives data from the active socket (server-side or client-side). It blocks until data arrives. Has a buffer that grows if the incoming data exceeds 64KB. Returns an empty string if no socket is open or the connection dropped.
+**Description:** Receives data from the active socket (server-side or client-side). It blocks until data arrives. Has a buffer that grows if the incoming data exceeds 128KB. Returns an empty string if no socket is open or the connection dropped.
 
 ---
 
@@ -1157,7 +1157,7 @@ long
 
 **Arguments:**
 ```c
-const char* string1, const char* pattern
+const char* text, const char* pattern
 ```
 
 **Return:**
@@ -1173,7 +1173,7 @@ typedef struct {
 } Splitstr;
 ```
 
-**Description:** Splits the `string1` string into an array of substrings using the regular expression `pattern` as the delimiter.
+**Description:** Splits the `text` string into an array of substrings using the regular expression `pattern` as the delimiter.
 
 ---
 
@@ -1197,7 +1197,7 @@ const char*
 
 **Arguments:**
 ```c
-const char* string1
+const char* text
 ```
 
 **Return:**
@@ -1213,7 +1213,7 @@ void
 
 **Arguments:**
 ```c
-const char* string1, const char* string2
+const char* text1, const char* text2
 ```
 
 **Return:**
@@ -1237,7 +1237,23 @@ long count, ...
 const char*
 ```
 
-**Description:** Concatenates `count` variadic string arguments into a single string. Uses a static 64 KB internal buffer.
+**Description:** Concatenates `count` variadic string arguments into a single string. Uses a static 128 KB internal buffer.
+
+---
+
+#### **Name:** `strinsert`
+
+**Arguments:**
+```c
+const char* text1, const char* text2, long index
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Inserts `text2` into `text1` at the specified `index`.
 
 ---
 
@@ -1245,7 +1261,7 @@ const char*
 
 **Arguments:**
 ```c
-const char* string1
+const char* text
 ```
 
 **Return:**
@@ -1261,7 +1277,7 @@ long
 
 **Arguments:**
 ```c
-const char* string1, long start_index, long stop_index
+const char* text, long start_index, long stop_index
 ```
 
 **Return:**
@@ -1269,7 +1285,7 @@ const char* string1, long start_index, long stop_index
 const char*
 ```
 
-**Description:** Returns of a substring of `string1` from `start` to `stop` index (inclusive).
+**Description:** Returns of a substring of `text` from `start` to `stop` index (inclusive).
 
 ---
 
@@ -1501,7 +1517,7 @@ const char*
 
 **Arguments:**
 ```c
-long sides, const char* string1, const char* pattern
+long sides, const char* text, const char* pattern
 ```
 
 **Return:**
@@ -1549,7 +1565,7 @@ void
 
 **Arguments:**
 ```c
-const char* string1
+const char* text
 ```
 
 **Return:**
