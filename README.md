@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.2.2`
+Version `0.2.3`
 
 ## NimLib Documentation
 
@@ -1385,6 +1385,22 @@ double
 
 ---
 
+#### **Name:** `tohexstr`
+
+**Arguments:**
+```c
+const char* value
+```
+
+**Return:**
+```c
+const char* value
+```
+
+**Description:** Turns a string in to hexadecimal.
+
+---
+
 #### **Name:** `tointflt`
 
 **Arguments:**
@@ -1446,6 +1462,22 @@ const char*
 ```
 
 **Description:** Converts a float to its string representation.
+
+---
+
+#### **Name:** `tostrhex`
+
+**Arguments:**
+```c
+const char* value
+```
+
+**Return:**
+```c
+const char* value
+```
+
+**Description:** Turns a hexadecimal string in to a normal string.
 
 ---
 
