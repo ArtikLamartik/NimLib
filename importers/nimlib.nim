@@ -90,10 +90,12 @@ importAll("/usr/lib32/nimlib.so"):
   proc tob64str*   (forurl: int, value: cstring, key: cstring): cstring
   proc tofltint*   (value: int): float
   proc tofltstr*   (value: cstring): float
+  proc tohexstr*   (value: cstring): cstring
   proc tointflt*   (value: float): int
   proc tointstr*   (value: cstring): int
   proc tostrb64*   (value: cstring, key: cstring): cstring
   proc tostrflt*   (value: float): cstring
+  proc tostrhex*   (value: cstring): cstring
   proc tostrint*   (value: int): cstring
   proc trimstr*    (sides: int, string1: cstring, pattern: cstring): cstring
   proc undef*      (name: cstring)
