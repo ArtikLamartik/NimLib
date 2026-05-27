@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.2"
+var VERSION = "0.2.3"
 
 {.emit: """
 #include <netinet/in.h>
@@ -647,6 +647,10 @@ proc tofltint*(value: int): float {.exportc, dynlib.} =
 proc tofltstr*(value: cstring): float {.exportc, dynlib.} =
   return float(parseInt($value))
 
+proc tohexstr*(value: cstring): cstring {.exportc, dynlib.} =
+  var v = $value
+  return cstring(v.toHex())
+
 proc tointflt*(value: float): int {.exportc, dynlib.} =
   return int(value)
 
@@ -682,6 +686,13 @@ proc tostrb64*(value: cstring, key: cstring): cstring {.exportc, dynlib.} =
 
 proc tostrflt*(value: float): cstring {.exportc, dynlib.} =
   return cstring($value)
+
+proc tostrhex*(value: cstring): cstring {.exportc, dynlib.} =
+  var v = $value
+  var str = ""
+  for i in countup(0, v.len - 2, 2):
+    str.add(char(parseHexInt(v[i..i+1])))
+  return cstring(str)
 
 proc tostrint*(value: int): cstring {.exportc, dynlib.} =
   return cstring($value)
