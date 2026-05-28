@@ -6,15 +6,15 @@ def main [
 ] {
     if $build {
         print "[Building]"
-        nim c --app:lib --out:build/nimlib.so src/main.nim
+        nim c --app:lib --out:./build/nimlib.so ./src/main.nim
     }
     if $clean {
         print "[Cleaning]"
-        rm -f build/nimlib.so
+        rm -f ./build/nimlib.so
     }
     if $install {
         print "[Installing]"
-        sudo cp build/nimlib.so /usr/lib32/
+        sudo cp ./build/nimlib.so /usr/lib32/
         sudo ldconfig
     }
     if $uninstall {
