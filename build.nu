@@ -1,5 +1,3 @@
-#!/usr/bin/env nu
-
 def main [
     --build (-b)
     --install (-i)
