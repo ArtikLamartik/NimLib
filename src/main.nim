@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.4"
+var VERSION = "0.2.5"
 
 {.emit: """
 #include <netinet/in.h>
@@ -347,6 +347,10 @@ proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_pr
     let parts = line.splitWhitespace(maxsplit=5)
   return (cstring(parts[0]), int(parseInt(parts[1])), int(parseInt(parts[2])), cstring(parts[3]), int(int(epochTime()) - parseInt(parts[4])), cstring(parts[5]))
 
+proc randflt*(minimum: float, maximum: float): float {.exportc, dynlib.} =
+  randomize()
+  return rand(minimum..maximum)
+
 proc randint*(minimum: int, maximum: int): int {.exportc, dynlib.} =
   randomize()
   return rand(minimum..maximum)
@@ -590,6 +594,10 @@ proc syncthr*(function: proc() {.noconv.}) {.exportc, dynlib.} =
     }
   }
   """.}
+
+proc timeformat*(timestamp: float, format: cstring): cstring {.exportc, dynlib.} =
+  let t = fromUnix(int(timestamp))
+  return cstring(t.format($format))
 
 proc timern*(): float {.exportc, dynlib.} =
   return epochTime()
