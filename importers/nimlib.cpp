@@ -108,6 +108,7 @@ extern "C" {
     void        mvfolder   (const char* old_path, const char* new_path);
     long        ping       (const char* url);
     Procinfo    procinfo   (long process_id);
+    double      randflt    (double minimum, double maximum);
     long        randint    (long minimum, long maximum);
     void*       reallocbuf (void* pointer1, long new_size);
     const char* replacestr (const char* text, const char* pattern, const char* replacement);
@@ -136,10 +137,11 @@ extern "C" {
     void        stdo       (const char* text);
     long        strcomp    (const char* text1, const char* text2);
     const char* strformat  (long count, ...);
-    const char* strinsert  (const char* text1, const char* text2, long index)
+    const char* strinsert  (const char* text1, const char* text2, long index);
     long        strsize    (const char* text);
     const char* substr     (const char* text, long start_index, long stop_index);
     void        syncthr    (void (*function)(void));
+    const char* timeformat (double timestamp, const char* format);
     double      timern     (void);
     void        timerstart (const char* name);
     long        timerstop  (const char* name);
