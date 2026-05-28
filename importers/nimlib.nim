@@ -53,6 +53,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc ping*       (url: cstring): int
   proc procinfo*   (process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring]
+  proc randflt*    (minimum: float, maximum: float): float
   proc randint*    (minimum: int, maximum: int): int
   proc reallocbuf* (pointer1: pointer; new_size: int): pointer
   proc replacestr* (text: cstring, pattern: cstring, replacement: cstring): cstring
@@ -85,6 +86,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc strsize*    (text: cstring): int
   proc substr*     (text: cstring, start_index: int, stop_index: int): cstring
   proc syncthr*    (function: proc() {.noconv.})
+  proc timeformat* (timestamp: float, format: cstring): cstring
   proc timern*     (): float
   proc timerstart* (name: cstring)
   proc timerstop*  (name: cstring): int
