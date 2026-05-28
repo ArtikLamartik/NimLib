@@ -11,6 +11,11 @@ install() {
     sudo ldconfig
 }
 
+if [ $# -eq 0 ]; then
+    echo "Usage: bash build.sh [--build|-b] [--install|-i]"
+    exit 0
+fi
+
 for arg in "$@"; do
     case "$arg" in
         --build|-b) build ;;
