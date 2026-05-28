@@ -6,7 +6,7 @@ Thank you for your interest in contributing to **NimLib**! Whether you're fixing
 
 ### Found a bug or have a question?
 
-No worries  that's what issues are for! Head over to GitHub and slap on the right label:
+No worries  that's what issues are for! Head over to GitHub Issues and slap on the right label:
 
 | Label | Description |
 |-------|-------------|
