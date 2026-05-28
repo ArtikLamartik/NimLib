@@ -22,7 +22,7 @@ uninstall() {
 }
 
 if [ $# -eq 0 ]; then
-    echo "Usage: bash build.sh [--build|-b] [--install|-i] [--clean|-c]"
+    echo "Usage: bash build.sh [--build|-b] [--clean|-c] [--install|-i] [--uninstall|-u]"
     exit 0
 fi
 
