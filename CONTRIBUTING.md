@@ -2,9 +2,11 @@
 
 Thank you for your interest in contributing to **NimLib**! Whether you're fixing a bug, adding a feature, improving documentation, or sharing feedback, your help is highly valued.
 
+---
+
 ### Found a bug or have a question?
 
-Open an issue on GitHub with the right label:
+No worries  that's what issues are for! Head over to GitHub and slap on the right label:
 
 | Label | Description |
 |-------|-------------|
@@ -15,7 +17,9 @@ Open an issue on GitHub with the right label:
 | [`question`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Aquestion) | Further information is requested |
 | [`wontfix`](https://github.com/ArtikLamartik/NimLib/issues?q=state%3Aopen%20label%3Awontfix) | This will not be worked on |
 
-Or if you'd rather not open an issue, DM me on Discord: **artiklamartik**
+Prefer to keep it casual? DM me on Discord: **artiklamartik**
+
+---
 
 ## Special Thanks
 
