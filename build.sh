@@ -1,5 +1,3 @@
-#!/bin/bash
-
 build() {
     echo "[Building]"
     nim c --app:lib --out:build/nimlib.so src/main.nim
