@@ -2,7 +2,7 @@
 
 [***only works on Linux, MacOS and BSD***]
 
-Version `0.2.4`
+Version `0.2.5`
 
 ## NimLib Documentation
 
@@ -777,6 +777,22 @@ typedef struct {
 
 ---
 
+#### **Name:** `randflt`
+
+**Arguments:**
+```c
+double minimum, double maximum
+```
+
+**Return:**
+```c
+double
+```
+
+**Description:** Returns a random float in the inclusive range `[minimum, maximum]`.
+
+---
+
 #### **Name:** `randint`
 
 **Arguments:**
@@ -1302,6 +1318,22 @@ void
 ```
 
 **Description:** Blocks until the thread identified by its function pointer finishes (pthread join).
+
+---
+
+#### **Name:** `timeformat`
+
+**Arguments:**
+```c
+double timestamp, const char* format
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Converts a Unix epoch timestamp into a human-readable date and time string using the specified format pattern.
 
 ---
 
