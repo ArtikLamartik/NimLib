@@ -1,8 +1,10 @@
 # NimLib - A Library made in Nim
 
-[***only works on Linux, MacOS and BSD***]
+[***only works on `Linux`, `MacOS` and `BSD`***]
 
-Version `0.2.5`
+> **Note:** If you are on `Windows`, use `WSL`.
+
+Version `0.2.6`
 
 ## NimLib Documentation
 
@@ -1241,6 +1243,38 @@ long
 
 ---
 
+#### **Name:** `strcount`
+
+**Arguments:**
+```c
+const char* text, const char* pattern
+```
+
+**Return:**
+```c
+long
+```
+
+**Description:** Returns the number of times `pattern` is found in `text`.
+
+---
+
+#### **Name:** `strdel`
+
+**Arguments:**
+```c
+const char* text, long index
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Deletes the character at the `index` position.
+
+---
+
 #### **Name:** `strformat`
 
 **Arguments:**
@@ -1270,22 +1304,6 @@ const char*
 ```
 
 **Description:** Inserts `text2` into `text1` at the specified `index`.
-
----
-
-#### **Name:** `strsize`
-
-**Arguments:**
-```c
-const char* text
-```
-
-**Return:**
-```c
-long
-```
-
-**Description:** Returns the length of a string.
 
 ---
 
