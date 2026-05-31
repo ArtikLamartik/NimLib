@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.2.6`
+Version `0.2.7`
 
 ## NimLib Documentation
 
@@ -639,6 +639,22 @@ typedef struct {
 
 ---
 
+#### **Name:** `lockthr`
+
+**Arguments:**
+```c
+void* mutex
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Locks a thread with the specified mutex.
+
+---
+
 #### **Name:** `lowstr`
 
 **Arguments:**
@@ -700,6 +716,22 @@ void
 ```
 
 **Description:** Creates a folder (and any necessary parent directories) at the given path.
+
+---
+
+#### **Name:** `mutexthr`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+void*
+```
+
+**Description:** Creates a mutex.
 
 ---
 
@@ -1592,6 +1624,22 @@ void
 ```
 
 **Description:** Deletes an environment variable by name.
+
+---
+
+#### **Name:** `unlockthr`
+
+**Arguments:**
+```c
+void* mutex
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Unlocks a thread with the specified mutex.
 
 ---
 
