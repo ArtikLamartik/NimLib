@@ -45,10 +45,12 @@ importAll("/usr/lib32/nimlib.so"):
   proc ladefs*     (): tuple[name: ptr UncheckedArray[cstring], value: ptr UncheckedArray[cstring], length: int]
   proc laprocs*    (): tuple[name: ptr UncheckedArray[cstring], process_id: ptr UncheckedArray[int], length: int]
   proc lf*         (): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArray[cstring], length: int]
+  proc lockthr*    (mutex: pointer)
   proc lowstr*     (text: cstring): cstring
   proc mcopy*      (source: cstring; destination: pointer; size: int)
   proc mkfile*     (path: cstring)
   proc mkfolder*   (path: cstring)
+  proc mutexthr*   (): pointer
   proc mvfile*     (old_path: cstring; new_path: cstring)
   proc mvfolder*   (old_path: cstring; new_path: cstring)
   proc ping*       (url: cstring): int
@@ -103,6 +105,7 @@ importAll("/usr/lib32/nimlib.so"):
   proc tostrint*   (value: int): cstring
   proc trimstr*    (text: cstring, sides: int, pattern: cstring): cstring
   proc undef*      (name: cstring)
+  proc unlockthr*  (mutex: pointer)
   proc until*      (timestamp: float)
   proc upstr*      (text: cstring): cstring
   proc version*    (): cstring
