@@ -100,10 +100,12 @@ extern "C" {
     Ladefs      ladefs     (void);
     Laprocs     laprocs    (void);
     Lf          lf         (void);
+    void        lockthr    (void* mutex);
     const char* lowstr     (const char* text);
     void        mcopy      (const char* source, void* destination, long size);
     void        mkfile     (const char* path);
     void        mkfolder   (const char* path);
+    void*       mutexthr   (void);
     void        mvfile     (const char* old_path, const char* new_path);
     void        mvfolder   (const char* old_path, const char* new_path);
     long        ping       (const char* url);
@@ -158,6 +160,7 @@ extern "C" {
     const char* tostrint   (long value);
     const char* trimstr    (const char* text, long sides, const char* pattern);
     void        undef      (const char* name);
+    void        unlockthr  (void* mutex);
     void        until      (double timestamp);
     const char* upstr      (const char* text);
     const char* version    (void);
