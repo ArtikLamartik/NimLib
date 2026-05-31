@@ -2,17 +2,17 @@
 
 build() {
     echo "[Building]"
-    nim c --app:lib --out:./build/nimlib.so ./src/main.nim
+    nim c --app:lib --out:build/nimlib.so src/main.nim
 }
 
 clean() {
     echo "[Cleaning]"
-    rm -f ./build/nimlib.so
+    rm -f build/nimlib.so
 }
 
 install() {
     echo "[Installing]"
-    sudo cp ./build/nimlib.so /usr/lib32/
+    sudo cp build/nimlib.so /usr/lib32/
     sudo ldconfig
 }
 
