@@ -81,9 +81,10 @@ importAll("/usr/lib32/nimlib.so"):
   proc stdi*       (visible: int): cstring
   proc stdo*       (text: cstring)
   proc strcomp*    (text1: cstring; text2: cstring): int
+  proc strcount*   (text: cstring, pattern: cstring): int
+  proc strdel*     (text: cstring, index: int): cstring
   proc strformat*  (count: int): cstring {.varargs.}
   proc strinsert*  (text1: cstring, text2: cstring, index: int): cstring
-  proc strsize*    (text: cstring): int
   proc substr*     (text: cstring, start_index: int, stop_index: int): cstring
   proc syncthr*    (function: proc() {.noconv.})
   proc timeformat* (timestamp: float, format: cstring): cstring
