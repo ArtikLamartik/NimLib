@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.5"
+var VERSION = "0.2.6"
 
 {.emit: """
 #include <netinet/in.h>
@@ -546,6 +546,17 @@ proc stdo*(text: cstring) {.exportc, dynlib.} =
 proc strcomp*(text1: cstring, text2: cstring): int {.exportc, dynlib.} =
   return int(cmp(text1, text2) == 0)
 
+proc strcount*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
+  let t = $text
+  let rePattern = re($pattern)
+  return findAll(t, rePattern).len
+
+proc strdel*(text: cstring, index: int): cstring {.exportc, dynlib.} =
+  var t = $text
+  if index >= 0 and index < t.len:
+    t.delete(index..index)
+  return cstring(t)
+
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   {.emit: """
   static char buf[131072];
@@ -570,9 +581,6 @@ proc strinsert*(text1: cstring, text2: cstring, index: int): cstring {.exportc, 
     idx = t1.len
   t1.insert(t2, idx)
   return cstring(t1)
-
-proc strsize*(text: cstring): int {.exportc, dynlib.} =
-  return int(len($text))
 
 proc substr*(text: cstring, start_index: int, stop_index: int): cstring {.exportc, dynlib.} =
   var t = $text
@@ -758,6 +766,7 @@ proc where*(command: cstring): cstring {.exportc, dynlib.} =
 proc cleanup() {.noconv.} =
   resetbgfg()
   cursor(1)
+  execlive("stty sane")
   {.emit: """
   for (int i = 0; i < job_count; i++) {
     if (job_active[i]) {
