@@ -136,9 +136,10 @@ extern "C" {
     const char* stdi       (long visible);
     void        stdo       (const char* text);
     long        strcomp    (const char* text1, const char* text2);
+    long        strcount   (const char* text, const char* pattern);
+    const char* strdel     (const char* text, long index);
     const char* strformat  (long count, ...);
     const char* strinsert  (const char* text1, const char* text2, long index);
-    long        strsize    (const char* text);
     const char* substr     (const char* text, long start_index, long stop_index);
     void        syncthr    (void (*function)(void));
     const char* timeformat (double timestamp, const char* format);
