@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.6"
+var VERSION = "0.2.7"
 
 {.emit: """
 #include <netinet/in.h>
@@ -310,6 +310,11 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArra
   var types_cstr = types.mapIt(cstring(it))
   return (cast[ptr UncheckedArray[cstring]](addr paths_cstr[0]), cast[ptr UncheckedArray[cstring]](addr types_cstr[0]), paths_cstr.len.int)
 
+proc lockthr*(mutex: pointer) {.exportc, dynlib.} =
+  {.emit: """
+    pthread_mutex_lock((pthread_mutex_t *)`mutex`);
+  """.}
+
 proc lowstr*(text: cstring): cstring =
   return cstring(toLower($text))
 
@@ -321,6 +326,15 @@ proc mkfile*(path: cstring) {.exportc, dynlib.} =
 
 proc mkfolder*(path: cstring) {.exportc, dynlib.} =
   createDir($path)
+
+proc mutexthr*(): pointer {.exportc, dynlib.} =
+  var mutex: pointer
+  {.emit: """
+    pthread_mutex_t *mtx = malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(mtx, NULL);
+    `mutex` = mtx;
+  """.}
+  return mutex
 
 proc mvfile*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveFile($old_path, $new_path)
@@ -736,6 +750,11 @@ proc trimstr*(text: cstring, sides: int, pattern: cstring): cstring {.exportc, d
 
 proc undef*(name: cstring) {.exportc, dynlib.} =
   delEnv($name)
+
+proc unlockthr*(mutex: pointer) {.exportc, dynlib.} =
+  {.emit: """
+    pthread_mutex_unlock((pthread_mutex_t *)`mutex`);
+  """.}
 
 proc until*(timestamp: float) {.exportc, dynlib.} =
   if timestamp > epochTime():
