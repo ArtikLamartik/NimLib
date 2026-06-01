@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.2.7`
+Version `0.2.8`
 
 ## NimLib Documentation
 
@@ -21,6 +21,22 @@ void*
 ```
 
 **Description:** Allocates a raw memory buffer of the given byte size. Free it with `freebuf`.
+
+---
+
+#### **Name:** `broadcasthr`
+
+**Arguments:**
+```c
+void* cond
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** It broadcasts a signal to all threads.
 
 ---
 
@@ -53,6 +69,22 @@ void
 ```
 
 **Description:** Clears the terminal screen.
+
+---
+
+#### **Name:** `condthr`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+void*
+```
+
+**Description:** Creates a condition variable for a thread.
 
 ---
 
@@ -432,7 +464,7 @@ long atexit, long exit_code
 void
 ```
 
-**Description:** Terminates the process immediately with the given exit code. If `atexit` is `0` then it exits softly and exits hardly if `1`
+**Description:** Terminates the process immediately with the given exit code. If `atexit` is `0` then it exits hardly, exits softly if `1` and it will wait for threads if `2`.
 
 ---
 
@@ -1056,6 +1088,22 @@ void
 ```
 
 **Description:** Registers a handler for a POSIX signal number. The function is called when the signal is received.
+
+---
+
+#### **Name:** `sigthr`
+
+**Arguments:**
+```c
+void* cond
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** It sends a signal to one thread.
 
 ---
 
@@ -1720,6 +1768,22 @@ void
 ```
 
 **Description:** Pauses execution for the given number of milliseconds.
+
+---
+
+#### **Name:** `waithr`
+
+**Arguments:**
+```c
+void* cond, void* mutex
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Waits for a signal from another thread.
 
 ---
 
