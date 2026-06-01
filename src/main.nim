@@ -11,7 +11,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.2.7"
+var VERSION = "0.2.8"
 
 {.emit: """
 #include <netinet/in.h>
@@ -68,11 +68,25 @@ addExitProc(runfifoexit)
 proc allocbuf*(size: int): pointer {.exportc, dynlib.} =
   return alloc(size)
 
+proc broadcasthr*(cond: pointer) {.exportc, dynlib.} =
+  {.emit: """
+  pthread_cond_broadcast((pthread_cond_t *)`cond`);
+  """.}
+
 proc cf*(path: cstring) {.exportc, dynlib.} =
   setCurrentDir($path)
 
 proc clrscr*() {.exportc, dynlib.} =
   discard execCmd("clear")
+
+proc condthr*(): pointer {.exportc, dynlib.} =
+  var cond: pointer
+  {.emit: """
+  pthread_cond_t *cnd = malloc(sizeof(pthread_cond_t));
+  pthread_cond_init(cnd, NULL);
+  `cond` = cnd;
+  """.}
+  return cond
 
 proc cpfile*(source: cstring, destination: cstring) {.exportc, dynlib.} =
   let src = $source
@@ -218,6 +232,10 @@ proc halt*(atexit: int, exit_code: int) {.exportc, dynlib.} =
     """.}
   elif atexit == 1:
     quit(exit_code)
+  elif atexit == 2:
+    {.emit:"""
+    pthread_exit(`exit_code`);
+    """.}
 
 proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
   let t = $text
@@ -312,7 +330,7 @@ proc lf*(): tuple[paths: ptr UncheckedArray[cstring], type_of: ptr UncheckedArra
 
 proc lockthr*(mutex: pointer) {.exportc, dynlib.} =
   {.emit: """
-    pthread_mutex_lock((pthread_mutex_t *)`mutex`);
+  pthread_mutex_lock((pthread_mutex_t *)`mutex`);
   """.}
 
 proc lowstr*(text: cstring): cstring =
@@ -330,9 +348,9 @@ proc mkfolder*(path: cstring) {.exportc, dynlib.} =
 proc mutexthr*(): pointer {.exportc, dynlib.} =
   var mutex: pointer
   {.emit: """
-    pthread_mutex_t *mtx = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(mtx, NULL);
-    `mutex` = mtx;
+  pthread_mutex_t *mtx = malloc(sizeof(pthread_mutex_t));
+  pthread_mutex_init(mtx, NULL);
+  `mutex` = mtx;
   """.}
   return mutex
 
@@ -436,6 +454,11 @@ proc setfg*(r: int, g: int, b: int) {.exportc, dynlib.} =
 
 proc sig*(signal: int, function: proc() {.noconv.}) {.exportc, dynlib.} =
   signal(cint(signal), cast[proc(_: cint) {.noconv.}](function))
+
+proc sigthr*(cond: pointer) {.exportc, dynlib.} =
+  {.emit: """
+  pthread_cond_signal((pthread_cond_t *)`cond`);
+  """.}
 
 proc sockacc*(): cstring {.exportc, dynlib.} =
   {.emit: """
@@ -753,7 +776,7 @@ proc undef*(name: cstring) {.exportc, dynlib.} =
 
 proc unlockthr*(mutex: pointer) {.exportc, dynlib.} =
   {.emit: """
-    pthread_mutex_unlock((pthread_mutex_t *)`mutex`);
+  pthread_mutex_unlock((pthread_mutex_t *)`mutex`);
   """.}
 
 proc until*(timestamp: float) {.exportc, dynlib.} =
@@ -778,6 +801,11 @@ proc vidbuf*(mode: int) {.exportc, dynlib.} =
 
 proc wait*(milliseconds: int) {.exportc, dynlib.} =
   sleep(milliseconds)
+
+proc waithr*(cond: pointer, mutex: pointer) {.exportc, dynlib.} =
+  {.emit: """
+  pthread_cond_wait((pthread_cond_t *)`cond`, (pthread_mutex_t *)`mutex`);
+  """.}
 
 proc where*(command: cstring): cstring {.exportc, dynlib.} =
   return cstring($execProcess("which " & $command).strip())
