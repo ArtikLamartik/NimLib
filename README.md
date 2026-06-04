@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.2.8`
+Version `0.2.9`
 
 ## NimLib Documentation
 
@@ -1104,118 +1104,6 @@ void
 ```
 
 **Description:** It sends a signal to one thread.
-
----
-
-#### **Name:** `sockacc`
-
-**Arguments:**
-```c
-void
-```
-
-**Return:**
-```c
-const char*
-```
-
-**Description:** Waits for the next client to connect on an already-open server socket. Returns the IP address of the connected client.
-
----
-
-#### **Name:** `sockclose`
-
-**Arguments:**
-```c
-void
-```
-
-**Return:**
-```c
-void
-```
-
-**Description:** Closes the server socket and any active client connection on the server side.
-
----
-
-#### **Name:** `sockcon`
-
-**Arguments:**
-```c
-const char* ipaddress, long port
-```
-
-**Return:**
-```c
-void
-```
-
-**Description:** Connects to a server as a client. Use `sockdiscon` to close the client-side connection when done.
-
----
-
-#### **Name:** `sockdiscon`
-
-**Arguments:**
-```c
-void
-```
-
-**Return:**
-```c
-void
-```
-
-**Description:** Disconnects the client socket opened by `sockcon`. Has no effect on the server side.
-
----
-
-#### **Name:** `sockopen`
-
-**Arguments:**
-```c
-long port
-```
-
-**Return:**
-```c
-const char*
-```
-
-**Description:** Opens a server socket on the given port. Returns the IP address of that client.
-
----
-
-#### **Name:** `sockrecv`
-
-**Arguments:**
-```c
-void
-```
-
-**Return:**
-```c
-const char*
-```
-
-**Description:** Receives data from the active socket (server-side or client-side). It blocks until data arrives. Has a buffer that grows if the incoming data exceeds 128KB. Returns an empty string if no socket is open or the connection dropped.
-
----
-
-#### **Name:** `socksend`
-
-**Arguments:**
-```c
-const char* data
-```
-
-**Return:**
-```c
-void
-```
-
-**Description:** Sends data over the active socket (server-side or client-side). Has no effect if no socket is currently open.
 
 ---
 
