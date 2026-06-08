@@ -1,17 +1,20 @@
+import std/asyncdispatch
+import std/httpclient
 import std/exitprocs
 import std/sequtils
 import std/strutils
 import std/terminal
 import std/base64
+import std/osproc
 import std/random
 import std/posix
 import std/times
-import osproc
+import std/net
 import std/os
 import std/re
 import math
 
-var VERSION = "0.2.9"
+var VERSION = "0.3.0"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -235,6 +238,21 @@ proc has*(text: cstring, pattern: cstring): int {.exportc, dynlib.} =
   if t.contains(re($pattern)):
     return 1
   return 0
+
+proc httpget*(url: cstring): cstring {.exportc, dynlib.} =
+  let client = newAsyncHttpClient()
+  let response = waitFor client.get($url)
+  let body = waitFor response.body
+  client.close()
+  return body.cstring
+
+proc httpost*(url: cstring, body: cstring, content_type: cstring): cstring {.exportc, dynlib.} =
+  let client = newAsyncHttpClient()
+  client.headers = newHttpHeaders({"Content-Type": $content_type})
+  let response = waitFor client.post($url, $body)
+  let rbody = waitFor response.body
+  client.close()
+  return rbody.cstring
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
@@ -510,12 +528,12 @@ proc strdel*(text: cstring, index: int): cstring {.exportc, dynlib.} =
 
 proc strformat*(count: int): cstring {.exportc, dynlib, varargs.} =
   {.emit: """
-  static char buf[131072];
+  volatile static char buf[131072];
   buf[0] = '\0';
-  va_list args;
+  volatile va_list args;
   va_start(args, `count`);
   for (int i = 0; i < `count`; i++) {
-    const char* s = va_arg(args, const char*);
+    volatile const char* s = va_arg(args, const char*);
     if (s != NULL) strcat(buf, s);
   }
   va_end(args);
