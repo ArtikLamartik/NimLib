@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.2.9`
+Version `0.3.0`
 
 ## NimLib Documentation
 
@@ -481,6 +481,38 @@ long
 ```
 
 **Description:** Returns `1` if the string contains a match for the regular expression pattern, `0` otherwise.
+
+---
+
+#### **Name:** `httpget`
+
+**Arguments:**
+```c
+const char* url
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Returns the content of a public website or ipaddress.
+
+---
+
+#### **Name:** `httpost`
+
+**Arguments:**
+```c
+const char* url, const char* body, const char* content_type
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Sends a `POST` request to a public website or ipaddress
 
 ---
 
