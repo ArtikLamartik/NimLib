@@ -91,6 +91,8 @@ extern const char* getprogloc  (void);
 extern Getermsize  getermsize  (void);
 extern void        halt        (long atexit, long exit_code);
 extern long        has         (const char* text, const char* pattern);
+extern const char* httpget     (const char* url);
+extern const char* httpost     (const char* url, const char* body, const char* content_type);
 extern long        isdef       (const char* name);
 extern long        isfile      (const char* path);
 extern long        isfolder    (const char* path);
