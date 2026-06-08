@@ -37,6 +37,8 @@ importAll("/usr/lib32/nimlib.so"):
   proc getermsize*    (): tuple[columns: int, rows: int]
   proc halt*          (atexit: int, exit_code: int)
   proc has*           (text: cstring, pattern: cstring): int
+  proc httpget*       (url: cstring): cstring
+  proc httpost*       (url: cstring, body: cstring, content_type: cstring): cstring
   proc isdef*         (name: cstring): int
   proc isfile*        (path: cstring): int
   proc isfolder*      (path: cstring): int
