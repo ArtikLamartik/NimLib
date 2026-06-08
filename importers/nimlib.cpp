@@ -92,6 +92,8 @@ extern "C" {
     Getermsize  getermsize    (void);
     void        halt          (long atexit, long exit_code);
     long        has           (const char* text, const char* pattern);
+    const char* httpget       (const char* url);
+    const char* httpost       (const char* url, const char* body, const char* content_type);
     long        isdef         (const char* name);
     long        isfile        (const char* path);
     long        isfolder      (const char* path);
