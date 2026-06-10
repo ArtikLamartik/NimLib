@@ -1,8 +1,6 @@
 # NimLib - A Library made in Nim
 
-[***Only works on `Linux`, `MacOS` and `BSD`***]
-
-> **Reminder:** If you are on `Linux` or `BSD`, use the `nimlib.so`. But if you are on `MacOS`, use the `nimlib.dynlib`.
+[***Only works on `Linux` and `BSD`***]
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
