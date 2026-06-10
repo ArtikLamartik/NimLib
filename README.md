@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.3.0`
+Version `0.3.1`
 
 ## NimLib Documentation
 
@@ -412,6 +412,22 @@ const char*
 
 ---
 
+#### **Name:** `getip`
+
+**Arguments:**
+```c
+void
+```
+
+**Return:**
+```c
+const char*
+```
+
+**Description:** Returns the IP of the caller.
+
+---
+
 #### **Name:** `getprogloc`
 
 **Arguments:**
@@ -512,7 +528,23 @@ const char* url, const char* body, const char* content_type
 const char*
 ```
 
-**Description:** Sends a `POST` request to a public website or ipaddress
+**Description:** Sends a `POST` request to a public website or ipaddress.
+
+---
+
+#### **Name:** `httpserver`
+
+**Arguments:**
+```c
+long port, const char* (*function)(const char* pth, const char* mth, const char* bdy)
+```
+
+**Return:**
+```c
+void
+```
+
+**Description:** Starts a webserver on the caller's IP address at the specified `port` and `handle-function`, that will handle the requests. `pth` is the path of the request, `mth` is the method they used to request and the `bdy` is the body of the request.
 
 ---
 
