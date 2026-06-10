@@ -14,7 +14,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.3.0"
+var VERSION = "0.3.1"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -203,6 +203,9 @@ proc getdef*(name: cstring): cstring {.exportc, dynlib.} =
   else:
     return ""
 
+proc getip*(): cstring {.exportc, dynlib.} =
+  return cstring($getPrimaryIPAddr())
+
 proc getprogloc*(): cstring {.exportc, dynlib.} =
   return cstring(getAppFilename())
 
@@ -253,6 +256,41 @@ proc httpost*(url: cstring, body: cstring, content_type: cstring): cstring {.exp
   let rbody = waitFor response.body
   client.close()
   return rbody.cstring
+
+proc httpserver*(port: int, function: proc(pth: cstring, mth: cstring, bdy: cstring): cstring {.noconv.}) {.exportc, dynlib.} =
+  let server = newSocket()
+  server.setSockOpt(OptReuseAddr, true)
+  server.setSockOpt(OptReusePort, true)
+  server.bindAddr(Port(port), "0.0.0.0")
+  server.listen()
+  while true:
+    var client: Socket
+    var address: string
+    server.acceptAddr(client, address)
+    var requestLine = ""
+    client.readLine(requestLine)
+    let parts = requestLine.split(' ')
+    if parts.len < 2:
+      client.close()
+      continue
+    let mth = parts[0]
+    let pth = parts[1]
+    var contentLength = 0
+    while true:
+      var header = ""
+      client.readLine(header)
+      if header == "" or header == "\r\n":
+        break
+      if header.toLower.startsWith("content-length:"):
+        contentLength = parseInt(header.split(':')[1].strip())
+    var body = ""
+    if contentLength > 0:
+      body = client.recv(contentLength)
+    let output = function(cstring(pth), cstring(mth), cstring(body))
+    let response = if output.isNil: "" else: $output
+    let http = "HTTP/1.1 200 OK\r\nContent-Length: " & $response.len & "\r\nContent-Type: text/plain\r\n\r\n" & response
+    client.send(http)
+    client.close()
 
 proc isdef*(name: cstring): int {.exportc, dynlib.} =
   return int(existsEnv($name) == true)
