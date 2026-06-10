@@ -65,7 +65,6 @@ typedef struct {
 } Splitstr;
 
 extern void*       allocbuf    (long size);
-extern long*       arrange     (long* arr);
 extern void        broadcasthr (void* cond);
 extern void        cf          (const char* path);
 extern void        clrscr      (void);
