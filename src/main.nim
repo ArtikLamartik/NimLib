@@ -14,7 +14,7 @@ import std/os
 import std/re
 import math
 
-var VERSION = "0.3.1"
+var VERSION = "0.3.2"
 
 {.emit: """
 #include <sys/ioctl.h>
@@ -143,7 +143,7 @@ proc fileinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edit:
   let file_size = int(getFileSize(p))
   when defined(linux):
     let (creator, _) = execCmdEx("stat -c '%U' " & p)
-  elif defined(bsd) or defined(macosx):
+  elif defined(bsd):
     let (creator, _) = execCmdEx("stat -f '%Su' " & p)
   return (cstring(name), cstring(creator.strip()), last_edit, file_size)
 
@@ -164,7 +164,7 @@ proc folderinfo*(path: cstring): tuple[name: cstring, creator: cstring, last_edi
     folder_size += int(getFileSize(file))
   when defined(linux):
     let (creator, _) = execCmdEx("stat -c '%U' " & p)
-  elif defined(bsd) or defined(macosx):
+  elif defined(bsd):
     let (creator, _) = execCmdEx("stat -f '%Su' " & p)
   result = (cstring(name), cstring(creator.strip()), last_edit, folder_size)
 
@@ -179,7 +179,7 @@ proc getargs*(): tuple[args: ptr UncheckedArray[cstring], length: int] {.exportc
     for i in 1..<parts.len:
       if parts[i].len > 0:
         args.add(parts[i])
-  elif defined(bsd) or defined(macosx):
+  elif defined(bsd):
     let output = execProcess("sysctl -n kern.proc.args " & $getCurrentProcessId())
     for arg in output.splitWhitespace():
       args.add(arg)
@@ -344,7 +344,7 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
   var names: seq[string]
   when defined(linux):
     let output = execProcess("ps -eo pid,comm --no-headers")
-  elif defined(bsd) or defined(macosx):
+  elif defined(bsd):
     let output = execProcess("ps -eo pid,comm")
   for line in output.splitLines():
     let stripped = line.strip()
@@ -355,7 +355,7 @@ proc laprocs*(): tuple[name: ptr UncheckedArray[cstring], process_id: ptr Unchec
       when defined(linux):
         process_ids.add(parts[0])
         names.add(parts[1])
-      elif defined(bsd) or defined(macosx):
+      elif defined(bsd):
         if parts[0] != "PID":
           process_ids.add(parts[0])
           names.add(parts[1])
@@ -410,10 +410,7 @@ proc mvfolder*(old_path: cstring, new_path: cstring) {.exportc, dynlib.} =
   moveDir($old_path, $new_path)
 
 proc ping*(url: cstring): int {.exportc, dynlib.} =
-  when defined(macosx):
-    let (_, code) = execCmdEx("ping -c 1 -t 1 " & $url)
-  elif defined(linux) or defined(bsd):
-    let (_, code) = execCmdEx("ping -c 1 -W 1 " & $url)
+  let (_, code) = execCmdEx("ping -c 1 -W 1 " & $url)
   return int(code == 0)
 
 proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_process_id: int, user_name: cstring, start_time: int, command: cstring] {.exportc, dynlib.} =
@@ -421,7 +418,7 @@ proc procinfo*(process_id: int): tuple[name: cstring, process_id: int, parent_pr
     let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,etimes,cmd --no-headers")
     let line = output.strip()
     let parts = line.splitWhitespace(maxsplit=5)
-  elif defined(bsd) or defined(macosx):
+  elif defined(bsd):
     let output = execProcess("ps -p " & $process_id & " -o comm,pid,ppid,user,etimes,command")
     let lines = output.strip().splitLines()
     let line = if lines.len > 1: lines[1] else: ""
