@@ -4,7 +4,7 @@
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
-Version `0.3.1`
+Version `0.3.2`
 
 ## NimLib Documentation
 
