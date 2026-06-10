@@ -65,6 +65,7 @@ typedef struct {
 } Splitstr;
 
 extern void*       allocbuf    (long size);
+extern long*       arrange     (long* arr);
 extern void        broadcasthr (void* cond);
 extern void        cf          (const char* path);
 extern void        clrscr      (void);
@@ -87,12 +88,14 @@ extern const char* getcf       (void);
 extern const char* getchr      (void);
 extern long        getcpid     (void);
 extern const char* getdef      (const char* name);
+extern const char* getip       (void);
 extern const char* getprogloc  (void);
 extern Getermsize  getermsize  (void);
 extern void        halt        (long atexit, long exit_code);
 extern long        has         (const char* text, const char* pattern);
 extern const char* httpget     (const char* url);
 extern const char* httpost     (const char* url, const char* body, const char* content_type);
+extern void        httpserver  (long port, const char* (*function)(const char* pth, const char* mth, const char* bdy));
 extern long        isdef       (const char* name);
 extern long        isfile      (const char* path);
 extern long        isfolder    (const char* path);
