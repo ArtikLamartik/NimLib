@@ -1,4 +1,4 @@
-# NimLib - A Library made in Nim
+# NimLib - A Standard Library made in Nim
 
 [***Only works on `Linux` and `BSD`***]
 
