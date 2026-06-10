@@ -2,9 +2,9 @@
 
 [***Only works on `Linux`, `MacOS` and `BSD`***]
 
-> **Note 1:** If you are on `Windows`, use `WSL`.
+> **Note:** If you are on `Windows`, use `WSL`.
 
-> **Note 2:** If you are on `Linux` or `BSD`, use the `nimlib.so` but if you are on `MacOS`, use the `nimlib.dynlib`.
+> **Reminder:** If you are on `Linux` or `BSD`, use the `nimlib.so` but if you are on `MacOS`, use the `nimlib.dynlib`.
 
 Version `0.3.1`
 
