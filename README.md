@@ -1,6 +1,6 @@
 # NimLib - A Library made in Nim
 
-[***only works on `Linux`, `MacOS` and `BSD`***]
+[***Only works on `Linux`, `MacOS` and `BSD`***]
 
 > **Note:** If you are on `Windows`, use `WSL`.
 
